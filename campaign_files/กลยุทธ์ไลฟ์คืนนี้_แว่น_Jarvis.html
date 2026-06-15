@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RUDEDOG Tonight's Strategy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00f2fe;
+            --secondary: #ff0050;
+            --bg: #0a0a0f;
+            --card-bg: #16161e;
+            --text: #ffffff;
+            --text-dim: #a0a0b0;
+        }
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 40px 20px; 
+        }
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+        }
+        .header {
+            text-align: left;
+            margin-bottom: 40px;
+            border-left: 8px solid var(--secondary);
+            padding-left: 25px;
+        }
+        h1 { 
+            font-size: 42px; 
+            margin: 0; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text);
+        }
+        .subtitle { 
+            color: var(--primary); 
+            font-size: 20px; 
+            font-weight: 400;
+            margin-top: 5px;
+        }
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 25px; 
+            margin-bottom: 40px; 
+        }
+        .card { 
+            background: var(--card-bg); 
+            padding: 30px; 
+            border-radius: 24px; 
+            border: 1px solid #2a2a35;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+        .step-num {
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            font-size: 80px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.05);
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .card p {
+            color: var(--text-dim);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+        .action-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0 0 0;
+        }
+        .action-list li {
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 10px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .action-list li::before {
+            content: "⚡";
+            color: var(--secondary);
+        }
+        .highlight-box {
+            background: linear-gradient(90deg, rgba(255,0,80,0.1) 0%, rgba(0,242,254,0.1) 100%);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px dashed var(--primary);
+            margin-top: 40px;
+        }
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: var(--text-dim);
+            font-size: 14px;
+        }
+        .badge {
+            background: var(--secondary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>EYEWEAR DOMINATION</h1>
+            <div class="subtitle">แผนกลยุทธ์ไลฟ์คืนนี้: ปั๊มยอดแว่น x2</div>
+            <div style="margin-top: 15px;">
+                <a href="https://boswave-gamer.loca.lt" target="_blank" style="display: inline-block; background: var(--primary); color: var(--bg); text-decoration: none; padding: 8px 16px; font-family: 'Kanit'; font-weight: 700; border-radius: 12px; border: 1px solid var(--primary); font-size: 0.85rem; box-shadow: 0 0 10px rgba(0,242,254,0.3); text-transform: uppercase;">💻 เปิดหน้าเว็บแอป (WEB PORTAL)</a>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Phase 1 -->
+            <div class="card">
+                <div class="step-num">01</div>
+                <h2>🧲 The Magnet Hook</h2>
+                <p>ดึงคนเข้าไลฟ์ด้วย Visual ที่ทรงพลังที่สุด (Leverage 10.4% CTR)</p>
+                <ul class="action-list">
+                    <li>โฮสต์ใส่แว่นตัวท็อปเดินโชว์ตั้งแต่ Preview</li>
+                    <li>จัด Display แว่น 10 รุ่นเรียงหน้ากล้อง</li>
+                    <li>Call-to-action: เคาะจอครบ 1k แจกคูปอง</li>
+                </ul>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="card">
+                <div class="step-num">02</div>
+                <h2>👓 Face Shape Guide</h2>
+                <p>ปลดล็อกความกังวล "ใส่แล้วไม่เข้าหน้า" เพื่อเพิ่มยอดขาย</p>
+                <ul class="action-list">
+                    <li>สาธิตการเลือกทรงแว่นตามรูปหน้าสดๆ</li>
+                    <li>เน้นย้ำวัสดุพรีเมี่ยม และเลนส์ UV400</li>
+                    <li>ตอบคำถาม Real-time เรื่องขนาดและน้ำหนัก</li>
+                </ul>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="card">
+                <div class="step-num">03</div>
+                <h2>🎁 The Bundle King</h2>
+                <p>ใช้สินค้าขายดี (กระเป๋า) มาช่วยดันยอดแว่นให้พุ่ง</p>
+                <ul class="action-list">
+                    <li>จัดเซ็ตพิเศษ: กระเป๋า + แว่น (ลดเพิ่ม)</li>
+                    <li>Flash Sale 5 นาที เร่งการตัดสินใจ</li>
+                    <li>แถมฟรี! Hard Case ลิมิเต็ด (จำนวนจำกัด)</li>
+                </ul>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="card">
+                <div class="step-num">04</div>
+                <h2>🎬 Traffic Engine</h2>
+                <p>ใช้พลังจากคลิปสั้นดึงคนเข้าสู่สมรภูมิไลฟ์</p>
+                <ul class="action-list">
+                    <li>ลงคลิป FastClips_v5 ก่อนไลฟ์ 15 นาที</li>
+                    <li>เน้นคลิป "แว่นรุ่นใหม่" และ "เลิกผลิต"</li>
+                    <li>ปักหมุดตะกร้าแว่นในวิดีโอเพื่อปูทาง</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="highlight-box">
+            <h3>💡 Jarvis AI Insight</h3>
+            <p>เมื่อคืนคนกดดูแว่นเยอะที่สุด (10.4%) แต่ยอดขายยังตามหลังกระเป๋า คืนนี้เราจะไม่แค่ "ให้ดู" แต่เราจะ "ให้ลอง" และ "ให้ดีลพิเศษ" เพื่อเปลี่ยนยอดคลิกเป็นเงินสดครับบอส!</p>
+        </div>
+
+        <div class="footer">
+            Generated by Gemini Jarvis AI for RUDEDOG® Team
+        </div>
+    </div>
+</body>
+</html>

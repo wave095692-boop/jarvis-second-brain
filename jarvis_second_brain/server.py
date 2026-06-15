@@ -93,7 +93,28 @@ def check_youtube_status(port, url):
                 pass
     return 'OFFLINE'
 
+def resolve_file_path(path):
+    if not path:
+        return path
+    if os.path.exists(path):
+        return path
+    filename = os.path.basename(path)
+    campaign_path = os.path.join(WORKSPACE_DIR, "campaign_files", filename)
+    if os.path.exists(campaign_path):
+        return campaign_path
+    yt_path = os.path.join(WORKSPACE_DIR, "youtube_premium_clone", filename)
+    if os.path.exists(yt_path):
+        return yt_path
+    root_path = os.path.join(WORKSPACE_DIR, filename)
+    if os.path.exists(root_path):
+        return root_path
+    jsb_path = os.path.join(DIRECTORY, filename)
+    if os.path.exists(jsb_path):
+        return jsb_path
+    return path
+
 def check_tunnel_online():
+
     try:
         # Check if localtunnel process is running (via pgrep)
         res = subprocess.run(['pgrep', '-f', 'localtunnel'], capture_output=True, text=True)
@@ -262,7 +283,9 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     break
             if not file_path:
                 file_path = '/Users/apple/Downloads/RUDEDOG_FAIR_2026_WAR_ROOM.html'
+            file_path = resolve_file_path(file_path)
             if os.path.exists(file_path):
+
                 self.send_response(200)
                 self.send_header('Content-Type', 'text/html; charset=utf-8')
                 self.end_headers()
@@ -282,7 +305,9 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     break
             if not file_path:
                 file_path = '/Users/apple/Downloads/กลยุทธ์ไลฟ์คืนนี้_แว่น_Jarvis.html'
+            file_path = resolve_file_path(file_path)
             if os.path.exists(file_path):
+
                 self.send_response(200)
                 self.send_header('Content-Type', 'text/html; charset=utf-8')
                 self.end_headers()
@@ -302,7 +327,9 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     break
             if not file_path:
                 file_path = PDF_PATH
+            file_path = resolve_file_path(file_path)
             if os.path.exists(file_path):
+
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/pdf')
                 self.end_headers()
@@ -322,7 +349,9 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     break
             if not file_path:
                 file_path = PDF_PATH_OLD
+            file_path = resolve_file_path(file_path)
             if os.path.exists(file_path):
+
                 self.send_response(200)
                 self.send_header('Content-Type', 'application/pdf')
                 self.end_headers()
@@ -340,8 +369,11 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
             data = load_project_files()
             for cat in data:
                 for item in data[cat]:
-                    item['exists'] = os.path.exists(item['path'])
+                    resolved = resolve_file_path(item['path'])
+                    item['exists'] = os.path.exists(resolved)
+                    item['path'] = resolved
             self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+
 
         elif path == '/api/file':
             key = query_params.get("key", [""])[0]
@@ -355,7 +387,11 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 if file_path:
                     break
             
+            if file_path:
+                file_path = resolve_file_path(file_path)
+            
             if file_path and os.path.exists(file_path):
+
                 self.send_response(200)
                 self.send_header('Content-Type', 'text/plain; charset=utf-8')
                 self.end_headers()
@@ -581,10 +617,11 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 if not target_item:
                     raise Exception("Project file key not found")
                 
-                old_path = target_item['path']
+                old_path = resolve_file_path(target_item['path'])
                 old_filename = target_item['name']
                 
                 if os.path.exists(old_path):
+
                     dir_name = os.path.dirname(old_path)
                     new_path = os.path.join(dir_name, new_filename)
                     
@@ -661,10 +698,11 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 if not target_item:
                     raise Exception("Project file key not found")
                 
-                file_path = target_item['path']
+                file_path = resolve_file_path(target_item['path'])
                 filename = target_item['name']
                 
                 if os.path.exists(file_path):
+
                     os.remove(file_path)
                 
                 data[category_key] = [item for item in data[category_key] if item['key'] != key]

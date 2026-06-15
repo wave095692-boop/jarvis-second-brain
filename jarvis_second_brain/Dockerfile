@@ -2,11 +2,12 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Copy dashboard server files
-COPY ./jarvis_second_brain /app
+# Copy the entire workspace to the container to make campaign_files, scripts, and other services accessible.
+COPY . /app
 
-# The port will be dynamically assigned by RENDER/RAILWAY via the $PORT environment variable.
-# We expose 8500 as the local fallback.
+WORKDIR /app/jarvis_second_brain
+
 EXPOSE 8500
 
 CMD ["python", "server.py"]
+
