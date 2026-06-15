@@ -76,6 +76,23 @@ def check_port_open(port):
         s.settimeout(0.5)
         return s.connect_ex(('127.0.0.1', port)) == 0
 
+def check_youtube_status(port, url):
+    if check_port_open(port):
+        return 'ONLINE'
+    if url:
+        if not any(local in url for local in ['localhost', '127.0.0.1', '0.0.0.0']):
+            try:
+                req = urllib.request.Request(
+                    url,
+                    headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)'}
+                )
+                with urllib.request.urlopen(req, timeout=1.0) as response:
+                    if response.status in [200, 302, 401, 403, 404, 301]:
+                        return 'ONLINE'
+            except Exception:
+                pass
+    return 'OFFLINE'
+
 def check_tunnel_online():
     try:
         # Check if localtunnel process is running (via pgrep)
@@ -161,7 +178,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
             response_data = {
                 'lan_ip': get_lan_ip(),
                 'youtube_clone': {
-                    'status': 'ONLINE' if check_port_open(8000) else 'OFFLINE',
+                    'status': check_youtube_status(8000, yt_tunnel),
                     'port': 8000,
                     'url': yt_tunnel
                 },
