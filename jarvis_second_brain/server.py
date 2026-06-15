@@ -1,0 +1,786 @@
+import http.server
+import socketserver
+import socket
+import json
+import os
+import subprocess
+import shutil
+import urllib.request
+import urllib.error
+
+PORT = int(os.environ.get("PORT", 8500))
+# Dynamic path resolution for portability
+DEFAULT_DIR = "/Users/apple/.gemini/antigravity-ide/scratch/jarvis_second_brain"
+DEFAULT_WORKSPACE = "/Users/apple/.gemini/antigravity-ide/scratch"
+
+DIRECTORY = DEFAULT_DIR if os.path.exists(DEFAULT_DIR) else os.path.dirname(os.path.abspath(__file__))
+WORKSPACE_DIR = DEFAULT_WORKSPACE if os.path.exists(DEFAULT_WORKSPACE) else os.path.dirname(DIRECTORY)
+
+PDF_PATH = "/Users/apple/Desktop/rudedog_content_ideas.pdf"
+if not os.path.exists(os.path.dirname(PDF_PATH)):
+    PDF_PATH = os.path.join(WORKSPACE_DIR, "rudedog_content_ideas.pdf")
+
+PDF_PATH_OLD = "/Users/apple/Desktop/rudedog_fair_10days_content.pdf"
+if not os.path.exists(os.path.dirname(PDF_PATH_OLD)):
+    PDF_PATH_OLD = os.path.join(WORKSPACE_DIR, "rudedog_fair_10days_content.pdf")
+
+NOTES_FILE = os.path.join(DIRECTORY, "notes.json")
+PROJECT_FILES_FILE = os.path.join(DIRECTORY, "project_files.json")
+
+def load_project_files():
+    if os.path.exists(PROJECT_FILES_FILE):
+        try:
+            with open(PROJECT_FILES_FILE, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {}
+
+def save_project_files(data):
+    try:
+        with open(PROJECT_FILES_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+        return True
+    except Exception:
+        return False
+
+def get_ssh_tunnel_url(log_path):
+    if os.path.exists(log_path):
+        try:
+            with open(log_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            last_url = None
+            for line in content.splitlines():
+                if 'tunneled with tls termination' in line and 'https://' in line:
+                    parts = line.split('https://')
+                    if len(parts) > 1:
+                        last_url = 'https://' + parts[1].strip()
+            return last_url
+        except Exception:
+            pass
+    return None
+
+def get_lan_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except Exception:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
+
+def check_port_open(port):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(0.5)
+        return s.connect_ex(('127.0.0.1', port)) == 0
+
+def check_tunnel_online():
+    try:
+        # Check if localtunnel process is running (via pgrep)
+        res = subprocess.run(['pgrep', '-f', 'localtunnel'], capture_output=True, text=True)
+        if res.stdout.strip():
+            return True
+            
+        # Fallback: check URL response
+        req = urllib.request.Request(
+            'https://boswave-gamer.loca.lt', 
+            headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)'}
+        )
+        with urllib.request.urlopen(req, timeout=1.0) as response:
+            return response.status in [200, 302, 401]
+    except Exception:
+        return False
+
+def get_system_stats():
+    stats = {}
+    # Load averages (Mac OS compatible)
+    try:
+        load = os.getloadavg()
+        stats['cpu_load'] = f"{load[0]:.2f}, {load[1]:.2f}, {load[2]:.2f}"
+    except Exception:
+        stats['cpu_load'] = "Unavailable"
+        
+    # Disk usage
+    try:
+        total, used, free = shutil.disk_usage("/")
+        stats['disk_free'] = f"{free / (2**30):.1f} GB / {total / (2**30):.1f} GB"
+    except Exception:
+        stats['disk_free'] = "Unavailable"
+        
+    return stats
+
+class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=DIRECTORY, **kwargs)
+
+    def end_headers(self):
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
+        super().end_headers()
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.end_headers()
+
+    def do_GET(self):
+        from urllib.parse import urlparse, parse_qs
+        parsed_url = urlparse(self.path)
+        path = parsed_url.path
+        query_params = parse_qs(parsed_url.query)
+
+        if path == '/api/status':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            
+            # Diagnose PDF
+            pdf_exists = os.path.exists(PDF_PATH)
+            pdf_time = ""
+            if pdf_exists:
+                import datetime
+                mtime = os.path.getmtime(PDF_PATH)
+                pdf_time = datetime.datetime.fromtimestamp(mtime).strftime('%Y-%m-%d %H:%M:%S')
+
+            dashboard_tunnel = os.environ.get("DASHBOARD_PUBLIC_URL")
+            if not dashboard_tunnel:
+                dashboard_tunnel = get_ssh_tunnel_url(os.path.join(WORKSPACE_DIR, "ssh_tunnel_output.log"))
+            
+            yt_tunnel = os.environ.get("YOUTUBE_PUBLIC_URL")
+            if not yt_tunnel:
+                yt_tunnel = get_ssh_tunnel_url(os.path.join(WORKSPACE_DIR, "youtube_tunnel_output.log"))
+            
+            # Fallback to localtunnel if ssh tunnel not running
+            if not dashboard_tunnel:
+                dashboard_tunnel = 'https://slow-beers-hope.loca.lt'
+            if not yt_tunnel:
+                yt_tunnel = 'https://boswave-gamer.loca.lt'
+
+            response_data = {
+                'lan_ip': get_lan_ip(),
+                'youtube_clone': {
+                    'status': 'ONLINE' if check_port_open(8000) else 'OFFLINE',
+                    'port': 8000,
+                    'url': yt_tunnel
+                },
+                'tunnel': {
+                    'status': 'ONLINE' if (yt_tunnel or check_tunnel_online()) else 'OFFLINE',
+                    'url': dashboard_tunnel
+                },
+                'pdf': {
+                    'status': 'FOUND' if pdf_exists else 'NOT FOUND',
+                    'last_modified': pdf_time,
+                    'path': PDF_PATH
+                },
+                'system': get_system_stats()
+            }
+            self.wfile.write(json.dumps(response_data).encode('utf-8'))
+            
+        elif path == '/api/notes':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            
+            if os.path.exists(NOTES_FILE):
+                with open(NOTES_FILE, 'r', encoding='utf-8') as f:
+                    data = f.read()
+                    self.wfile.write(data.encode('utf-8'))
+            else:
+                self.wfile.write(json.dumps([]).encode('utf-8'))
+
+        elif path == '/api/uploads':
+            upload_dir = os.path.join(DIRECTORY, "uploads")
+            rooms = ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]
+            response_data = {}
+            for r in rooms:
+                r_dir = os.path.join(upload_dir, r)
+                if not os.path.exists(r_dir):
+                    os.makedirs(r_dir)
+                files = os.listdir(r_dir)
+                files = [f for f in files if not f.startswith('.')]
+                files.sort()
+                response_data[r] = files
+                
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(json.dumps(response_data).encode('utf-8'))
+
+        elif path == '/view/upload':
+            file_name = query_params.get("file", [""])[0]
+            file_name = os.path.basename(file_name)
+            room = query_params.get("room", ["Boss"])[0]
+            if room not in ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]:
+                room = "Boss"
+                
+            upload_dir = os.path.join(DIRECTORY, "uploads", room)
+            file_path = os.path.join(upload_dir, file_name)
+            if os.path.exists(file_path):
+                self.send_response(200)
+                import mimetypes
+                mime_type, _ = mimetypes.guess_type(file_path)
+                if not mime_type:
+                    mime_type = 'application/octet-stream'
+                self.send_header('Content-Type', mime_type)
+                
+                friendly_types = ['application/pdf', 'image/png', 'image/jpeg', 'image/gif', 'text/plain', 'text/html']
+                if mime_type not in friendly_types:
+                    self.send_header('Content-Disposition', f'attachment; filename="{file_name}"')
+                self.end_headers()
+                with open(file_path, 'rb') as f:
+                    self.wfile.write(f.read())
+            else:
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'Uploaded file not found'}).encode('utf-8'))
+                
+        elif path == '/view/war_room':
+            data = load_project_files()
+            file_path = None
+            for item in data.get('campaign', []):
+                if item['key'] == 'war_room':
+                    file_path = item['path']
+                    break
+            if not file_path:
+                file_path = '/Users/apple/Downloads/RUDEDOG_FAIR_2026_WAR_ROOM.html'
+            if os.path.exists(file_path):
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/html; charset=utf-8')
+                self.end_headers()
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    self.wfile.write(f.read().encode('utf-8'))
+            else:
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'WAR ROOM HTML not found'}).encode('utf-8'))
+
+        elif path == '/view/live_strategy':
+            data = load_project_files()
+            file_path = None
+            for item in data.get('campaign', []):
+                if item['key'] == 'live_strategy':
+                    file_path = item['path']
+                    break
+            if not file_path:
+                file_path = '/Users/apple/Downloads/กลยุทธ์ไลฟ์คืนนี้_แว่น_Jarvis.html'
+            if os.path.exists(file_path):
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/html; charset=utf-8')
+                self.end_headers()
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    self.wfile.write(f.read().encode('utf-8'))
+            else:
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'Live Strategy HTML not found'}).encode('utf-8'))
+
+        elif path == '/view/pdf':
+            data = load_project_files()
+            file_path = None
+            for item in data.get('campaign', []):
+                if item['key'] == 'pdf_latest':
+                    file_path = item['path']
+                    break
+            if not file_path:
+                file_path = PDF_PATH
+            if os.path.exists(file_path):
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/pdf')
+                self.end_headers()
+                with open(file_path, 'rb') as f:
+                    self.wfile.write(f.read())
+            else:
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'PDF not found'}).encode('utf-8'))
+
+        elif path == '/view/pdf_old':
+            data = load_project_files()
+            file_path = None
+            for item in data.get('campaign', []):
+                if item['key'] == 'pdf_old':
+                    file_path = item['path']
+                    break
+            if not file_path:
+                file_path = PDF_PATH_OLD
+            if os.path.exists(file_path):
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/pdf')
+                self.end_headers()
+                with open(file_path, 'rb') as f:
+                    self.wfile.write(f.read())
+            else:
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'Old PDF not found'}).encode('utf-8'))
+
+        elif path == '/api/project-files':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            data = load_project_files()
+            for cat in data:
+                for item in data[cat]:
+                    item['exists'] = os.path.exists(item['path'])
+            self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
+
+        elif path == '/api/file':
+            key = query_params.get("key", [""])[0]
+            data = load_project_files()
+            file_path = None
+            for cat in data:
+                for item in data[cat]:
+                    if item['key'] == key:
+                        file_path = item['path']
+                        break
+                if file_path:
+                    break
+            
+            if file_path and os.path.exists(file_path):
+                self.send_response(200)
+                self.send_header('Content-Type', 'text/plain; charset=utf-8')
+                self.end_headers()
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    self.wfile.write(f.read().encode('utf-8'))
+            else:
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': f'File not found: {key}'}).encode('utf-8'))
+        else:
+            super().do_GET()
+
+    def do_POST(self):
+        from urllib.parse import urlparse, parse_qs
+        parsed_url = urlparse(self.path)
+        path = parsed_url.path
+        query_params = parse_qs(parsed_url.query)
+        content_length = int(self.headers['Content-Length'])
+        
+        if path == '/api/upload-file':
+            filename = query_params.get("filename", ["document.dat"])[0]
+            filename = os.path.basename(filename)
+            room = query_params.get("room", ["Boss"])[0]
+            if room not in ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]:
+                room = "Boss"
+                
+            upload_dir = os.path.join(DIRECTORY, "uploads", room)
+            if not os.path.exists(upload_dir):
+                os.makedirs(upload_dir)
+                
+            base, ext = os.path.splitext(filename)
+            counter = 1
+            final_filename = filename
+            while os.path.exists(os.path.join(upload_dir, final_filename)):
+                final_filename = f"{base}_{counter}{ext}"
+                counter += 1
+                
+            file_path = os.path.join(upload_dir, final_filename)
+            
+            try:
+                file_data = self.rfile.read(content_length)
+                with open(file_path, 'wb') as f:
+                    f.write(file_data)
+                
+                # Append upload note to notes.json
+                if os.path.exists(NOTES_FILE):
+                    with open(NOTES_FILE, 'r', encoding='utf-8') as nf:
+                        try:
+                            notes = json.load(nf)
+                        except Exception:
+                            notes = []
+                else:
+                    notes = []
+                import datetime
+                next_id = max([n.get("id", 0) for n in notes]) + 1 if notes else 1
+                now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                room_labels = {
+                    "Boss": "บอส (Boss)",
+                    "Friend1": "เพื่อน 1",
+                    "Friend2": "เพื่อน 2",
+                    "Friend3": "เพื่อน 3",
+                    "Friend4": "เพื่อน 4"
+                }
+                room_lbl = room_labels.get(room, room)
+                notes.append({
+                    "id": next_id,
+                    "text": f"อัปโหลดไฟล์สำเร็จ: '{final_filename}' ไปยังห้อง '{room_lbl}'",
+                    "timestamp": now_str
+                })
+                with open(NOTES_FILE, 'w', encoding='utf-8') as nf:
+                    json.dump(notes, nf, ensure_ascii=False, indent=4)
+                
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'status': 'success', 'filename': final_filename}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
+            return
+            
+        elif path == '/api/delete-file':
+            filename = query_params.get("filename", [""])[0]
+            filename = os.path.basename(filename)
+            room = query_params.get("room", ["Boss"])[0]
+            if room not in ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]:
+                room = "Boss"
+                
+            upload_dir = os.path.join(DIRECTORY, "uploads", room)
+            file_path = os.path.join(upload_dir, filename)
+            
+            try:
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                    
+                    # Append delete note to notes.json
+                    if os.path.exists(NOTES_FILE):
+                        with open(NOTES_FILE, 'r', encoding='utf-8') as nf:
+                            try:
+                                notes = json.load(nf)
+                            except Exception:
+                                notes = []
+                    else:
+                        notes = []
+                    import datetime
+                    next_id = max([n.get("id", 0) for n in notes]) + 1 if notes else 1
+                    now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    room_labels = {
+                        "Boss": "บอส (Boss)",
+                        "Friend1": "เพื่อน 1",
+                        "Friend2": "เพื่อน 2",
+                        "Friend3": "เพื่อน 3",
+                        "Friend4": "เพื่อน 4"
+                    }
+                    room_lbl = room_labels.get(room, room)
+                    notes.append({
+                        "id": next_id,
+                        "text": f"ลบไฟล์สำเร็จ: '{filename}' จากห้อง '{room_lbl}'",
+                        "timestamp": now_str
+                    })
+                    with open(NOTES_FILE, 'w', encoding='utf-8') as nf:
+                        json.dump(notes, nf, ensure_ascii=False, indent=4)
+                    
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'status': 'success'}).encode('utf-8'))
+                else:
+                    self.send_response(404)
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'error': 'File not found'}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
+            return
+            
+        elif path == '/api/rename-file':
+            old_filename = query_params.get("old_filename", [""])[0]
+            old_filename = os.path.basename(old_filename)
+            new_filename = query_params.get("new_filename", [""])[0]
+            new_filename = os.path.basename(new_filename)
+            room = query_params.get("room", ["Boss"])[0]
+            if room not in ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]:
+                room = "Boss"
+                
+            upload_dir = os.path.join(DIRECTORY, "uploads", room)
+            old_path = os.path.join(upload_dir, old_filename)
+            new_path = os.path.join(upload_dir, new_filename)
+            
+            try:
+                if not old_filename or not new_filename:
+                    raise Exception("Missing file name parameter")
+                if os.path.exists(old_path):
+                    if os.path.exists(new_path) and old_filename.lower() != new_filename.lower():
+                        raise Exception("Destination file already exists")
+                    os.rename(old_path, new_path)
+                    
+                    # Append rename note to notes.json
+                    if os.path.exists(NOTES_FILE):
+                        with open(NOTES_FILE, 'r', encoding='utf-8') as nf:
+                            try:
+                                notes = json.load(nf)
+                            except Exception:
+                                notes = []
+                    else:
+                        notes = []
+                    import datetime
+                    next_id = max([n.get("id", 0) for n in notes]) + 1 if notes else 1
+                    now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    room_labels = {
+                        "Boss": "บอส (Boss)",
+                        "Friend1": "เพื่อน 1",
+                        "Friend2": "เพื่อน 2",
+                        "Friend3": "เพื่อน 3",
+                        "Friend4": "เพื่อน 4"
+                    }
+                    room_lbl = room_labels.get(room, room)
+                    notes.append({
+                        "id": next_id,
+                        "text": f"เปลี่ยนชื่อไฟล์สำเร็จ: '{old_filename}' เป็น '{new_filename}' ในห้อง '{room_lbl}'",
+                        "timestamp": now_str
+                    })
+                    with open(NOTES_FILE, 'w', encoding='utf-8') as nf:
+                        json.dump(notes, nf, ensure_ascii=False, indent=4)
+                    
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'status': 'success', 'filename': new_filename}).encode('utf-8'))
+                else:
+                    self.send_response(404)
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'error': 'Source file not found'}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
+            return
+
+        elif path == '/api/rename-project-file':
+            key = query_params.get("key", [""])[0]
+            new_filename = query_params.get("new_filename", [""])[0]
+            new_filename = os.path.basename(new_filename)
+            
+            try:
+                if not key or not new_filename:
+                    raise Exception("Missing parameters")
+                
+                data = load_project_files()
+                target_item = None
+                category_key = None
+                for cat in data:
+                    for item in data[cat]:
+                        if item['key'] == key:
+                            target_item = item
+                            category_key = cat
+                            break
+                    if target_item:
+                        break
+                        
+                if not target_item:
+                    raise Exception("Project file key not found")
+                
+                old_path = target_item['path']
+                old_filename = target_item['name']
+                
+                if os.path.exists(old_path):
+                    dir_name = os.path.dirname(old_path)
+                    new_path = os.path.join(dir_name, new_filename)
+                    
+                    if os.path.exists(new_path) and old_filename.lower() != new_filename.lower():
+                        raise Exception("Destination file already exists")
+                    
+                    os.rename(old_path, new_path)
+                    
+                    target_item['path'] = new_path
+                    target_item['name'] = new_filename
+                    target_item['label'] = new_filename
+                    save_project_files(data)
+                    
+                    if os.path.exists(NOTES_FILE):
+                        with open(NOTES_FILE, 'r', encoding='utf-8') as nf:
+                            try:
+                                notes = json.load(nf)
+                            except Exception:
+                                notes = []
+                    else:
+                        notes = []
+                    import datetime
+                    next_id = max([n.get("id", 0) for n in notes]) + 1 if notes else 1
+                    now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                    
+                    category_labels = {
+                        "campaign": "RUDEDOG FAIR CAMPAIGN",
+                        "youtube": "YOUTUBE PREMIUM APP",
+                        "compiler": "COMPILER SCRIPTS"
+                    }
+                    cat_lbl = category_labels.get(category_key, category_key)
+                    
+                    notes.append({
+                        "id": next_id,
+                        "text": f"เปลี่ยนชื่อไฟล์โปรเจกต์สำเร็จ: '{old_filename}' เป็น '{new_filename}' ในกลุ่ม '{cat_lbl}'",
+                        "timestamp": now_str
+                    })
+                    with open(NOTES_FILE, 'w', encoding='utf-8') as nf:
+                        json.dump(notes, nf, ensure_ascii=False, indent=4)
+                    
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'status': 'success', 'filename': new_filename}).encode('utf-8'))
+                else:
+                    self.send_response(404)
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'error': 'Source file not found on disk'}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
+            return
+
+        elif path == '/api/delete-project-file':
+            key = query_params.get("key", [""])[0]
+            
+            try:
+                if not key:
+                    raise Exception("Missing key parameter")
+                
+                data = load_project_files()
+                target_item = None
+                category_key = None
+                for cat in data:
+                    for item in data[cat]:
+                        if item['key'] == key:
+                            target_item = item
+                            category_key = cat
+                            break
+                    if target_item:
+                        break
+                        
+                if not target_item:
+                    raise Exception("Project file key not found")
+                
+                file_path = target_item['path']
+                filename = target_item['name']
+                
+                if os.path.exists(file_path):
+                    os.remove(file_path)
+                
+                data[category_key] = [item for item in data[category_key] if item['key'] != key]
+                save_project_files(data)
+                
+                if os.path.exists(NOTES_FILE):
+                    with open(NOTES_FILE, 'r', encoding='utf-8') as nf:
+                        try:
+                            notes = json.load(nf)
+                        except Exception:
+                            notes = []
+                else:
+                    notes = []
+                import datetime
+                next_id = max([n.get("id", 0) for n in notes]) + 1 if notes else 1
+                now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                
+                category_labels = {
+                    "campaign": "RUDEDOG FAIR CAMPAIGN",
+                    "youtube": "YOUTUBE PREMIUM APP",
+                    "compiler": "COMPILER SCRIPTS"
+                }
+                cat_lbl = category_labels.get(category_key, category_key)
+                
+                notes.append({
+                    "id": next_id,
+                    "text": f"ลบไฟล์โปรเจกต์สำเร็จ: '{filename}' จากกลุ่ม '{cat_lbl}'",
+                    "timestamp": now_str
+                })
+                with open(NOTES_FILE, 'w', encoding='utf-8') as nf:
+                    json.dump(notes, nf, ensure_ascii=False, indent=4)
+                
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'status': 'success'}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
+            return
+
+        post_data = self.rfile.read(content_length).decode('utf-8')
+        
+        if path == '/api/notes':
+            try:
+                # Save notes
+                notes = json.loads(post_data)
+                with open(NOTES_FILE, 'w', encoding='utf-8') as f:
+                    json.dump(notes, f, ensure_ascii=False, indent=4)
+                
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'status': 'success'}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
+                
+        elif path == '/api/action':
+            try:
+                req = json.loads(post_data)
+                action = req.get('action')
+                log_message = ""
+                
+                if action == 'regenerate_pdf':
+                    script_path = os.path.join(WORKSPACE_DIR, "create_pdf.py")
+                    result = subprocess.run(['python3', script_path], capture_output=True, text=True)
+                    if result.returncode == 0:
+                        log_message = "PDF Successfully compiled via headless Chrome."
+                    else:
+                        log_message = f"Error during compile: {result.stderr}"
+                        
+                elif action == 'restart_youtube':
+                    # Stop if running on port 8000
+                    try:
+                        # Find process listening on port 8000
+                        lsof_res = subprocess.run(['lsof', '-t', '-i', ':8000'], capture_output=True, text=True)
+                        if lsof_res.stdout.strip():
+                            pids = lsof_res.stdout.strip().split('\n')
+                            for pid in pids:
+                                subprocess.run(['kill', '-9', pid])
+                            log_message = "Killed existing YouTube Premium clone processes. "
+                        else:
+                            log_message = "YouTube Premium was not running. "
+                    except Exception as ex:
+                        log_message = f"Check/kill failed: {ex}. "
+
+                    # Start YouTube Premium server
+                    server_script = os.path.join(WORKSPACE_DIR, "youtube_premium_clone", "server.py")
+                    subprocess.Popen(['python3', server_script], start_new_session=True)
+                    log_message += "Launched server.py asynchronously on Port 8000."
+                    
+                elif action == 'restart_tunnel':
+                    # Stop existing localtunnel if any
+                    try:
+                        ps_res = subprocess.run(['pgrep', '-f', 'localtunnel'], capture_output=True, text=True)
+                        if ps_res.stdout.strip():
+                            pids = ps_res.stdout.strip().split('\n')
+                            for pid in pids:
+                                subprocess.run(['kill', '-9', pid])
+                            log_message = "Closed existing localtunnel process. "
+                        else:
+                            log_message = "Localtunnel was not running. "
+                    except Exception as ex:
+                        log_message = f"Check/kill failed: {ex}. "
+
+                    # Start localtunnel
+                    subprocess.Popen(['npx', 'localtunnel', '--port', '8000', '--subdomain', 'boswave-gamer'], start_new_session=True)
+                    log_message += "Launched localtunnel in background on subdomain 'boswave-gamer'."
+                
+                else:
+                    self.send_response(400)
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'error': 'Invalid action'}).encode('utf-8'))
+                    return
+                
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json')
+                self.end_headers()
+                self.wfile.write(json.dumps({'status': 'success', 'log': log_message}).encode('utf-8'))
+                
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
+
+if __name__ == "__main__":
+    if not os.path.exists(DIRECTORY):
+        os.makedirs(DIRECTORY)
+    os.chdir(DIRECTORY)
+    socketserver.ThreadingTCPServer.allow_reuse_address = True
+    with socketserver.ThreadingTCPServer(("", PORT), SecondBrainHandler) as httpd:
+        print(f"Jarvis Second Brain Server running on port {PORT}")
+        httpd.serve_forever()

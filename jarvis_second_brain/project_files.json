@@ -1,0 +1,102 @@
+{
+    "campaign": [
+        {
+            "key": "strategy_md",
+            "name": "rudedog_content_ideas.md",
+            "path": "/Users/apple/.gemini/antigravity-ide/brain/31977e7a-8cdf-4a1a-8989-cd639dc5b055/rudedog_content_ideas.md",
+            "type": "md",
+            "label": "rudedog_content_ideas.md",
+            "canPreview": true
+        },
+        {
+            "key": "strategy_md_old",
+            "name": "rudedog_fair_10days_content.md",
+            "path": "/Users/apple/.gemini/antigravity-ide/brain/8107daaa-f0f2-4535-b751-7c4d1a1f6591/rudedog_fair_10days_content.md",
+            "type": "md",
+            "label": "rudedog_fair_10days_content.md (ปีก่อน)",
+            "canPreview": true
+        },
+        {
+            "key": "war_room",
+            "name": "RUDEDOG_FAIR_2026_WAR_ROOM.html",
+            "path": "/Users/apple/Downloads/RUDEDOG_FAIR_2026_WAR_ROOM.html",
+            "type": "html",
+            "label": "RUDEDOG_FAIR_2026_WAR_ROOM.html",
+            "canOpen": true,
+            "openUrl": "/view/war_room"
+        },
+        {
+            "key": "live_strategy",
+            "name": "กลยุทธ์ไลฟ์คืนนี้_แว่น_Jarvis.html",
+            "path": "/Users/apple/Downloads/กลยุทธ์ไลฟ์คืนนี้_แว่น_Jarvis.html",
+            "type": "html",
+            "label": "กลยุทธ์ไลฟ์คืนนี้_แว่น_Jarvis.html",
+            "canOpen": true,
+            "openUrl": "/view/live_strategy"
+        },
+        {
+            "key": "pdf_latest",
+            "name": "แผ่น2.pdf",
+            "path": "/Users/apple/Desktop/แผ่น2.pdf",
+            "type": "pdf",
+            "label": "แผ่น2.pdf",
+            "canOpen": true,
+            "openUrl": "/view/pdf"
+        },
+        {
+            "key": "pdf_old",
+            "name": "แผ่นๅ.pdf",
+            "path": "/Users/apple/Desktop/แผ่นๅ.pdf",
+            "type": "pdf",
+            "label": "แผ่นๅ.pdf",
+            "canOpen": true,
+            "openUrl": "/view/pdf_old"
+        }
+    ],
+    "youtube": [
+        {
+            "key": "yt_html",
+            "name": "index.html",
+            "path": "/Users/apple/.gemini/antigravity-ide/scratch/youtube_premium_clone/index.html",
+            "type": "code",
+            "label": "index.html"
+        },
+        {
+            "key": "yt_js",
+            "name": "app.js",
+            "path": "/Users/apple/.gemini/antigravity-ide/scratch/youtube_premium_clone/app.js",
+            "type": "code",
+            "label": "app.js"
+        },
+        {
+            "key": "yt_css",
+            "name": "index.css",
+            "path": "/Users/apple/.gemini/antigravity-ide/scratch/youtube_premium_clone/index.css",
+            "type": "code",
+            "label": "index.css"
+        },
+        {
+            "key": "yt_server",
+            "name": "server.py",
+            "path": "/Users/apple/.gemini/antigravity-ide/scratch/youtube_premium_clone/server.py",
+            "type": "code",
+            "label": "server.py"
+        }
+    ],
+    "compiler": [
+        {
+            "key": "pdf_script",
+            "name": "generate_dark_pdf.py",
+            "path": "/Users/apple/.gemini/antigravity-ide/scratch/generate_dark_pdf.py",
+            "type": "code",
+            "label": "generate_dark_pdf.py"
+        },
+        {
+            "key": "pdf_script_beautiful",
+            "name": "generate_beautiful_pdf.py",
+            "path": "/Users/apple/.gemini/antigravity-ide/scratch/generate_beautiful_pdf.py",
+            "type": "code",
+            "label": "generate_beautiful_pdf.py"
+        }
+    ]
+}

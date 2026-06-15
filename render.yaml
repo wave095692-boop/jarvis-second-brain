@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: jarvis-second-brain
+    env: docker
+    dockerfilePath: ./jarvis_second_brain/Dockerfile
+    plan: free
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: YOUTUBE_PUBLIC_URL
+        value: "" # Set this in Render UI after youtube-premium-clone is deployed (e.g. https://youtube-premium-clone.onrender.com)
+      - key: DASHBOARD_PUBLIC_URL
+        value: "" # Set this in Render UI to the dashboard url (e.g. https://jarvis-second-brain.onrender.com)
+
+  - type: web
+    name: youtube-premium-clone
+    env: docker
+    dockerfilePath: ./youtube_premium_clone/Dockerfile
+    plan: free
+    envVars:
+      - key: PORT
+        value: 10000

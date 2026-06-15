@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS SECOND BRAIN — Control Room</title>
+    <!-- Lucide Icons & Fonts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css?v=2.3">
+    <style>
+        /* Embed docx styles directly to avoid browser CSS caching */
+        .docx-viewer {
+            background: #ffffff !important;
+            color: #2b2b2b !important;
+            padding: 40px 50px !important;
+            border-radius: 8px !important;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+            max-height: 550px !important;
+            overflow-y: auto !important;
+            font-family: 'Times New Roman', Georgia, serif, 'Kanit' !important;
+            font-size: 16px !important;
+            line-height: 1.6 !important;
+            text-align: left !important;
+            border: 1px solid #ddd !important;
+            margin: 10px auto !important;
+            max-width: 800px !important;
+        }
+        .docx-viewer h1, .docx-viewer h2, .docx-viewer h3, .docx-viewer h4 {
+            font-family: 'Kanit', sans-serif !important;
+            color: #111111 !important;
+            margin-top: 1.2em !important;
+            margin-bottom: 0.6em !important;
+            font-weight: 700 !important;
+        }
+        .docx-viewer h1 { font-size: 22px !important; border-bottom: 1px solid #ddd !important; padding-bottom: 5px !important; }
+        .docx-viewer h2 { font-size: 18px !important; }
+        .docx-viewer h3 { font-size: 16px !important; }
+        .docx-viewer p {
+            margin-bottom: 1em !important;
+            color: #222222 !important;
+        }
+        .docx-viewer ul, .docx-viewer ol {
+            margin-bottom: 1em !important;
+            padding-left: 20px !important;
+            color: #222222 !important;
+        }
+        .docx-viewer li {
+            margin-bottom: 0.4em !important;
+        }
+        .docx-viewer table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin: 15px 0 !important;
+            font-size: 14px !important;
+        }
+        .docx-viewer th, .docx-viewer td {
+            border: 1px solid #cccccc !important;
+            padding: 8px 12px !important;
+            text-align: left !important;
+            color: #222222 !important;
+        }
+        .docx-viewer th {
+            background-color: #f5f5f5 !important;
+            font-weight: bold !important;
+        }
+
+        /* Beautiful Brutalist DOCX custom dashboard presentation styles */
+        .docx-beautiful-container {
+            background: #FAF9F6 !important;
+            color: #121212 !important;
+            padding: 35px 30px !important;
+            border-radius: 8px !important;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+            max-height: 580px !important;
+            overflow-y: auto !important;
+            font-family: 'Anuphan', 'Kanit', sans-serif !important;
+            font-size: 14.5px !important;
+            line-height: 1.6 !important;
+            text-align: left !important;
+            border: 2px solid #121212 !important;
+            margin: 0 auto !important;
+        }
+
+        .docx-intro-header {
+            border-bottom: 4px solid #121212 !important;
+            padding-bottom: 20px !important;
+            margin-bottom: 25px !important;
+        }
+
+        .docx-intro-header h1 {
+            font-family: 'Kanit', sans-serif !important;
+            font-size: 26px !important;
+            font-weight: 800 !important;
+            margin: 0 0 10px 0 !important;
+            color: #121212 !important;
+            text-transform: uppercase !important;
+        }
+
+        .docx-intro-subtitle {
+            font-size: 14px !important;
+            color: #444444 !important;
+            margin-bottom: 15px !important;
+            font-weight: 600 !important;
+        }
+
+        .docx-meta-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+            gap: 12px !important;
+            margin-top: 15px !important;
+            margin-bottom: 15px !important;
+        }
+
+        .docx-meta-item {
+            border: 2px solid #121212 !important;
+            padding: 10px 12px !important;
+            background: #ffffff !important;
+            box-shadow: 3px 3px 0 #121212 !important;
+        }
+
+        .docx-meta-item b {
+            display: block !important;
+            font-family: 'IBM Plex Mono', monospace !important;
+            font-size: 15px !important;
+            color: #FF4D00 !important;
+        }
+
+        .docx-meta-item span {
+            font-size: 11px !important;
+            color: #555555 !important;
+            font-weight: 600 !important;
+        }
+
+        .docx-phase-box {
+            background: #ffffff !important;
+            border: 2px solid #121212 !important;
+            padding: 12px 15px !important;
+            margin-bottom: 12px !important;
+            box-shadow: 3px 3px 0 #121212 !important;
+        }
+
+        .docx-phase-box h4, .docx-rules-box h4 {
+            font-family: 'Kanit', sans-serif !important;
+            margin: 0 0 8px 0 !important;
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            color: #121212 !important;
+        }
+
+        .docx-rules-box {
+            background: #fff9e6 !important;
+            border: 2px dashed #ffb300 !important;
+            padding: 12px 15px !important;
+            margin-bottom: 15px !important;
+            border-radius: 4px !important;
+        }
+
+        .docx-rules-box ul, .docx-phase-box ul {
+            padding-left: 20px !important;
+            margin: 0 !important;
+        }
+
+        .docx-rules-box li {
+            margin-bottom: 6px !important;
+            font-size: 12.5px !important;
+            color: #664d03 !important;
+        }
+
+        .docx-card {
+            background: #ffffff !important;
+            border: 2px solid #121212 !important;
+            border-left: 10px solid #121212 !important;
+            padding: 20px !important;
+            margin-bottom: 25px !important;
+            box-shadow: 4px 4px 0 #121212 !important;
+            border-radius: 4px !important;
+        }
+
+        .docx-card.reach { border-left-color: #FF4D00 !important; }
+        .docx-card.believe { border-left-color: #0E6BA8 !important; }
+        .docx-card.move { border-left-color: #1F7A3D !important; }
+
+        .docx-card-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+            border-bottom: 2px solid #121212 !important;
+            padding-bottom: 8px !important;
+            margin-bottom: 12px !important;
+        }
+
+        .docx-card-header .ep-info {
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .docx-card-header .ep-num {
+            font-family: 'IBM Plex Mono', monospace !important;
+            color: #FF4D00 !important;
+            font-weight: 700 !important;
+            font-size: 11.5px !important;
+        }
+
+        .docx-card-header .ep-title {
+            font-family: 'Kanit', sans-serif !important;
+            font-size: 16.5px !important;
+            font-weight: 700 !important;
+            margin: 4px 0 0 0 !important;
+            color: #121212 !important;
+        }
+
+        .docx-card-header .badge {
+            font-family: 'Kanit', sans-serif !important;
+            font-weight: 700 !important;
+            font-size: 10px !important;
+            color: #ffffff !important;
+            padding: 3px 8px !important;
+            border-radius: 2px !important;
+            text-transform: uppercase !important;
+        }
+
+        .docx-card-header .badge.reach { background: #FF4D00 !important; }
+        .docx-card-header .badge.believe { background: #0E6BA8 !important; }
+        .docx-card-header .badge.move { background: #1F7A3D !important; }
+
+        .docx-card-meta-line {
+            font-size: 12.5px !important;
+            margin-bottom: 6px !important;
+            color: #333333 !important;
+        }
+
+        .docx-card-meta-line strong {
+            color: #121212 !important;
+        }
+
+        .docx-card-tag {
+            display: inline-block !important;
+            background: #f0f0f0 !important;
+            border: 1px solid #d1cfca !important;
+            padding: 3px 8px !important;
+            font-size: 11px !important;
+            font-family: 'IBM Plex Mono', monospace !important;
+            margin-bottom: 12px !important;
+            border-radius: 4px !important;
+            color: #555555 !important;
+        }
+
+        .docx-idea-box {
+            background: #FAF9F6 !important;
+            border: 1px solid #d1cfca !important;
+            padding: 12px !important;
+            margin-bottom: 12px !important;
+            border-radius: 4px !important;
+        }
+
+        .docx-idea-box:last-child {
+            margin-bottom: 0 !important;
+        }
+
+        .docx-idea-title {
+            font-family: 'Kanit', sans-serif !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            color: #121212 !important;
+            margin-bottom: 6px !important;
+            border-bottom: 1px dashed #d1cfca !important;
+            padding-bottom: 4px !important;
+        }
+
+        .docx-idea-details {
+            margin: 0 !important;
+            padding-left: 15px !important;
+            font-size: 12px !important;
+            line-height: 1.5 !important;
+            color: #333333 !important;
+        }
+
+        .docx-idea-details li {
+            margin-bottom: 4px !important;
+        }
+
+        .docx-idea-details li:last-child {
+            margin-bottom: 0 !important;
+        }
+
+        /* Compact action icon buttons for files */
+        .btn-icon-action {
+            background: rgba(255, 255, 255, 0.02) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--neon-cyan) !important;
+            width: 22px !important;
+            height: 22px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            padding: 0 !important;
+            outline: none !important;
+        }
+        .btn-icon-action:hover {
+            background: rgba(0, 242, 254, 0.1) !important;
+            border-color: var(--neon-cyan) !important;
+            box-shadow: 0 0 8px rgba(0, 242, 254, 0.2) !important;
+            color: #fff !important;
+        }
+        .btn-icon-action.text-pink {
+            color: var(--neon-pink) !important;
+            border-color: rgba(255, 0, 80, 0.3) !important;
+        }
+        .btn-icon-action.text-pink:hover {
+            background: rgba(255, 0, 80, 0.1) !important;
+            border-color: var(--neon-pink) !important;
+            box-shadow: 0 0 8px rgba(255, 0, 80, 0.2) !important;
+            color: #fff !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Game-like Loading Screen Overlay -->
+    <div id="loader-overlay" class="loader-overlay">
+        <div class="loader-container">
+            <div class="loader-cyber-grid"></div>
+            <div class="loader-glitch-text" data-text="JARVIS // SECOND BRAIN">JARVIS // SECOND BRAIN</div>
+            <div class="loader-subtitle">NEURAL LINK INTERFACE</div>
+            
+            <!-- Step 1: Click to Boot (Autoplay workaround & Game vibe) -->
+            <div id="loader-init-screen" class="loader-init-screen">
+                <button id="loader-start-btn" class="loader-start-btn">
+                    <span class="btn-scanlines"></span>
+                    <span class="btn-text">INITIATE NEURAL LINK</span>
+                </button>
+                <div class="loader-tip">System will synthesize tactical audio protocols</div>
+            </div>
+
+            <!-- Step 2: Progress Screen (Hidden initially) -->
+            <div id="loader-progress-screen" class="loader-progress-screen" style="display: none;">
+                <div class="loader-progress-wrapper">
+                    <div class="loader-progress-bar">
+                        <div id="loader-progress-fill" class="loader-progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="loader-progress-details">
+                        <span id="loader-status-text">WAITING FOR HANDSHAKE...</span>
+                        <span id="loader-percentage">0%</span>
+                    </div>
+                </div>
+
+                <div class="loader-terminal-box">
+                    <div id="loader-terminal-logs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hud-container">
+        <!-- Header HUD -->
+        <header class="hud-header">
+            <div class="hud-title-wrapper">
+                <div class="cyber-blink red-blink"></div>
+                <h1>JARVIS // SECOND BRAIN</h1>
+                <span class="premium-badge">TACTICAL COMMAND</span>
+            </div>
+            <div class="hud-meta">
+                <div class="meta-block">
+                    <span class="lbl">LAN IP:</span>
+                    <span id="hud-lan-ip" class="val text-cyan">loading...</span>
+                </div>
+                <div class="meta-block">
+                    <span class="lbl">SYSTEM:</span>
+                    <span id="hud-cpu" class="val text-pink">loading...</span>
+                </div>
+                <div class="meta-block">
+                    <span class="lbl">DISK STATUS:</span>
+                    <span id="hud-disk" class="val text-yellow">loading...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Workspace Grid -->
+        <main class="hud-grid">
+            <!-- Column 1: Diagnostics & Files -->
+            <div class="grid-column-wrapper">
+                <!-- Diagnostics -->
+                <section class="hud-card diagnostic-panel">
+                    <div class="card-glow"></div>
+                    <h2><i data-lucide="activity"></i> SYSTEM DIAGNOSTICS</h2>
+                    <div class="diagnostic-list">
+                        <div class="diag-item">
+                            <span class="diag-label">YOUTUBE PREMIUM WEB CLIENT</span>
+                            <div class="diag-status">
+                                <span id="yt-status-text" class="status-text text-dim">checking...</span>
+                                <div id="yt-status-led" class="status-led led-gray"></div>
+                            </div>
+                        </div>
+                        <div class="diag-item">
+                            <span class="diag-label">ONLINE TUNNEL (LOCALTUNNEL)</span>
+                            <div class="diag-status">
+                                <span id="tunnel-status-text" class="status-text text-dim">checking...</span>
+                                <div id="tunnel-status-led" class="status-led led-gray"></div>
+                            </div>
+                        </div>
+                        <div class="diag-item">
+                            <span class="diag-label">RUDEDOG CONTENT IDEAS PDF</span>
+                            <div class="diag-status">
+                                <span id="pdf-status-text" class="status-text text-dim">checking...</span>
+                                <div id="pdf-status-led" class="status-led led-gray"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="network-info-box">
+                        <h3><i data-lucide="globe"></i> CONNECTIVITY PROFILE</h3>
+                        <div class="net-grid">
+                            <div class="net-item">
+                                <span class="net-lbl">DASHBOARD URL:</span>
+                                <a id="lan-link" href="#" target="_blank" class="net-val text-yellow">loading...</a>
+                            </div>
+                            <div class="net-item">
+                                <span class="net-lbl">YOUTUBE CLONE:</span>
+                                <a id="tunnel-link" href="#" target="_blank" class="net-val text-pink">loading...</a>
+                            </div>
+                            <div class="net-item">
+                                <span class="net-lbl">PDF ON DESKTOP:</span>
+                                <span id="pdf-mtime" class="net-val text-cyan">loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Project File Explorer -->
+                <section class="hud-card explorer-panel" style="margin-top: 24px;">
+                    <div class="card-glow"></div>
+                    <h2 style="color: var(--neon-cyan);"><i data-lucide="folder-open"></i> PROJECT FILE EXPLORER</h2>
+                    
+                    <div class="explorer-groups">
+                        <div class="exp-group">
+                            <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-down" class="group-arrow"></i> RUDEDOG FAIR CAMPAIGN</div>
+                            <div class="exp-files" id="project-campaign-files">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="exp-group">
+                            <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-right" class="group-arrow"></i> YOUTUBE PREMIUM APP</div>
+                            <div class="exp-files" id="project-youtube-files" style="display: none;">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="exp-group">
+                            <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-right" class="group-arrow"></i> COMPILER SCRIPTS</div>
+                            <div class="exp-files" id="project-compiler-files" style="display: none;">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+
+                        <div class="exp-group">
+                            <div class="exp-group-title" style="color: var(--neon-pink); display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px;">
+                                <span><i data-lucide="chevron-right"></i> SHARED ROOMS</span>
+                                <div style="display: flex; align-items: center; gap: 4px; margin-left: auto;">
+                                    <select id="user-room-select" class="btn-exp-action" style="background: var(--dark); border: 1px solid var(--neon-pink); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 2px 4px; border-radius: 2px; height: 20px; cursor: pointer;">
+                                        <option value="Boss">บอส (Boss)</option>
+                                        <option value="Friend1">เพื่อน 1 (Friend 1)</option>
+                                        <option value="Friend2">เพื่อน 2 (Friend 2)</option>
+                                        <option value="Friend3">เพื่อน 3 (Friend 3)</option>
+                                        <option value="Friend4">เพื่อน 4 (Friend 4)</option>
+                                    </select>
+                                    <button class="btn-exp-action text-pink" onclick="triggerFileUpload()" style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; cursor: pointer; border: 1px solid var(--neon-pink); height: 20px;">
+                                        <i data-lucide="upload-cloud" style="width: 12px; height: 12px;"></i> UPLOAD
+                                    </button>
+                                </div>
+                                <input type="file" id="pdf-upload-file" style="display: none;" onchange="handleFileUpload(event)">
+                            </div>
+                            <div class="exp-files" id="uploaded-files-list">
+                                <!-- Loaded dynamically via JS -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Column 2: Controls & Terminal -->
+            <section class="hud-card control-panel">
+                <div class="card-glow"></div>
+                <h2><i data-lucide="sliders"></i> QUICK COMMAND CONSOLE</h2>
+                
+                <div class="control-actions">
+                    <button class="btn-hud btn-cyan" onclick="runAction('restart_youtube')">
+                        <i data-lucide="play-circle"></i>
+                        <div class="btn-text">
+                            <b>LAUNCH YOUTUBE PREMIUM</b>
+                            <span>Restart python server.py on port 8000</span>
+                        </div>
+                    </button>
+                    <button class="btn-hud btn-pink" onclick="runAction('restart_tunnel')">
+                        <i data-lucide="share-2"></i>
+                        <div class="btn-text">
+                            <b>ESTABLISH LOCALTUNNEL</b>
+                            <span>Forward port 8000 to public subdomain</span>
+                        </div>
+                    </button>
+                    <button class="btn-hud btn-orange" onclick="runAction('regenerate_pdf')">
+                        <i data-lucide="file-text"></i>
+                        <div class="btn-text">
+                            <b>REGENERATE STRATEGY PDF</b>
+                            <span>Compile create_pdf.py to Desktop</span>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="terminal-container">
+                    <div class="term-header">
+                        <span class="term-title"><i data-lucide="terminal"></i> JARVIS COMMAND LOGS</span>
+                        <span class="term-status">READY</span>
+                    </div>
+                    <div id="terminal-body" class="term-body">
+                        [13:18:04] SYSTEM INITIALIZED // WALKING THROUGH MEMORY STATUS...
+                        [13:18:05] ACTIVE INSTANCE CONNECTED ON PORT 8500.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Column 3: Notes (Second Brain Memory) -->
+            <section class="hud-card memory-panel">
+                <div class="card-glow"></div>
+                <h2><i data-lucide="brain"></i> SECOND BRAIN MEMORY</h2>
+                
+                <!-- Quick input to add note -->
+                <div class="note-input-wrapper">
+                    <input type="text" id="note-input" placeholder="ป้อนความจำใหม่ บันทึกไอเดีย/ภารกิจค้าง..." onkeypress="handleNoteKeyPress(event)">
+                    <button class="btn-add" onclick="addNote()"><i data-lucide="plus"></i></button>
+                </div>
+
+                <div id="notes-list" class="notes-list">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </section>
+        </main>
+
+        <!-- HUD Code Viewer Modal Overlay -->
+        <div id="code-viewer-modal" class="hud-modal" style="display: none;">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <span id="modal-file-title" class="modal-title"><i data-lucide="file-code"></i> FILE VIEWER // LOADING...</span>
+                    <button class="btn-close" onclick="closeFileViewer()"><i data-lucide="x"></i></button>
+                </header>
+                <div class="modal-body" id="modal-body-container">
+                    <pre id="modal-pre-block"><code id="modal-code-block" class="code-block">loading file contents...</code></pre>
+                    <div id="modal-custom-preview" style="display: none; width: 100%; height: 100%;"></div>
+                </div>
+                <footer class="modal-footer-box">
+                    <span id="modal-file-path">PATH: /unknown/file</span>
+                    <button class="btn-modal-action" onclick="closeFileViewer()">CLOSE VIEW</button>
+                </footer>
+            </div>
+        </div>
+        
+        <footer class="hud-footer">
+            <span>JARVIS SYSTEM v4.0 // ACTIVE COMMAND AND MEMORY DASHBOARD</span>
+            <span>TONY STARK PRIVATE WORKSPACE</span>
+        </footer>
+    </div>
+
+    <!-- Script file -->
+    <script src="app.js?v=2.3"></script>
+</body>
+</html>

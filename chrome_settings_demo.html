@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome Settings Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --google-blue: #1a73e8;
+            --google-blue-hover: #1557b0;
+            --google-gray-50: #f8f9fa;
+            --google-gray-100: #f1f3f4;
+            --google-gray-200: #e8eaed;
+            --google-gray-600: #5f6368;
+            --google-gray-900: #202124;
+            --border-color: #dadce0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: var(--google-gray-900);
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Top Header */
+        header {
+            height: 56px;
+            background-color: var(--google-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            z-index: 10;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            font-size: 20px;
+        }
+
+        .chrome-logo {
+            width: 28px;
+            height: 28px;
+        }
+
+        /* Container Layout */
+        .container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 250px;
+            border-right: 1px solid var(--border-color);
+            background-color: #ffffff;
+            padding-top: 8px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 24px;
+            font-size: 14px;
+            color: var(--google-gray-900);
+            text-decoration: none;
+            cursor: pointer;
+            border-radius: 0 20px 20px 0;
+            margin-right: 8px;
+            font-weight: 500;
+        }
+
+        .sidebar-item.active {
+            background-color: #e8f0fe;
+            color: var(--google-blue);
+        }
+
+        .sidebar-item:hover:not(.active) {
+            background-color: var(--google-gray-100);
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 40px 60px;
+            overflow-y: auto;
+            background-color: #ffffff;
+        }
+
+        .breadcrumb {
+            font-size: 13px;
+            color: var(--google-gray-600);
+            margin-bottom: 24px;
+        }
+
+        .breadcrumb span {
+            margin: 0 8px;
+        }
+
+        .page-title-container {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .icon-container {
+            width: 40px;
+            height: 40px;
+            background-color: #e8f0fe;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--google-blue);
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 500;
+        }
+
+        /* Settings Card */
+        .settings-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .option-row {
+            display: flex;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            position: relative;
+        }
+
+        .option-row:last-child {
+            border-bottom: none;
+        }
+
+        .option-row:hover {
+            background-color: var(--google-gray-50);
+        }
+
+        .radio-container {
+            margin-right: 20px;
+            display: flex;
+            align-items: flex-start;
+            padding-top: 2px;
+        }
+
+        .radio-btn {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--google-gray-600);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s;
+        }
+
+        .radio-btn.checked {
+            border-color: var(--google-blue);
+        }
+
+        .radio-btn.checked::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background-color: var(--google-blue);
+            border-radius: 50%;
+        }
+
+        .option-text {
+            flex: 1;
+        }
+
+        .option-title {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .option-desc {
+            font-size: 13px;
+            color: var(--google-gray-600);
+            line-height: 1.4;
+        }
+
+        /* Pulse and Guide Overlay */
+        .guide-highlight {
+            border: 3px solid #1a73e8;
+            box-shadow: 0 0 15px rgba(26, 115, 232, 0.4);
+            animation: pulse 2s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(26, 115, 232, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(26, 115, 232, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(26, 115, 232, 0);
+            }
+        }
+
+        .guide-tooltip {
+            position: absolute;
+            left: 105%;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #202124;
+            color: white;
+            padding: 16px 20px;
+            border-radius: 8px;
+            width: 280px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 100;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .guide-tooltip::before {
+            content: '';
+            position: absolute;
+            right: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            border-width: 8px;
+            border-style: solid;
+            border-color: transparent #202124 transparent transparent;
+        }
+
+        .guide-tooltip h4 {
+            color: #8ab4f8;
+            margin-bottom: 8px;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* Info Banner */
+        .info-banner {
+            background-color: #fce8e6;
+            border: 1px solid #fad2cf;
+            color: #c5221f;
+            padding: 16px 24px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+        }
+
+        .info-banner-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-section">
+            <svg class="chrome-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 0C16.3 0 20.1 2.9 21.4 7L12 7C9.2 7 7 9.2 7 12C7 13.1 7.4 14.1 8 14.9L3.5 7.1C1.3 10 0 13.5 0 17.5C0 19.1 0.3 20.7 0.9 22.2L6 13.3C6.6 10.7 8.9 9 11.6 9H22.9C23.6 10.2 24 11.6 24 13C24 19.6 18.6 25 12 25C10.7 25 9.5 24.8 8.3 24.4L13.5 15.4C14 15.8 14.7 16 15.4 16C17.6 16 19.4 14.2 19.4 12C19.4 10.8 19 9.8 18.3 9L13.8 16.8C11.6 16.8 9.8 15 9.8 12.8C9.8 12.2 10 11.6 10.3 11.1L5.2 2.2C7.1 0.8 9.5 0 12 0Z" fill="white"/>
+            </svg>
+            <span>Chrome Settings (การตั้งค่าโครม)</span>
+        </div>
+    </header>
+
+    <div class="container">
+        <aside>
+            <div class="sidebar-item">You and Google</div>
+            <div class="sidebar-item">Autofill and passwords</div>
+            <div class="sidebar-item active">Privacy and security</div>
+            <div class="sidebar-item">Appearance</div>
+            <div class="sidebar-item">Search engine</div>
+            <div class="sidebar-item">On startup</div>
+        </aside>
+
+        <main>
+            <div class="breadcrumb">
+                Privacy and security <span>&gt;</span> Site settings <span>&gt;</span> On-device site data
+            </div>
+
+            <div class="page-title-container">
+                <div class="icon-container">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+                        <path d="M3 5V19A9 3 0 0 0 21 19V5"></path>
+                        <path d="M3 12A9 3 0 0 0 21 12"></path>
+                    </svg>
+                </div>
+                <h2 class="page-title">On-device site data (ข้อมูลไซต์บนอุปกรณ์)</h2>
+            </div>
+
+            <!-- Red banner to highlight warning -->
+            <div class="info-banner">
+                <div class="info-banner-icon">⚠️</div>
+                <div>
+                    <strong>สาเหตุของปัญหา:</strong> หากเลือกหัวข้อที่สองไว้ เมื่อปิดเบราว์เซอร์ ข้อมูลจะถูกลบทั้งหมด ทำให้ไม่จดจำข้อมูลหรือการล็อกอินครับ
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <!-- Option 1: ALLOW (Correct) -->
+                <div class="option-row guide-highlight" id="opt-allow">
+                    <div class="radio-container">
+                        <div class="radio-btn checked"></div>
+                    </div>
+                    <div class="option-text">
+                        <div class="option-title">
+                            Allow sites to save data on your device
+                            <span style="color: #188038; background-color: #e6f4ea; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: bold;">แนะนำ / Recommended</span>
+                        </div>
+                        <div class="option-desc">
+                            อนุญาตให้เว็บไซต์บันทึกข้อมูลในอุปกรณ์ของคุณ (ข้อมูล เช่น คีย์, การตั้งค่า, เซสชันล็อกอิน จะไม่หายเมื่อปิดโครม)
+                        </div>
+                    </div>
+                    
+                    <!-- Pulsing Tooltip -->
+                    <div class="guide-tooltip">
+                        <h4>👉 ต้องตั้งค่าเป็นข้อนี้ครับบอส!</h4>
+                        กดเลือกตัวเลือกนี้ เพื่อให้เครื่องของเพื่อนยอมจำค่าประวัติ คีย์ และการตั้งค่าของหน้าเว็บเมื่อปิดโปรแกรมครับ
+                    </div>
+                </div>
+
+                <!-- Option 2: DELETE ON EXIT (Incorrect) -->
+                <div class="option-row" id="opt-delete">
+                    <div class="radio-container">
+                        <div class="radio-btn"></div>
+                    </div>
+                    <div class="option-text">
+                        <div class="option-title" style="color: #c5221f;">
+                            Delete data sites have saved on your device when you close all windows
+                        </div>
+                        <div class="option-desc">
+                            ลบข้อมูลที่ไซต์บันทึกไว้ในอุปกรณ์ของคุณเมื่อคุณปิดหน้าต่างทั้งหมด (สาเหตุที่ทำให้ข้อมูลหายและต้องเริ่มใหม่ทุกครั้งเมื่อเปิดแอพ)
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Option 3: BLOCK ALL -->
+                <div class="option-row" id="opt-block">
+                    <div class="radio-container">
+                        <div class="radio-btn"></div>
+                    </div>
+                    <div class="option-text">
+                        <div class="option-title">
+                            Don't allow sites to save data on your device
+                        </div>
+                        <div class="option-desc">
+                            ไม่อนุญาตให้ไซต์บันทึกข้อมูลใด ๆ เลย (จะไม่จำค่าใด ๆ ทั้งสิ้น)
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p style="font-size: 13px; color: var(--google-gray-600); text-align: center; margin-top: 40px;">
+                * การสาธิตการตั้งค่า Chrome - Antigravity IDE
+            </p>
+        </main>
+    </div>
+
+    <script>
+        // Simulating option change on click
+        const rows = document.querySelectorAll('.option-row');
+        rows.forEach(row => {
+            row.addEventListener('click', () => {
+                rows.forEach(r => r.querySelector('.radio-btn').classList.remove('checked'));
+                row.querySelector('.radio-btn').classList.add('checked');
+            });
+        });
+    </script>
+</body>
+</html>

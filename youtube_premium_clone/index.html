@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube Premium Personal Client - แอปพลิเคชันเล่นยูทูปส่วนตัวแบบไม่มีโฆษณาคั่น พร้อมฟังก์ชันการเก็บประวัติและเพลย์ลิสต์">
+    <title>BOS WAVE - Gamer Client</title>
+    <!-- Lucide Icons for premium modern look -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <!-- Netflix-Style Intro Loader with Gamer Graphics -->
+    <div id="intro-loader" class="intro-loader" style="cursor: pointer;">
+        <div class="intro-ring" id="intro-ring"></div>
+        <div class="intro-logo-container">
+            <span class="intro-logo" id="intro-logo">BOS WAVE</span>
+            <div class="intro-bar" id="intro-bar"></div>
+            <div id="intro-progress" class="intro-progress">CLICK ANYWHERE TO INITIALIZE SYSTEM</div>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <a href="#" class="logo-container" id="menu-logo">
+                <span class="logo-text">BOS WAVE</span>
+                <span class="premium-badge">GAMER</span>
+            </a>
+
+            <!-- Discover Menu -->
+            <div class="menu-group">
+                <div class="menu-title">ค้นพบ</div>
+                <div class="menu-item active" id="menu-home" onclick="switchView('home')">
+                    <i data-lucide="home"></i>
+                    <span>หน้าแรก</span>
+                </div>
+                <div class="menu-item" id="menu-search" onclick="switchView('search')">
+                    <i data-lucide="search"></i>
+                    <span>ค้นหา</span>
+                </div>
+            </div>
+
+            <!-- Library Menu -->
+            <div class="menu-group">
+                <div class="menu-title">คลังวิดีโอ</div>
+                <div class="menu-item" id="menu-history" onclick="switchView('history')">
+                    <i data-lucide="history"></i>
+                    <span>ประวัติการดู</span>
+                </div>
+                <div class="menu-item" id="menu-watch-later" onclick="switchView('watch-later')">
+                    <i data-lucide="clock"></i>
+                    <span>ดูภายหลัง</span>
+                </div>
+                <div class="menu-item" id="menu-favorites" onclick="switchView('favorites')">
+                    <i data-lucide="heart"></i>
+                    <span>รายการโปรด</span>
+                </div>
+            </div>
+            
+             <!-- App version / info at bottom -->
+             <div class="sidebar-hud" style="margin-top: auto; padding: 12px; font-size: 11px; border-top: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px;">
+                 <div style="font-family: var(--font-gamer); color: var(--border-cyan); font-weight: 800; font-size: 10px; letter-spacing: 1px;">HUD: SERVER STATUS</div>
+                 
+                 <div style="display: flex; flex-direction: column; gap: 4px; font-family: var(--font-tech); font-size: 13px;">
+                     <div>
+                         <span style="color: var(--text-muted);">LOCAL LAN:</span> 
+                         <a href="#" target="_blank" id="hud-lan-ip" style="color: var(--border-yellow); text-decoration: none;">http://loading...</a>
+                     </div>
+                     <div>
+                         <span style="color: var(--text-muted);">ONLINE:</span> 
+                         <a href="https://boswave-gamer.loca.lt" target="_blank" style="color: var(--border-pink); text-decoration: none;">https://boswave-gamer.loca.lt</a>
+                     </div>
+                     <div>
+                         <span style="color: var(--text-muted);">PASS:</span> 
+                         <span id="hud-public-ip" style="color: var(--text-primary); font-weight: bold;">loading...</span>
+                     </div>
+                 </div>
+                 
+                 <div style="color: var(--text-muted); font-size: 10px; margin-top: 4px; border-top: 1px dashed rgba(153,0,255,0.2); padding-top: 4px;">
+                     BOS WAVE Client v3.2
+                 </div>
+             </div>
+         </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-area">
+            <!-- Header Search Bar & Direct URL Paste -->
+            <header class="top-header">
+                <!-- YouTube Search -->
+                <div class="search-bar-container">
+                    <div class="search-input-wrapper">
+                        <i data-lucide="search" class="search-icon"></i>
+                        <input type="text" id="input-search" class="search-input" placeholder="ค้นหาวิดีโอ หรือใส่คำค้นหา..." onkeypress="handleSearchKeyPress(event)">
+                    </div>
+                    <button class="btn-premium" onclick="triggerSearch()">ค้นหา</button>
+                </div>
+
+                <!-- Direct URL Fetch -->
+                <div class="url-paste-container">
+                    <input type="text" id="input-url" class="url-input" placeholder="วางลิงก์ YouTube ตรงนี้เพื่อเล่นด่วน...">
+                    <button class="btn-premium" onclick="playFromUrl()">เล่นด่วน</button>
+                </div>
+            </header>
+
+            <!-- Scrollable View Port -->
+            <main class="content-frame" id="content-frame">
+
+                <!-- 1. Home View -->
+                <section id="view-home" class="fade-in">
+                    <div class="info-section">
+                        <div class="info-content">
+                            <h3>สวัสดีครับบอส! ยินดีต้อนรับสู่ BOS WAVE (Gamer Edition)</h3>
+                            <p>ไม่มีโฆษณาคั่น เล่นความบันเทิงระดับพรีเมียมแบบไม่มีขีดจำกัด พร้อมบันทึกประวัติส่วนตัวครับ</p>
+                        </div>
+                        <i data-lucide="gamepad-2" style="color: var(--border-cyan); width: 36px; height: 36px;"></i>
+                    </div>
+
+                    <div class="section-title">วิดีโอแนะนำวันนี้</div>
+                    <div class="video-grid" id="grid-home">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- 2. Search View -->
+                <section id="view-search" style="display: none;" class="fade-in">
+                    <div class="section-title" id="search-title">ผลการค้นหาสำหรับ: </div>
+                    <div class="video-grid" id="grid-search">
+                        <!-- Loading Skeletons will appear here, then populated by JS -->
+                    </div>
+                </section>
+
+                <!-- 3. Player View -->
+                <section id="view-player" style="display: none;" class="fade-in">
+                    <div class="player-container">
+                        <!-- Main Video Column -->
+                        <div class="player-main">
+                            <div class="player-back-bar" style="margin-bottom: 16px; display: flex; gap: 8px;">
+                                <button class="btn-action" onclick="goBack()" style="border-color: var(--border-pink); color: var(--border-pink);">
+                                    <i data-lucide="arrow-left"></i>
+                                    <span>ย้อนกลับ</span>
+                                </button>
+                            </div>
+                            <div class="video-wrapper" id="video-wrapper">
+                                <!-- Iframe will be generated by JS here -->
+                            </div>
+                            
+                            <div class="video-details-card">
+                                <h2 class="player-title" id="player-title">ชื่อวิดีโอ YouTube</h2>
+                                
+                                <div class="player-actions">
+                                    <button class="btn-action" id="btn-fav" onclick="toggleFavoriteCurrent()">
+                                        <i data-lucide="heart"></i>
+                                        <span id="txt-fav">เพิ่มในรายการโปรด</span>
+                                    </button>
+                                    <button class="btn-action" id="btn-later" onclick="toggleWatchLaterCurrent()">
+                                        <i data-lucide="clock"></i>
+                                        <span id="txt-later">ดูภายหลัง</span>
+                                    </button>
+                                    <button class="btn-action" id="btn-backup-player" onclick="toggleBackupPlayer()" style="border-color: var(--border-yellow); color: var(--border-yellow);">
+                                        <i data-lucide="refresh-cw"></i>
+                                        <span id="txt-backup">เครื่องเล่นสำรอง (หากเล่นไม่ได้)</span>
+                                    </button>
+                                    <button class="btn-action" id="btn-backup-rotate" onclick="rotateBackupInstance()" style="border-color: var(--border-cyan); color: var(--border-cyan); display: none;">
+                                        <i data-lucide="shuffle"></i>
+                                        <span id="txt-backup-rotate">เปลี่ยนเซิร์ฟเวอร์สำรอง</span>
+                                    </button>
+                                    <button class="btn-action" onclick="toggleMiniPlayer()">
+                                        <i data-lucide="layers"></i>
+                                        <span>ย่อจอ/โหมดลอย</span>
+                                    </button>
+                                    <button class="btn-action" onclick="copyShareLink()">
+                                        <i data-lucide="share-2"></i>
+                                        <span>แชร์ลิงก์</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Column (Suggested Videos) -->
+                        <div class="player-sidebar">
+                            <div class="section-title">วิดีโอที่ใกล้เคียง</div>
+                            <div id="sidebar-suggestions" style="display: flex; flex-direction: column; gap: 16px;">
+                                <!-- Suggested Video list items -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. History View -->
+                <section id="view-history" style="display: none;" class="fade-in">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+                        <div class="section-title" style="margin-bottom: 0;">ประวัติการรับชมล่าสุด ของเครื่องนี้</div>
+                        <button class="btn-action" onclick="clearHistory()"><i data-lucide="trash-2"></i> ล้างประวัติทั้งหมด</button>
+                    </div>
+                    <div class="video-grid" id="grid-history">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- 5. Watch Later View -->
+                <section id="view-watch-later" style="display: none;" class="fade-in">
+                    <div class="section-title">รายการดูภายหลัง (Watch Later)</div>
+                    <div class="video-grid" id="grid-watch-later">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+                <!-- 6. Favorites View -->
+                <section id="view-favorites" style="display: none;" class="fade-in">
+                    <div class="section-title">รายการโปรดที่บันทึกไว้</div>
+                    <div class="video-grid" id="grid-favorites">
+                        <!-- Populated by JS -->
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="app-toast" class="toast">ข้อความแจ้งเตือน</div>
+
+    <script src="app.js"></script>
+</body>
+</html>

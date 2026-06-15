@@ -1,0 +1,1912 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RUDEDOG FAIR 2026 — Script 10 EP TikTok</title>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700;900&family=Sarabun:wght@400;500;600&family=IBM+Plex+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #F5F3EE;
+  --ink: #111111;
+  --reach: #D85A30;
+  --believe: #185FA5;
+  --move: #3B6D11;
+  --reach-bg: #FDF1EC;
+  --believe-bg: #EBF2FB;
+  --move-bg: #EDF5E5;
+  --gold: #BA7517;
+  --card: #FFFFFF;
+  --muted: #6B6860;
+  --border: #E0DDD5;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+  background-image: radial-gradient(rgba(17,17,17,.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.wrap { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+/* ===== HEADER ===== */
+.site-header {
+  background: var(--ink);
+  color: #fff;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid var(--reach);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.header-logo {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 900;
+  font-size: 1rem;
+  color: #fff;
+  letter-spacing: .05em;
+}
+.header-logo span { color: var(--reach); }
+.header-divider { flex: 1; }
+.phase-nav { display: flex; gap: 6px; flex-wrap: wrap; }
+.phase-btn {
+  font-family: 'Kanit', sans-serif;
+  font-size: .72rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 99px;
+  border: 1.5px solid rgba(255,255,255,.2);
+  background: transparent;
+  color: rgba(255,255,255,.6);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all .15s;
+  letter-spacing: .04em;
+}
+.phase-btn:hover { background: rgba(255,255,255,.1); color: #fff; }
+.phase-btn.r { border-color: var(--reach); color: var(--reach); }
+.phase-btn.b { border-color: var(--believe); color: #5A9FE0; }
+.phase-btn.m { border-color: var(--move); color: #7BC55E; }
+
+/* ===== HERO ===== */
+.hero {
+  padding: 52px 0 40px;
+  border-bottom: 2px solid var(--ink);
+  background: var(--card);
+}
+.eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .15em;
+  color: var(--reach);
+  margin-bottom: 10px;
+  display: block;
+}
+.hero h1 {
+  font-family: 'Kanit', sans-serif;
+  font-size: clamp(2rem, 5.5vw, 3.8rem);
+  font-weight: 900;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+.hero h1 .orange { color: var(--reach); }
+.hero-sub {
+  margin-top: 12px;
+  color: var(--muted);
+  max-width: 640px;
+  font-size: .95rem;
+}
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+}
+.meta-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .78rem;
+  font-weight: 700;
+  padding: 5px 14px;
+  border: 2px solid var(--ink);
+  background: var(--card);
+}
+.meta-chip.reach { border-color: var(--reach); color: var(--reach); }
+.meta-chip.believe { border-color: var(--believe); color: var(--believe); }
+.meta-chip.move { border-color: var(--move); color: var(--move); }
+
+/* ===== HOW TO USE ===== */
+.howto {
+  background: var(--ink);
+  color: #fff;
+  padding: 20px 24px;
+  margin: 32px 0 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+.howto-item { font-size: .88rem; color: #cfcdc6; }
+.howto-item b { display: block; font-family: 'Kanit', sans-serif; color: #FFD23F; margin-bottom: 2px; font-size: .9rem; }
+
+/* ===== PHASE DIVIDER ===== */
+.phase-divider {
+  padding: 36px 0 8px;
+}
+.phase-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Kanit', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: .04em;
+}
+.phase-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.phase-desc {
+  font-size: .88rem;
+  color: var(--muted);
+  margin-top: 4px;
+  margin-left: 22px;
+}
+
+/* ===== EP CARD ===== */
+.ep-card {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  margin-bottom: 18px;
+  break-inside: avoid;
+  position: relative;
+}
+.ep-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+}
+.ep-card.reach::before { background: var(--reach); }
+.ep-card.believe::before { background: var(--believe); }
+.ep-card.move::before { background: var(--move); }
+
+.ep-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px 14px 22px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+.ep-day {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  font-size: .72rem;
+  padding: 3px 8px;
+  color: #fff;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.ep-day.reach { background: var(--reach); }
+.ep-day.believe { background: var(--believe); }
+.ep-day.move { background: var(--move); }
+
+.ep-title-block { flex: 1; }
+.ep-num {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 900;
+  font-size: 1.25rem;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.ep-tagline {
+  font-family: 'Kanit', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ink);
+  margin-top: 1px;
+}
+.ep-psych-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 6px;
+}
+.psych-tag {
+  font-size: .68rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 700;
+  padding: 1px 7px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: var(--paper);
+}
+
+.ep-toggle-btn {
+  font-size: 1.2rem;
+  color: var(--muted);
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: transform .2s;
+}
+.ep-card.open .ep-toggle-btn { transform: rotate(180deg); }
+
+/* ===== EP BODY ===== */
+.ep-body { display: none; padding: 0 18px 20px 22px; }
+.ep-card.open .ep-body { display: block; }
+
+/* storyboard */
+.sb-section { margin-top: 18px; }
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.storyboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 4px;
+}
+@media (max-width: 600px) {
+  .storyboard { grid-template-columns: repeat(2, 1fr); }
+}
+.sb-frame {
+  background: var(--paper);
+  border: 1px solid var(--border);
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.sb-time {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem;
+  font-weight: 700;
+}
+.sb-time.reach { color: var(--reach); }
+.sb-time.believe { color: var(--believe); }
+.sb-time.move { color: var(--move); }
+
+/* phone sketch */
+.phone-sketch {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 5px;
+  aspect-ratio: 9/14;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.phone-screen {
+  background: #2a2a2a;
+  border-radius: 5px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 3px;
+  padding: 5px;
+  position: relative;
+}
+.phone-screen-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+.phone-screen-desc {
+  font-size: 7px;
+  color: #aaa;
+  text-align: center;
+  line-height: 1.4;
+}
+.phone-bar-top {
+  position: absolute;
+  top: 4px; left: 4px; right: 4px;
+  height: 2px;
+  border-radius: 1px;
+  opacity: .5;
+}
+.phone-bar-bottom {
+  position: absolute;
+  bottom: 4px; left: 4px; right: 4px;
+  font-size: 6px;
+  color: rgba(255,255,255,.5);
+  text-align: left;
+}
+.sb-caption {
+  font-size: .7rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* script blocks */
+.script-grid {
+  display: grid;
+  gap: 10px;
+  margin-top: 4px;
+}
+.script-block {
+  padding: 11px 13px;
+  border-radius: 2px;
+  font-size: .9rem;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  position: relative;
+}
+.script-block .block-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  display: block;
+  margin-bottom: 6px;
+}
+.script-block.hook {
+  background: #FFF3EE;
+  border-left: 4px solid var(--reach);
+}
+.script-block.hook .block-label { color: var(--reach); }
+.script-block.body {
+  background: var(--paper);
+  border-left: 4px solid var(--border);
+}
+.script-block.body .block-label { color: var(--muted); }
+.script-block.mission {
+  background: #EBF2FB;
+  border-left: 4px solid var(--believe);
+}
+.script-block.mission .block-label { color: var(--believe); }
+.script-block.close-ep {
+  background: #F6F1E4;
+  border-left: 4px solid var(--gold);
+}
+.script-block.close-ep .block-label { color: var(--gold); }
+
+/* caption & hashtag */
+.caption-block {
+  background: #F0F0F0;
+  border: 1px solid var(--border);
+  padding: 11px 13px;
+  font-size: .88rem;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  color: var(--ink);
+}
+.caption-block .block-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 6px;
+}
+.hashtags {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.ht {
+  font-size: .78rem;
+  color: #185FA5;
+  background: #E8F0FA;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* viral tips */
+.viral-tips {
+  background: #FAFAF6;
+  border: 1px dashed var(--border);
+  padding: 10px 13px;
+  margin-top: 4px;
+}
+.viral-tips .block-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--reach);
+  display: block;
+  margin-bottom: 8px;
+}
+.tip-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.tip-list li {
+  font-size: .82rem;
+  color: var(--muted);
+  display: flex;
+  gap: 7px;
+  align-items: flex-start;
+}
+.tip-list li::before {
+  content: '→';
+  color: var(--reach);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* footer */
+.site-footer {
+  background: var(--ink);
+  color: #9a988f;
+  padding: 24px 0;
+  margin-top: 48px;
+  font-size: .8rem;
+}
+.footer-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.footer-inner b { color: #FFD23F; font-family: 'Kanit', sans-serif; }
+
+/* print */
+@media print {
+  .site-header, .howto { display: none; }
+  .ep-body { display: block !important; }
+  .ep-card { break-inside: avoid; page-break-inside: avoid; }
+  .ep-toggle-btn { display: none; }
+  body { background: white; background-image: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- STICKY NAV -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-logo">RUDEDOG<span>FAIR</span> 2026</div>
+    <div class="header-divider"></div>
+    <nav class="phase-nav">
+      <a href="#reach" class="phase-btn r">REACH D-10→7</a>
+      <a href="#believe" class="phase-btn b">BELIEVE D-6→3</a>
+      <a href="#move" class="phase-btn m">MOVE D-2→0</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">WORK ORDER № RDF-2026-MID · TIKTOK SCRIPT PACK</span>
+    <h1>สคริปต์เต็ม<br><span class="orange">10 ตอน</span></h1>
+    <p class="hero-sub">ซีรีส์สารคดีเรียลลิตี้ "10 วันก่อนโกดังแตก" — ถ่ายด้วยโทรศัพท์เครื่องเดียว ออกอากาศวันละตอน ไม่มีข้อแก้ตัว</p>
+    <div class="hero-meta">
+      <span class="meta-chip reach">REACH EP.1–4</span>
+      <span class="meta-chip believe">BELIEVE EP.5–8</span>
+      <span class="meta-chip move">MOVE EP.9–10</span>
+      <span class="meta-chip" style="border-color:var(--gold);color:var(--gold);">45–60 วิ/ตอน</span>
+      <span class="meta-chip">โทรศัพท์เดียว ไม่ต้องเซ็ต</span>
+    </div>
+
+    <div class="howto">
+      <div class="howto-item"><b>🎬 วิธีใช้สคริปต์นี้</b>อ่านก่อนถ่ายไม่เกิน 1 รอบ อย่าท่อง — ให้พูดธรรมชาติ Script คือ framework ไม่ใช่บทพูด</div>
+      <div class="howto-item"><b>📅 Timeline ถ่าย</b>ถ่ายล่วงหน้า 1 วันเสมอ บอสหน้ากล้อง 30 นาที/วัน โพสต์ 17:00–19:00 ทุกวัน</div>
+      <div class="howto-item"><b>📌 กฎเหล็ก Hook</b>3 วิแรกต้องปิดเรื่อง ด้วย negative framing — ขึ้นต้นด้วยสิ่งที่ "ผิดปกติ" ก่อนเสมอ</div>
+      <div class="howto-item"><b>💬 ภารกิจคอมเมนต์</b>ทุกตอนมี 1 ภารกิจเท่านั้น — แอดมินตอบทุกคอมเมนต์ใน 30 นาทีแรกหลังโพสต์</div>
+    </div>
+  </div>
+</section>
+
+<main>
+<div class="wrap">
+
+<!-- ============ PHASE: REACH ============ -->
+<div class="phase-divider" id="reach">
+  <div class="phase-label">
+    <span class="phase-dot" style="background:var(--reach);"></span>
+    <span style="color:var(--reach);">PHASE 1 — REACH</span>
+    <span style="color:var(--muted);font-family:'Kanit';font-weight:400;font-size:.9rem;">D-10 ถึง D-7</span>
+  </div>
+  <p class="phase-desc">เป้าหมาย: ทำให้ทั้งนนท์รู้ว่ามีงาน — ปูเรื่อง เปิดตัวละคร สร้าง open loop ให้คนรอดูตอนต่อ</p>
+</div>
+
+<!-- EP 1 -->
+<div class="ep-card reach" id="ep1">
+  <div class="ep-header" onclick="toggleEp('ep1')">
+    <span class="ep-day reach">D-10</span>
+    <div class="ep-title-block">
+      <div class="ep-num">EP.1</div>
+      <div class="ep-tagline">โกดังจะแตกแล้วครับ</div>
+      <div class="ep-psych-row">
+        <span class="psych-tag">P1 Open Loop</span>
+        <span class="psych-tag">P7 Unity</span>
+      </div>
+    </div>
+    <div class="ep-toggle-btn">▾</div>
+  </div>
+  <div class="ep-body">
+
+    <div class="sb-section">
+      <div class="section-label">Storyboard — 4 shots</div>
+      <div class="storyboard">
+        <div class="sb-frame">
+          <span class="sb-time reach">0–3 วิ (HOOK)</span>
+          <div class="phone-sketch">
+            <div class="phone-screen">
+              <div class="phone-bar-top" style="background:var(--reach);"></div>
+              <div class="phone-screen-icon">🚪</div>
+              <div class="phone-screen-desc">บอสเดิน<br>เปิดประตูโกดัง<br>กล้องตาม handheld</div>
+            </div>
+          </div>
+          <div class="sb-caption">กล้องตาม ไม่ต้อง stabilize — ความสั่นคือความเรียล</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">3–20 วิ</span>
+          <div class="phone-sketch">
+            <div class="phone-screen">
+              <div class="phone-screen-icon">📦</div>
+              <div class="phone-screen-desc">pan ช้าๆ<br>เห็นสต๊อกกองสูง<br>บอสส่ายหัว</div>
+              <div class="phone-bar-bottom">Ambient sound เท่านั้น</div>
+            </div>
+          </div>
+          <div class="sb-caption">เสียงเดินในโกดัง echo = ไม่ต้องใส่เพลง</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">20–48 วิ</span>
+          <div class="phone-sketch">
+            <div class="phone-screen">
+              <div class="phone-screen-icon">🎤</div>
+              <div class="phone-screen-desc">บอสหันมาพูด<br>กับกล้อง<br>ตรงๆ ไม่ตัด</div>
+              <div class="phone-bar-bottom">ตัวนับถอยหลัง "10 วัน"</div>
+            </div>
+          </div>
+          <div class="sb-caption">Long take เดียว ไม่ต้องแคร์ filler word</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">48–58 วิ</span>
+          <div class="phone-sketch">
+            <div class="phone-screen">
+              <div class="phone-screen-icon">📅</div>
+              <div class="phone-screen-desc">ชูป้ายชื่องาน<br>หรือพิมพ์วันที่<br>บนหน้าจอ</div>
+              <div class="phone-bar-bottom">"เหลืออีก 10 วัน"</div>
+            </div>
+          </div>
+          <div class="sb-caption">ตัดเร็ว — จบสั้น</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Script เต็ม</div>
+      <div class="script-grid">
+        <div class="script-block hook">
+          <span class="block-label">🔴 HOOK — 3 วิแรก (พูดขณะเดินเปิดประตูโกดัง)</span>
+"คืนนี้นอนไม่หลับครับ... โกดังเราจะแตกแล้ว"
+        </div>
+        <div class="script-block body">
+          <span class="block-label">🎬 BODY — วินาที 4–48</span>
+[กล้องแพนเห็นของกองสูงทั่วโกดัง]
+
+"นี่คือสต๊อก RUDEDOG ทั้งหมดที่เราสั่งมาตลอดปีที่ผ่านมา
+ของทุกชิ้นที่เห็น — ยังอยู่ที่นี่หมดเลยครับ
+
+เราวางแผนว่าจะขายออนไลน์ได้ แต่มันไม่เป็นอย่างนั้น
+ตอนนี้โกดังแน่น เราต้องเคลียร์ให้หมด
+
+[หยุด มองกล้อง]
+
+วิธีแก้เดียวที่ผมคิดได้คือ — เปิดโกดัง
+ลดราคาให้แรงที่สุดที่เราเคยทำ
+แล้วให้คนนนทบุรีและรอบข้างมาช่วยเอาออกไป
+
+[ชี้ไปที่กองของ]
+
+ทั้งหมดนี้ ต้องออกให้หมดในวันเดียว"
+        </div>
+        <div class="script-block mission">
+          <span class="block-label">💬 ภารกิจคอมเมนต์ (พูดก่อนจบ)</span>
+"ถ้าใครสนใจ พิมพ์ 'ไปแน่' ใต้คลิปนี้ไว้เลยครับ
+ผมจะ reply ทุกคอมเมนต์คืนนี้เอง"
+        </div>
+        <div class="script-block close-ep">
+          <span class="block-label">🔚 ปิดตอน + Open Loop</span>
+"เหลืออีก 10 วัน... โกดังต้องว่าง 🐶
+
+[pause 1 วิ]
+
+พรุ่งนี้ผมจะเฉลยให้ฟังว่า — ทำไมถึงสั่งของมาเยอะขนาดนี้
+เรื่องมันยาว แต่บอกได้ว่า... ผมพลาดจริงๆ ครับ"
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Caption + Hashtag (TikTok)</div>
+      <div class="caption-block">
+        <span class="block-label">📝 Caption</span>โกดัง RUDEDOG กำลังจะแตก 😰 สั่งของมาเยอะเกิน ต้องเคลียร์ภายใน 10 วัน — เปิดโกดังลดแรงที่สุดที่เคยทำ
+
+📅 วันที่งาน: [วันที่]
+📍 สถานที่: [ที่อยู่]
+
+พิมพ์ "ไปแน่" ไว้ก่อนเลยครับ ผมตอบทุกคอมเมนต์คืนนี้ 🐶
+        <div class="hashtags">
+          <span class="ht">#RUDEDOGFair2026</span>
+          <span class="ht">#โกดังต้องว่าง</span>
+          <span class="ht">#ลดราคา</span>
+          <span class="ht">#นนทบุรี</span>
+          <span class="ht">#MidYearSale</span>
+          <span class="ht">#RUDEDOG</span>
+          <span class="ht">#ของลดราคา</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Viral Tips — ถ่ายด้วยโทรศัพท์เดียว</div>
+      <div class="viral-tips">
+        <span class="block-label">💡 EASY VIRAL MECHANICS</span>
+        <ul class="tip-list">
+          <li>เปิดประตูโกดังก่อน แล้วค่อยกด record — เดินเข้าไปพร้อมกล้อง ไม่ต้อง set frame</li>
+          <li>เสียง ambient ในโกดัง (echo, เสียงของ) คือ BGM ที่ดีที่สุด ไม่ต้องใส่เพลงทับ</li>
+          <li>ไม่ต้องแต่งหน้า ไม่ต้องเปลี่ยนเสื้อ — ความ "มาตรงจากชีวิตจริง" คือจุดแข็ง</li>
+          <li>ถ่าย take เดียว ยาว 90 วิ แล้วค่อยตัดเหลือ 55 วิ ตัด filler ออก อย่าตัด emotion</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EP 2 -->
+<div class="ep-card reach" id="ep2">
+  <div class="ep-header" onclick="toggleEp('ep2')">
+    <span class="ep-day reach">D-9</span>
+    <div class="ep-title-block">
+      <div class="ep-num">EP.2</div>
+      <div class="ep-tagline">คำสารภาพ CEO — ทำไมถึงต้องลด</div>
+      <div class="ep-psych-row">
+        <span class="psych-tag">P2 Pratfall Effect</span>
+        <span class="psych-tag">P1 Open Loop</span>
+      </div>
+    </div>
+    <div class="ep-toggle-btn">▾</div>
+  </div>
+  <div class="ep-body">
+
+    <div class="sb-section">
+      <div class="section-label">Storyboard — 4 shots</div>
+      <div class="storyboard">
+        <div class="sb-frame">
+          <span class="sb-time reach">0–3 วิ (HOOK)</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">😬</div>
+            <div class="phone-screen-desc">บอสนั่งกลางออฟฟิศ<br>หน้าเครียด<br>ถือกระดาษ</div>
+          </div></div>
+          <div class="sb-caption">นั่งที่โต๊ะทำงานจริง ไม่ต้องจัดฉาก</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">3–15 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">📄</div>
+            <div class="phone-screen-desc">ชูใบสั่งซื้อจริง<br>กล้องซูมเห็น<br>ตัวเลข</div>
+          </div></div>
+          <div class="sb-caption">ใบ PO จริง = ความน่าเชื่อถือ 100%</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">15–45 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🗣️</div>
+            <div class="phone-screen-desc">บอสอธิบาย<br>ตรงกล้อง<br>ยอมรับความผิดพลาด</div>
+          </div></div>
+          <div class="sb-caption">ยิ่งพูดตรงยิ่งดี อย่า polish</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">45–58 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">💰</div>
+            <div class="phone-screen-desc">บอสยิ้มเศร้าๆ<br>"ความซวยของผม<br>= ส่วนลดของคุณ"</div>
+          </div></div>
+          <div class="sb-caption">จบด้วย line นี้แล้วตัดทันที</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Script เต็ม</div>
+      <div class="script-grid">
+        <div class="script-block hook">
+          <span class="block-label">🔴 HOOK — 3 วิแรก (ถือเอกสารขึ้นมา)</span>
+"ผมทำพลาดครับ — สั่งของเกินมา และวันนี้ต้องสารภาพให้หมด"
+        </div>
+        <div class="script-block body">
+          <span class="block-label">🎬 BODY — วินาที 4–48</span>
+[ชูใบออเดอร์ให้กล้องเห็น]
+
+"นี่คือใบสั่งซื้อจากต้นปีครับ ตอนนั้นผมคิดว่าเทรนด์จะไปทางนั้น
+เลยสั่งสต๊อกรุ่น [XX] เพิ่มไว้ก่อน
+คิดว่าขายออนไลน์ได้ 3 เดือน
+
+[วางเอกสาร]
+
+ผลคือ... ของยังอยู่ครบเลยครับ ไม่ได้ขายออกเลยสักชิ้น
+
+[พักหายใจ]
+
+แทนที่ผมจะเก็บไว้จนฝุ่นจับ หรือขายลด online แบบที่ต้องเสียค่า platform ไปอีก
+ผมเลือกที่จะเปิดโกดัง ลดให้เจ็บจริงๆ
+แล้วเอาเงินส่วนนั้นคืนให้คนที่มาถึงหน้างาน
+
+ความผิดพลาดของผม — คือส่วนลดของคุณครับ"
+        </div>
+        <div class="script-block mission">
+          <span class="block-label">💬 ภารกิจคอมเมนต์</span>
+"เคยซื้อ RUDEDOG ครั้งแรกตอนไหนครับ?
+เล่าให้ฟังหน่อย อยากรู้จริงๆ"
+        </div>
+        <div class="script-block close-ep">
+          <span class="block-label">🔚 ปิดตอน</span>
+"เหลืออีก 9 วัน... โกดังต้องว่าง 🐶
+
+พรุ่งนี้พาดูของจริงที่เกิดขึ้นปีที่แล้ว
+6,000 คนเดินเข้ามา — แล้วมันเป็นยังไง"
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Caption + Hashtag (TikTok)</div>
+      <div class="caption-block">
+        <span class="block-label">📝 Caption</span>สารภาพตรงๆ ครับ 🙏 สั่งของผิดพลาด สต๊อกล้น ทำไงได้ — เปิดโกดังลดให้เจ็บจริง
+
+ความซวยของผม = ส่วนลดของคุณ 😅
+
+แล้วคุณล่ะ เคยซื้อ RUDEDOG ครั้งแรกตอนไหนครับ? เล่าให้ฟังหน่อย 👇
+        <div class="hashtags">
+          <span class="ht">#RUDEDOGFair2026</span>
+          <span class="ht">#CEOสารภาพ</span>
+          <span class="ht">#โกดังต้องว่าง</span>
+          <span class="ht">#นนทบุรี</span>
+          <span class="ht">#ของลดราคา</span>
+          <span class="ht">#เรียลมาก</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Viral Tips</div>
+      <div class="viral-tips">
+        <span class="block-label">💡 EASY VIRAL MECHANICS</span>
+        <ul class="tip-list">
+          <li>ถือเอกสารจริงขึ้นมา ไม่ใช่ props — ตัวเลขจริง = น่าเชื่อถือ = share ต่อ</li>
+          <li>แสงออฟฟิศธรรมดา ไม่ต้องจัดไฟ — ความ "ดิบ" คือ algorithm magnet บน TikTok</li>
+          <li>พูดตรงกล้อง ไม่ตัด ไม่ transition — long take 1 take คือสไตล์ viral ที่สุดตอนนี้</li>
+          <li>ถ้าพูดผิดพลาดระหว่าง take อย่าตัดทิ้ง — แก้ตัวในคลิปเลย มันจะ feel authentic มากขึ้น</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EP 3 -->
+<div class="ep-card reach" id="ep3">
+  <div class="ep-header" onclick="toggleEp('ep3')">
+    <span class="ep-day reach">D-8</span>
+    <div class="ep-title-block">
+      <div class="ep-num">EP.3</div>
+      <div class="ep-tagline">หลักฐานปีที่แล้ว — footage 6,000 คน</div>
+      <div class="ep-psych-row">
+        <span class="psych-tag">P4 Social Proof</span>
+        <span class="psych-tag">P5 Loss Aversion</span>
+      </div>
+    </div>
+    <div class="ep-toggle-btn">▾</div>
+  </div>
+  <div class="ep-body">
+
+    <div class="sb-section">
+      <div class="section-label">Storyboard — 4 shots</div>
+      <div class="storyboard">
+        <div class="sb-frame">
+          <span class="sb-time reach">0–3 วิ (HOOK)</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">👥</div>
+            <div class="phone-screen-desc">ภาพงานปีก่อน<br>คนแน่น<br>TEXT: "6,000 คน"</div>
+          </div></div>
+          <div class="sb-caption">เปิดด้วย footage คนเยอะทันที</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">3–25 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🏃</div>
+            <div class="phone-screen-desc">footage คน<br>เดินเลือกของ<br>บอส voice over</div>
+          </div></div>
+          <div class="sb-caption">เสียง ambient งาน ไม่ต้องตัด</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">25–46 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">😔</div>
+            <div class="phone-screen-desc">ซูมคนหิ้วของ<br>บอส: "ไซส์ M<br>หมดก่อนเที่ยง"</div>
+          </div></div>
+          <div class="sb-caption">ความสูญเสีย = viral ที่สุด</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">46–58 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">📦</div>
+            <div class="phone-screen-desc">ตัดมาโกดังปีนี้<br>"เตรียมมากกว่า<br>3 เท่า"</div>
+          </div></div>
+          <div class="sb-caption">Hope หลัง Fear</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Script เต็ม</div>
+      <div class="script-grid">
+        <div class="script-block hook">
+          <span class="block-label">🔴 HOOK — 3 วิแรก (เปิดด้วย footage คนแน่น)</span>
+[voice over footage] "คนที่ต่อแถวอยู่ตรงนั้น... ไม่ทันครับ"
+        </div>
+        <div class="script-block body">
+          <span class="block-label">🎬 BODY — วินาที 4–48 (voice over footage งานปีที่แล้ว)</span>
+"RUDEDOG FAIR ปีที่แล้ว มีคนมางาน 6,000 คน
+มาจากอยุธยา มาจากปทุม มาจากบางบัวทอง
+บางคนขับรถมาเกือบชั่วโมง
+
+[ซูมภาพคนหิ้วถุงเดินออกมา]
+
+ไซส์ M ของเสื้อรุ่นหนึ่ง — หมดก่อนเที่ยงครับ
+มีคนต่อแถวรอแล้วไม่ทัน ผมยังรู้สึกผิดอยู่เลย
+
+[ตัดมาโกดังปีนี้]
+
+ปีนี้เราเตรียมสต๊อกไว้ 3 เท่าของปีที่แล้ว
+เพราะจำปีก่อนได้ — และไม่อยากให้ใครต้องกลับมือเปล่าอีก
+
+ถ้าปีที่แล้วคุณพลาด — ปีนี้ห้ามพลาดอีกครับ"
+        </div>
+        <div class="script-block mission">
+          <span class="block-label">💬 ภารกิจคอมเมนต์</span>
+"แท็กเพื่อนที่ 'ปีก่อนพลาด' มาใต้นี้เลยครับ
+ปีนี้อย่าให้พลาดอีก 👇"
+        </div>
+        <div class="script-block close-ep">
+          <span class="block-label">🔚 ปิดตอน</span>
+"เหลืออีก 8 วัน... โกดังต้องว่าง 🐶
+
+พรุ่งนี้มาล้างความเข้าใจผิดกัน
+'ของลดราคา = ของโล๊ะ?' — ผมจะพิสูจน์ให้ดูครับ"
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Caption + Hashtag (TikTok)</div>
+      <div class="caption-block">
+        <span class="block-label">📝 Caption</span>ปีที่แล้ว 6,000 คนมา บางคนไม่ทันแล้ว 😢 ปีนี้เราเตรียม 3 เท่า
+
+แท็กเพื่อนที่ "ปีก่อนพลาด" มาเลยครับ — ปีนี้ห้ามพลาดอีก 🙏
+
+📅 [วันที่งาน] | 📍 [สถานที่]
+        <div class="hashtags">
+          <span class="ht">#RUDEDOGFair2026</span>
+          <span class="ht">#6000คน</span>
+          <span class="ht">#โกดังต้องว่าง</span>
+          <span class="ht">#แท็กเพื่อน</span>
+          <span class="ht">#นนทบุรี</span>
+          <span class="ht">#งานแฟร์</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Viral Tips</div>
+      <div class="viral-tips">
+        <span class="block-label">💡 EASY VIRAL MECHANICS</span>
+        <ul class="tip-list">
+          <li>ใช้ footage งานปีที่แล้วเป็น B-roll — ถ้าไม่มี ถ่าย slo-mo คนเดินในห้างก็ได้ feel เดียวกัน</li>
+          <li>เสียง ambient งาน (เสียงคน เสียง PA) = ไม่ต้องใส่เพลง — เสียงจริงดึงดูดความสนใจมากกว่า</li>
+          <li>"แท็กเพื่อน" คือ CTA ที่ทำให้ reach ขยายออกไปฟรี — ทุกแท็ก = reach คนใหม่ 1 คน</li>
+          <li>ถ้า footage ปีก่อนไม่ชัด ไม่เป็นไร — ความ "บ้านๆ" ของ footage เก่าทำให้ดู authentic กว่า</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EP 4 -->
+<div class="ep-card reach" id="ep4">
+  <div class="ep-header" onclick="toggleEp('ep4')">
+    <span class="ep-day reach">D-7</span>
+    <div class="ep-title-block">
+      <div class="ep-num">EP.4</div>
+      <div class="ep-tagline">Myth Bust — "ของลด = ของโล๊ะ?"</div>
+      <div class="ep-psych-row">
+        <span class="psych-tag">P3 Reason-Why</span>
+        <span class="psych-tag">P2 Pratfall</span>
+      </div>
+    </div>
+    <div class="ep-toggle-btn">▾</div>
+  </div>
+  <div class="ep-body">
+
+    <div class="sb-section">
+      <div class="section-label">Storyboard — 4 shots</div>
+      <div class="storyboard">
+        <div class="sb-frame">
+          <span class="sb-time reach">0–3 วิ (HOOK)</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🔬</div>
+            <div class="phone-screen-desc">บอสถือสินค้า<br>"ของมีตำหนิ?<br>พิสูจน์เลย"</div>
+          </div></div>
+          <div class="sb-caption">ชูของขึ้นมาให้เห็นชัด</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">3–25 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">📱</div>
+            <div class="phone-screen-desc">ชูโทรศัพท์<br>หน้าเว็บ/shopee<br>ราคาออนไลน์</div>
+          </div></div>
+          <div class="sb-caption">screen ราคาจริง = หลักฐานจริง</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">25–46 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🧮</div>
+            <div class="phone-screen-desc">นับนิ้ว<br>อธิบาย math<br>ค่า platform 29%</div>
+          </div></div>
+          <div class="sb-caption">นับนิ้ว = visual ง่ายสุด</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time reach">46–58 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">✅</div>
+            <div class="phone-screen-desc">close-up สินค้า<br>ไม่มีตำหนิ<br>"batch เดียวกัน"</div>
+          </div></div>
+          <div class="sb-caption">พิสูจน์ด้วยของจริง</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Script เต็ม</div>
+      <div class="script-grid">
+        <div class="script-block hook">
+          <span class="block-label">🔴 HOOK — 3 วิแรก (ถือสินค้าให้กล้องเห็น)</span>
+"ลดราคาแรงขนาดนี้ ของต้องมีตำหนิแน่ๆ — ผมจะพิสูจน์ให้ดูครับ"
+        </div>
+        <div class="script-block body">
+          <span class="block-label">🎬 BODY — วินาที 4–48</span>
+[ชูโทรศัพท์ให้เห็นราคาบน platform ออนไลน์]
+
+"ราคาออนไลน์ตอนนี้ [XXX] บาท
+ราคางานนี้ [XXX] บาท
+ต่างกัน [XXX] บาท — มันไปไหนครับ?
+
+[วางโทรศัพท์ หันมาพูด]
+
+เวลาคุณซื้อของออนไลน์
+platform เก็บค่าธรรมเนียมเฉลี่ย 25–30% ทุกออเดอร์
+นั่นคือเงินที่คุณจ่าย แต่ไม่ได้ของเพิ่มเลยครับ
+
+[ชูนิ้ว 1 นิ้ว]
+
+ขายหน้างาน — ไม่มีค่า platform
+[นิ้ว 2] ของเดียวกัน batch เดียวกัน warehouse เดียวกัน
+[นิ้ว 3] เงินส่วนต่างนั้น — ผมเอามาลดให้คุณ
+
+[ชู close-up สินค้า]
+
+ดูเองนะครับ ไม่มีตำหนิ ไม่มีโล๊ะ แค่ช่องทางขายต่างกัน"
+        </div>
+        <div class="script-block mission">
+          <span class="block-label">💬 ภารกิจคอมเมนต์</span>
+"สงสัยอะไรเรื่องงานนี้ — ถามใต้นี้ได้เลยครับ
+บอสตอบเองทุกข้อ คำถามที่ดีอาจกลายเป็น EP ถัดไปด้วย 👇"
+        </div>
+        <div class="script-block close-ep">
+          <span class="block-label">🔚 ปิดตอน</span>
+"เหลืออีก 7 วัน... โกดังต้องว่าง 🐶
+
+พรุ่งนี้พาเดินดูสต๊อกของจริง พร้อมเปิดราคาแบบไม่กั๊ก"
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Caption + Hashtag (TikTok)</div>
+      <div class="caption-block">
+        <span class="block-label">📝 Caption</span>ของลดราคา = ของโล๊ะ? — ไม่ใช่ครับ มาดูคณิตศาสตร์ข้างหลังราคากัน 🧮
+
+ค่า platform 25–30% ที่คุณจ่ายทุกครั้งที่ซื้อออนไลน์ — งานนี้เราเอาเงินนั้นคืนให้คุณ
+
+สงสัยอะไรถามใต้นี้ บอสตอบเองทุกข้อ 👇
+        <div class="hashtags">
+          <span class="ht">#RUDEDOGFair2026</span>
+          <span class="ht">#ของไม่ได้โล๊ะ</span>
+          <span class="ht">#ค่าplatform</span>
+          <span class="ht">#โกดังต้องว่าง</span>
+          <span class="ht">#รู้ทันก่อนซื้อ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Viral Tips</div>
+      <div class="viral-tips">
+        <span class="block-label">💡 EASY VIRAL MECHANICS</span>
+        <ul class="tip-list">
+          <li>ชูโทรศัพท์ให้กล้องเห็น screen จริงๆ — อย่า screenshot อย่า graphic ของจริง = ดูดีที่สุด</li>
+          <li>นับนิ้วอธิบาย 3 ข้อ = visual ที่ทำคนดูตามและจำได้ — ไม่ต้องมี animation</li>
+          <li>คำว่า "เพราะ" ในสคริปต์สำคัญมาก — สมองคนชอบเหตุผล แม้เหตุผลจะง่ายมาก</li>
+          <li>ถามคำถามในคอมเมนต์ = algorithm boost ทันที เพราะ TikTok ชอบ engagement rate สูง</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ PHASE: BELIEVE ============ -->
+<div class="phase-divider" id="believe">
+  <div class="phase-label">
+    <span class="phase-dot" style="background:var(--believe);"></span>
+    <span style="color:var(--believe);">PHASE 2 — BELIEVE</span>
+    <span style="color:var(--muted);font-family:'Kanit';font-weight:400;font-size:.9rem;">D-6 ถึง D-3</span>
+  </div>
+  <p class="phase-desc">เป้าหมาย: เปลี่ยนคนที่ "รู้แล้ว" เป็นคนที่ "เชื่อจริง" — เปิดราคา พิสูจน์ utility แจก commitment</p>
+</div>
+
+<!-- EP 5 -->
+<div class="ep-card believe" id="ep5">
+  <div class="ep-header" onclick="toggleEp('ep5')">
+    <span class="ep-day believe">D-6</span>
+    <div class="ep-title-block">
+      <div class="ep-num">EP.5</div>
+      <div class="ep-tagline">พาเดินดูของ + เปิดราคาจริง</div>
+      <div class="ep-psych-row">
+        <span class="psych-tag">P5 Scarcity</span>
+        <span class="psych-tag">P6 Commitment Ladder</span>
+      </div>
+    </div>
+    <div class="ep-toggle-btn">▾</div>
+  </div>
+  <div class="ep-body">
+
+    <div class="sb-section">
+      <div class="section-label">Storyboard — 4 shots</div>
+      <div class="storyboard">
+        <div class="sb-frame">
+          <span class="sb-time believe">0–3 วิ (HOOK)</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🚪</div>
+            <div class="phone-screen-desc">บอสเปิดประตูโกดัง<br>กล้อง POV<br>first-person</div>
+          </div></div>
+          <div class="sb-caption">POV เดินเข้าโกดัง = immersive</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">3–30 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">👕</div>
+            <div class="phone-screen-desc">walk-through<br>บอสหยิบของขึ้นมา<br>บอกราคาดังๆ</div>
+          </div></div>
+          <div class="sb-caption">พูดราคาจริง ไม่กลัว — ราคาดีพูดได้</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">30–48 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">⭐</div>
+            <div class="phone-screen-desc">hero item<br>ปิดราคา<br>"ทายก่อน"</div>
+          </div></div>
+          <div class="sb-caption">สร้าง mystery = ดึงคนมาคอมเมนต์</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">48–58 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">📲</div>
+            <div class="phone-screen-desc">ชู QR LINE OA<br>"แอดรับข้อมูลก่อนใคร"</div>
+          </div></div>
+          <div class="sb-caption">เปิด LINE OA วันนี้</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Script เต็ม</div>
+      <div class="script-grid">
+        <div class="script-block hook">
+          <span class="block-label">🔴 HOOK — 3 วิแรก (กล้อง POV เปิดประตูโกดัง)</span>
+"ไม่บอกราคาก่อนไม่ได้แล้ว — มาดูกันเลยครับ"
+        </div>
+        <div class="script-block body">
+          <span class="block-label">🎬 BODY — วินาที 4–48 (เดินในโกดัง)</span>
+[หยิบสินค้าชิ้นที่ 1 ขึ้นมา]
+"อันนี้เสื้อ [ชื่อรุ่น] ราคาปกติ [XXX] บาท
+งานนี้ [XXX] บาท — ลดไป [XX%]"
+
+[เดินต่อ หยิบชิ้นที่ 2]
+"อันนี้ [ชื่อรุ่น] ปกติ [XXX] งานนี้ [XXX]"
+
+[หยิบชิ้นที่ 3]
+"อันนี้ [ชื่อรุ่น] ไซส์ M L เหลืออยู่ [XX] ตัว ราคา [XXX]"
+
+[หยิบ hero item ขึ้นมา — ปิดป้ายราคา]
+"ตัวนี้... ผมยังไม่บอกราคาครับ
+เพราะอยากให้ทายก่อน
+ใครทายถูกหรือใกล้ที่สุด — รับสิทธิ์เลือกของคนแรกหน้างาน"
+        </div>
+        <div class="script-block mission">
+          <span class="block-label">💬 ภารกิจคอมเมนต์</span>
+"ทายราคา hero item ใต้คลิปนี้ได้เลยครับ
+บอกชื่อด้วยนะ — 5 คนที่ทายใกล้สุดผมบอกเองหน้างาน 👇"
+        </div>
+        <div class="script-block close-ep">
+          <span class="block-label">🔚 ปิดตอน</span>
+"เหลืออีก 6 วัน... โกดังต้องว่าง 🐶
+
+วันนี้เปิด LINE OA แล้วครับ แอดไว้รับแผนที่และ early access
+พรุ่งนี้คุยเรื่องคนที่ใช้เสื้อตัวเดิมมา 3 ปี 😄"
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Caption + Hashtag (TikTok)</div>
+      <div class="caption-block">
+        <span class="block-label">📝 Caption</span>ในที่สุดก็พาเดินดูของจริงแล้ว 🏃 พร้อมเปิดราคาแบบไม่กั๊ก
+
+แต่ตัวนี้... ทายราคาก่อนได้เลยครับ ใครใกล้สุดรับสิทธิ์เลือกของคนแรกหน้างาน 👇
+
+📲 เปิด LINE OA แล้ววันนี้ แอดรับข้อมูลก่อนใคร
+        <div class="hashtags">
+          <span class="ht">#RUDEDOGFair2026</span>
+          <span class="ht">#เปิดราคา</span>
+          <span class="ht">#ทายราคา</span>
+          <span class="ht">#โกดังต้องว่าง</span>
+          <span class="ht">#walk-through</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Viral Tips</div>
+      <div class="viral-tips">
+        <span class="block-label">💡 EASY VIRAL MECHANICS</span>
+        <ul class="tip-list">
+          <li>กล้อง POV เดินเข้า = มุมที่ TikTok ชอบมาก คน feel ว่าตัวเองอยู่ในโกดัง</li>
+          <li>พูดราคาดังๆ ชัดๆ — อย่ากลัว ราคาดีคือ hook ที่แรงที่สุด</li>
+          <li>ปิดราคา hero item = สร้าง gap ข้อมูล คน scroll ต่อไม่ได้จนต้องคอมเมนต์</li>
+          <li>แสงในโกดัง (ไฟนีออน) ทำให้ดู cinematic โดยธรรมชาติ ไม่ต้องกรอง</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EP 6 -->
+<div class="ep-card believe" id="ep6">
+  <div class="ep-header" onclick="toggleEp('ep6')">
+    <span class="ep-day believe">D-5</span>
+    <div class="ep-title-block">
+      <div class="ep-num">EP.6</div>
+      <div class="ep-tagline">เสื้อตัวเดียว ชีวิต 30+ ทั้งใบ</div>
+      <div class="ep-psych-row">
+        <span class="psych-tag">P7 Unity</span>
+        <span class="psych-tag">P6 Commitment</span>
+      </div>
+    </div>
+    <div class="ep-toggle-btn">▾</div>
+  </div>
+  <div class="ep-body">
+
+    <div class="sb-section">
+      <div class="section-label">Storyboard — 4 shots</div>
+      <div class="storyboard">
+        <div class="sb-frame">
+          <span class="sb-time believe">0–3 วิ (HOOK)</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">👨‍👧</div>
+            <div class="phone-screen-desc">b-roll คนรับลูก<br>ใส่เสื้อ RUDEDOG<br>นนทบุรี จริง</div>
+          </div></div>
+          <div class="sb-caption">ถ่าย b-roll ในนนท์จริง</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">3–25 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🔄</div>
+            <div class="phone-screen-desc">cut สลับ scenes<br>ชีวิต 30+<br>คนเดียวกัน</div>
+          </div></div>
+          <div class="sb-caption">ใช้ทีมงานถ่ายให้กัน</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">25–45 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🎤</div>
+            <div class="phone-screen-desc">บอสพูด to camera<br>"เข้าใจว่าเวลา<br>ของพี่มีค่า"</div>
+          </div></div>
+          <div class="sb-caption">พูดด้วย empathy จริงๆ</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">45–58 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">💬</div>
+            <div class="phone-screen-desc">โหวต CTA<br>"ใส่ไปไหนบ่อย?"<br>ใต้คลิป</div>
+          </div></div>
+          <div class="sb-caption">โหวต = engagement ที่ง่ายที่สุด</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Script เต็ม</div>
+      <div class="script-grid">
+        <div class="script-block hook">
+          <span class="block-label">🔴 HOOK — 3 วิแรก (b-roll คนใส่เสื้อในชีวิตประจำวัน)</span>
+"เสื้อตัวเดิม — วิ่งตอนเช้า รับลูกตอนเย็น ประชุม zoom ตอนสี่โมง
+ชีวิตคนนนท์มันเป็นแบบนี้ครับ"
+        </div>
+        <div class="script-block body">
+          <span class="block-label">🎬 BODY — วินาที 4–48 (voice over + b-roll)</span>
+[voice over ขณะตัด scenes ชีวิตประจำวัน]
+
+"เราไม่ได้ขายเสื้อผ้า — เราขายเวลาที่ประหยัดได้
+จากการไม่ต้องคิดทุกเช้าว่าจะใส่อะไร
+
+เสื้อ RUDEDOG ออกแบบมาสำหรับคนที่มีชีวิตจริง
+ไม่ใช่แค่ใส่ถ่ายรูป
+
+[บอสหันมาพูดตรงๆ]
+
+ผมเข้าใจครับ ว่าเวลาของพี่แต่ละคนมีค่ามาก
+งานนี้เลยออกแบบมาให้ง่ายที่สุด — เข้าเดินเลือก จ่าย กลับบ้าน
+ไม่ต้องรอของ ไม่ต้องลุ้น shipping
+
+ของดีในราคาที่สมเหตุสมผล สำหรับชีวิตจริงของพี่"
+        </div>
+        <div class="script-block mission">
+          <span class="block-label">💬 ภารกิจคอมเมนต์</span>
+"ส่งคลิปนี้ให้คนที่รู้จัก 'ใส่เสื้อตัวเดิมมา 3 ปี' แล้วคอมเมนต์โหวตหน่อยครับ
+ใส่ไปไหนบ่อยสุด?
+A) ทำงาน | B) วิ่งออกกำลังกาย | C) รับลูก/ไปห้าง 👇"
+        </div>
+        <div class="script-block close-ep">
+          <span class="block-label">🔚 ปิดตอน</span>
+"เหลืออีก 5 วัน... โกดังต้องว่าง 🐶
+
+พรุ่งนี้ขับรถมาให้ดูเลยว่ามาจากทุกย่านในนนท์ยังไง ใช้เวลาเท่าไหร่"
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Caption + Hashtag (TikTok)</div>
+      <div class="caption-block">
+        <span class="block-label">📝 Caption</span>เสื้อตัวเดิม วิ่งเช้า รับลูกเย็น ประชุม zoom — ชีวิตคนนนท์ 😄
+
+ส่งให้คน "ใส่เสื้อตัวเดิมมา 3 ปี" แล้วโหวต: ใส่ไปไหนบ่อยสุด?
+A) ทำงาน | B) วิ่ง | C) รับลูก/ห้าง 👇
+        <div class="hashtags">
+          <span class="ht">#RUDEDOGFair2026</span>
+          <span class="ht">#ชีวิต30+</span>
+          <span class="ht">#คนนนทบุรี</span>
+          <span class="ht">#โกดังต้องว่าง</span>
+          <span class="ht">#lifestyle</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Viral Tips</div>
+      <div class="viral-tips">
+        <span class="block-label">💡 EASY VIRAL MECHANICS</span>
+        <ul class="tip-list">
+          <li>ถ่าย b-roll ในนนทบุรีจริง (Big C, MRT สายม่วง, หน้าโรงเรียน) — location จริง = identity คนดู</li>
+          <li>ไม่ต้องใช้นักแสดง — ถ่ายทีมงานจริงหรือขอ permission ถ่ายลูกค้าประจำ</li>
+          <li>โหวต A/B/C = comment bait ที่ไม่รู้สึก forced และ TikTok ชอบ interaction แบบนี้</li>
+          <li>พูดชื่อย่าน "นนท์" ในคลิป — คน local จะ feel connected และแชร์ให้เพื่อนในย่านเดียวกัน</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EP 7 -->
+<div class="ep-card believe" id="ep7">
+  <div class="ep-header" onclick="toggleEp('ep7')">
+    <span class="ep-day believe">D-4</span>
+    <div class="ep-title-block">
+      <div class="ep-num">EP.7</div>
+      <div class="ep-tagline">ไปยังไง จอดตรงไหน — Utility คลิป ⭐</div>
+      <div class="ep-psych-row">
+        <span class="psych-tag">P6 Commitment</span>
+        <span class="psych-tag">P7 Unity</span>
+        <span class="psych-tag" style="border-color:var(--gold);color:var(--gold);">Convert สูงสุด</span>
+      </div>
+    </div>
+    <div class="ep-toggle-btn">▾</div>
+  </div>
+  <div class="ep-body">
+
+    <div class="sb-section">
+      <div class="section-label">Storyboard — 4 shots</div>
+      <div class="storyboard">
+        <div class="sb-frame">
+          <span class="sb-time believe">0–3 วิ (HOOK)</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🚗</div>
+            <div class="phone-screen-desc">บอสนั่งในรถ<br>Google Maps เปิด<br>"ขับมาให้ดูเลย"</div>
+          </div></div>
+          <div class="sb-caption">วางโทรศัพท์บน dashboard ถ่ายตัวเอง</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">3–30 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">📍</div>
+            <div class="phone-screen-desc">ขับผ่าน landmark<br>บอกทางปาก<br>เสียงเนวิเกต</div>
+          </div></div>
+          <div class="sb-caption">เสียงเนวิเกต = เรียล ไม่ต้องตัด</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">30–48 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🅿️</div>
+            <div class="phone-screen-desc">ถึงที่จอด<br>บอก capacity<br>ทางเลือกสำรอง</div>
+          </div></div>
+          <div class="sb-caption">ถ่ายป้ายที่จอดจริง</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">48–58 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">💾</div>
+            <div class="phone-screen-desc">ชู LINE QR<br>"เซฟคลิปนี้ไว้<br>วันงานเปิดได้เลย"</div>
+          </div></div>
+          <div class="sb-caption">"เซฟ" คลิป = บอก algorithm</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Script เต็ม</div>
+      <div class="script-grid">
+        <div class="script-block hook">
+          <span class="block-label">🔴 HOOK — 3 วิแรก (นั่งในรถ Maps เปิด)</span>
+"กี่คนที่อยากมาแต่กลัวจอดรถไม่ได้ — ผมขับมาให้ดูเลยครับ"
+        </div>
+        <div class="script-block body">
+          <span class="block-label">🎬 BODY — วินาที 4–48 (ขับรถมาสถานที่จริง)</span>
+[ขับรถ กล้องบน dashboard หรือถือมือเดียว]
+
+"ออกจากอนุสาวรีย์ชัยฯ ขับตรงมาเลย ผ่าน Central พระราม 5
+ประมาณ [XX] นาที ไม่ต้องขึ้นทางด่วน
+
+สำหรับคนบางใหญ่ บางบัวทอง — 
+นั่ง MRT สายม่วง ลงสถานี [ชื่อสถานี] แล้วเดินต่อ [X] นาที
+หรือ grab มาจากสถานีก็ได้ [XX] บาทโดยประมาณ
+
+[ถึงที่จอด]
+
+ที่จอดรถที่นี่ฟรีครับ รองรับได้ [XX] คัน
+ถ้าเต็ม มีที่จอดสำรองที่ [ชื่อสถานที่] ห่างไป [X] นาทีเดิน
+
+[หันมาพูดกล้อง]
+
+เซฟคลิปนี้ไว้เลยนะครับ วันงานเปิดดูได้เลย ไม่ต้องหาใหม่"
+        </div>
+        <div class="script-block mission">
+          <span class="block-label">💬 ภารกิจคอมเมนต์</span>
+"มาจากย่านไหนครับ? คอมเมนต์บอกเลย
+แอดมินจะบอกเส้นทางเร็วสุดให้รายย่าน 🗺️"
+        </div>
+        <div class="script-block close-ep">
+          <span class="block-label">🔚 ปิดตอน</span>
+"เหลืออีก 4 วัน... โกดังต้องว่าง 🐶
+
+พรุ่งนี้เปิดหลังบ้าน ทีมกำลังแพ็คของเตรียมไว้ให้คุณอยู่
+และจะมีเกมทายจำนวนกล่อง รางวัลน่าสนใจมากครับ"
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Caption + Hashtag (TikTok)</div>
+      <div class="caption-block">
+        <span class="block-label">📝 Caption</span>กลัวจอดรถไม่ได้? ขับมาให้ดูเลย 🚗 พร้อมบอกเส้นทางจากทุกย่านในนนท์
+
+📌 เซฟคลิปนี้ไว้ วันงานเปิดดูได้เลย
+
+มาจากย่านไหน? คอมเมนต์บอก แอดมินบอกเส้นทางให้เลย 👇
+        <div class="hashtags">
+          <span class="ht">#RUDEDOGFair2026</span>
+          <span class="ht">#เส้นทางไปงาน</span>
+          <span class="ht">#ที่จอดรถ</span>
+          <span class="ht">#นนทบุรี</span>
+          <span class="ht">#โกดังต้องว่าง</span>
+          <span class="ht">#save</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Viral Tips</div>
+      <div class="viral-tips">
+        <span class="block-label">💡 EASY VIRAL MECHANICS</span>
+        <ul class="tip-list">
+          <li>มุมในรถ = มุมที่ TikTok ไม่ค่อยเห็น แต่ feel เหมือนเพื่อนพากันมา = share ง่าย</li>
+          <li>เสียงเนวิเกต GPS จริง อย่าตัดออก — เสียง ambient เหล่านี้ทำให้ content feel ไม่ staged</li>
+          <li>บอก "เซฟคลิปนี้ไว้" ในคลิปเลย — save rate สูง = algorithm ดันคลิปให้ไกลขึ้น</li>
+          <li>แอดมินตอบรายย่านในคอมเมนต์ = สร้าง community thread ที่คนอื่นอ่านแล้วได้ประโยชน์ด้วย</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EP 8 -->
+<div class="ep-card believe" id="ep8">
+  <div class="ep-header" onclick="toggleEp('ep8')">
+    <span class="ep-day believe">D-3</span>
+    <div class="ep-title-block">
+      <div class="ep-num">EP.8</div>
+      <div class="ep-tagline">ภูเขาสต๊อก + ทีมแพ็คของ (BTS)</div>
+      <div class="ep-psych-row">
+        <span class="psych-tag">P4 Social Proof</span>
+        <span class="psych-tag">P1 Open Loop</span>
+      </div>
+    </div>
+    <div class="ep-toggle-btn">▾</div>
+  </div>
+  <div class="ep-body">
+
+    <div class="sb-section">
+      <div class="section-label">Storyboard — 4 shots</div>
+      <div class="storyboard">
+        <div class="sb-frame">
+          <span class="sb-time believe">0–3 วิ (HOOK)</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🏔️</div>
+            <div class="phone-screen-desc">ยื่นแขนถ่ายมุมสูง<br>สต๊อกเต็มเฟรม<br>"กี่กล่อง ทาย?"</div>
+          </div></div>
+          <div class="sb-caption">ยืนบนเก้าอี้ + ยื่นแขนถ่ายลงมา</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">3–25 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">👷</div>
+            <div class="phone-screen-desc">pan ทีมแพ็คของ<br>เสียง ambient<br>ออฟฟิศจริง</div>
+          </div></div>
+          <div class="sb-caption">เสียงแพ็คของ กรอบกล่อง = เรียลมาก</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">25–46 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🎮</div>
+            <div class="phone-screen-desc">กลับมาที่กอง<br>บอส: "เกมทาย<br>10 คน รับรางวัล"</div>
+          </div></div>
+          <div class="sb-caption">เกม = comment bait ที่ดีที่สุด</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time believe">46–58 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">⏳</div>
+            <div class="phone-screen-desc">นับถอยหลัง<br>3 วันบนหน้าจอ<br>ใหญ่ชัด</div>
+          </div></div>
+          <div class="sb-caption">ตัวเลขใหญ่ = กดดันดี</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Script เต็ม</div>
+      <div class="script-grid">
+        <div class="script-block hook">
+          <span class="block-label">🔴 HOOK — 3 วิแรก (ถ่ายมุมสูง สต๊อกเต็มเฟรม)</span>
+"3 วันแล้วกองนี้จะต้องหายไปทั้งหมด — ทายสิครับว่ามีกี่กล่อง?"
+        </div>
+        <div class="script-block body">
+          <span class="block-label">🎬 BODY — วินาที 4–48</span>
+[ยืนหน้ากองสต๊อก]
+"ทีมเราแพ็คของมา 3 วันแล้วครับ เพื่อให้ทุกอย่างพร้อม
+ในวันเปิดประตู — คุณเดินเข้ามา เลือกได้ทันที ไม่ต้องรอ
+
+[pan กล้องไปที่ทีมทำงาน]
+
+ดูทีมงานที่นี่ครับ ทุกคนทำเพื่อให้วันนั้นออกมาดีที่สุด
+สำหรับทุกคนที่มา
+
+[กลับมาที่กอง]
+
+แต่ผมยังอยากรู้ว่า... กองนี้มีกี่กล่องครับ?
+10 คนที่ทายใกล้สุด จะได้รับของที่ระลึกจากเรา
+แต่ต้องมารับเองหน้างานเท่านั้น — ต้องมานะครับ"
+        </div>
+        <div class="script-block mission">
+          <span class="block-label">💬 ภารกิจคอมเมนต์</span>
+"เกมทายจำนวนกล่อง — ตัวเลขเดียวเท่านั้น
+10 คนที่ทายใกล้สุดรับของที่ระลึก (ต้องมารับเองหน้างาน!) 👇"
+        </div>
+        <div class="script-block close-ep">
+          <span class="block-label">🔚 ปิดตอน</span>
+"เหลืออีก 3 วัน... โกดังต้องว่าง 🐶
+
+พรุ่งนี้บอก 5 สิ่งที่จะหมดเร็วที่สุดในงาน — ถ้าอยากได้ของพวกนั้น
+ต้องเข้างานตอนเปิดประตูเลยครับ"
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Caption + Hashtag (TikTok)</div>
+      <div class="caption-block">
+        <span class="block-label">📝 Caption</span>3 วันก่อนงาน ทีมแพ็คของกันอยู่ 🏃 แล้วกองนี้มีกี่กล่องครับ?
+
+🎮 เกมทาย: ตัวเลขเดียว 10 คนที่ใกล้สุดรับของที่ระลึก (ต้องมารับเองหน้างาน)
+
+👇 คอมเมนต์ตัวเลขได้เลย
+        <div class="hashtags">
+          <span class="ht">#RUDEDOGFair2026</span>
+          <span class="ht">#ทายจำนวนกล่อง</span>
+          <span class="ht">#BTS</span>
+          <span class="ht">#โกดังต้องว่าง</span>
+          <span class="ht">#countdown</span>
+          <span class="ht">#3วัน</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Viral Tips</div>
+      <div class="viral-tips">
+        <span class="block-label">💡 EASY VIRAL MECHANICS</span>
+        <ul class="tip-list">
+          <li>ยืนบนเก้าอี้แล้วยื่นแขนถ่ายลงมา = wide shot แบบ aerial ฟรีๆ ไม่ต้องโดรน</li>
+          <li>เสียงแพ็คของ เสียงกรอบกล่อง = sound ที่คนดูรู้สึกว่างานจริงและใกล้มาถึงแล้ว</li>
+          <li>เกมทายตัวเลข = คนอยากรู้คำตอบจริงๆ engagement จึงเกิดขึ้นเอง ไม่รู้สึก forced</li>
+          <li>"ต้องมารับเองหน้างาน" = anchor commitment — คนที่ชนะเกมมีสัญญาใจแล้วว่าต้องไป</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ PHASE: MOVE ============ -->
+<div class="phase-divider" id="move">
+  <div class="phase-label">
+    <span class="phase-dot" style="background:var(--move);"></span>
+    <span style="color:var(--move);">PHASE 3 — MOVE</span>
+    <span style="color:var(--muted);font-family:'Kanit';font-weight:400;font-size:.9rem;">D-2 ถึง D-0</span>
+  </div>
+  <p class="phase-desc">เป้าหมาย: เปลี่ยน "จะไป" เป็น "ออกจากบ้านแล้ว" — กด FOMO เต็มที่ ปิด loop สร้างความเร่งด่วน</p>
+</div>
+
+<!-- EP 9 -->
+<div class="ep-card move" id="ep9">
+  <div class="ep-header" onclick="toggleEp('ep9')">
+    <span class="ep-day move">D-2</span>
+    <div class="ep-title-block">
+      <div class="ep-num">EP.9</div>
+      <div class="ep-tagline">5 สิ่งที่จะหมดก่อนเพื่อน</div>
+      <div class="ep-psych-row">
+        <span class="psych-tag">P5 Loss Aversion</span>
+        <span class="psych-tag">P8 Goal Gradient</span>
+      </div>
+    </div>
+    <div class="ep-toggle-btn">▾</div>
+  </div>
+  <div class="ep-body">
+
+    <div class="sb-section">
+      <div class="section-label">Storyboard — 4 shots</div>
+      <div class="storyboard">
+        <div class="sb-frame">
+          <span class="sb-time move">0–3 วิ (HOOK)</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🏃</div>
+            <div class="phone-screen-desc">บอสถือสินค้า<br>ตัวเลข qty น้อย<br>ข้างๆ เฟรม</div>
+          </div></div>
+          <div class="sb-caption">เขียนตัวเลข qty บน sticky note แปะข้างๆ</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time move">3–40 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">5️⃣</div>
+            <div class="phone-screen-desc">countdown reveal<br>ทีละชิ้น นับนิ้ว<br>หยิบของจริง</div>
+          </div></div>
+          <div class="sb-caption">หยิบของจริงขึ้นมา อย่าใช้ภาพ</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time move">40–50 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">1️⃣</div>
+            <div class="phone-screen-desc">ซูม "อันดับ 1"<br>qty จำกัดมาก<br>close-up</div>
+          </div></div>
+          <div class="sb-caption">pause นาน 1 วิก่อนบอกอันดับ 1</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time move">50–58 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">⏰</div>
+            <div class="phone-screen-desc">เวลาเปิดประตู<br>"2 วันแล้ว"<br>ตัวเลขใหญ่</div>
+          </div></div>
+          <div class="sb-caption">ตัดทันทีหลังบอกเวลา</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Script เต็ม</div>
+      <div class="script-grid">
+        <div class="script-block hook">
+          <span class="block-label">🔴 HOOK — 3 วิแรก (ถือสินค้า แปะตัวเลข qty)</span>
+"ถ้าอยากได้ตัวนี้ ต้องอ่านคลิปนี้ก่อนไปงาน
+เพราะมันจะหมดก่อนเที่ยงครับ"
+        </div>
+        <div class="script-block body">
+          <span class="block-label">🎬 BODY — วินาที 4–48 (countdown reveal)</span>
+[นับนิ้วหรือ whiteboard]
+
+"อันดับ 5: [สินค้า A]
+มีแค่ [XX] ชุด ราคา [XXX] บาท
+[หยิบของขึ้นมาให้เห็น]
+
+อันดับ 4: [สินค้า B]
+[XX] ชุด ไซส์ L เหลือน้อยสุด
+
+อันดับ 3: [สินค้า C]
+ไซส์ M กับ L มีรวมกัน [XX] ตัว — ปีที่แล้วหมดก่อน 11 โมง
+
+อันดับ 2: [สินค้า D]
+รุ่น limited ปีนี้อย่างเดียว ไม่มีผลิตต่อ [XX] ชิ้น
+
+[pause หนึ่งวิ]
+
+อันดับ 1...
+[ชูของขึ้นมา close-up]
+ตัวนี้มีแค่ [XX] ชิ้นในงานครับ
+ถ้าจะเอา — ต้องเข้ามาตอนเปิดประตูเลย"
+        </div>
+        <div class="script-block mission">
+          <span class="block-label">💬 ภารกิจคอมเมนต์</span>
+"เป้าหมายแรกที่จะวิ่งไปหยิบคืออะไร? คอมเมนต์บอกเลยครับ
+ผมจะเอาคำตอบนี้ไปวางผังสต๊อกหน้างานจริงๆ 👇"
+        </div>
+        <div class="script-block close-ep">
+          <span class="block-label">🔚 ปิดตอน</span>
+"เหลืออีก 2 วัน... โกดังต้องว่าง 🐶
+
+เปิดประตู [เวลา] น.
+เซฟเช็คลิสต์วันงานไว้ใต้คลิปนี้ได้เลยครับ"
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Caption + Hashtag (TikTok)</div>
+      <div class="caption-block">
+        <span class="block-label">📝 Caption</span>5 สิ่งที่จะหมดก่อนเพื่อน 🔥 อย่าพลาดอ่านก่อนไปงาน
+
+📍 เปิดประตู [เวลา] น. วันที่ [วันที่]
+
+เป้าหมายแรกของคุณคืออะไร? คอมเมนต์บอกเลย — ผมวางผังสต๊อกตามนี้จริงๆ 👇
+        <div class="hashtags">
+          <span class="ht">#RUDEDOGFair2026</span>
+          <span class="ht">#ของจะหมด</span>
+          <span class="ht">#FOMO</span>
+          <span class="ht">#โกดังต้องว่าง</span>
+          <span class="ht">#2วันแล้ว</span>
+          <span class="ht">#sale</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Viral Tips</div>
+      <div class="viral-tips">
+        <span class="block-label">💡 EASY VIRAL MECHANICS</span>
+        <ul class="tip-list">
+          <li>countdown ด้วยนิ้ว 5-4-3-2-1 = visual ง่ายที่สุด คนดูตามได้เองและอยากรู้อันดับ 1</li>
+          <li>หยิบของจริงขึ้นมาทุกอันดับ ไม่ใช้ภาพ — ของจริงในมือ = น่าเชื่อถือกว่า 10 เท่า</li>
+          <li>ตัวเลข qty น้อย (12, 8, 5 ชิ้น) คือ scarcity จริง ไม่ต้อง fake — พูดตัวเลขจริง</li>
+          <li>บอกว่า "เอาคำตอบไปวางผังจริง" = คนรู้สึกว่า comment ของตัวเองมีผลจริง engagement พุ่ง</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- EP 10 -->
+<div class="ep-card move" id="ep10">
+  <div class="ep-header" onclick="toggleEp('ep10')">
+    <span class="ep-day move">D-1</span>
+    <div class="ep-title-block">
+      <div class="ep-num">EP.10</div>
+      <div class="ep-tagline">Final Call + ทิ้งเซอร์ไพรส์ปิดงาน</div>
+      <div class="ep-psych-row">
+        <span class="psych-tag">P1 Open Loop (ปิด)</span>
+        <span class="psych-tag">P8 Goal Gradient</span>
+      </div>
+    </div>
+    <div class="ep-toggle-btn">▾</div>
+  </div>
+  <div class="ep-body">
+
+    <div class="sb-section">
+      <div class="section-label">Storyboard — 4 shots</div>
+      <div class="storyboard">
+        <div class="sb-frame">
+          <span class="sb-time move">0–3 วิ (HOOK)</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🌅</div>
+            <div class="phone-screen-desc">บอสยืนหน้าสถานที่จริง<br>ยามเย็น<br>แสงธรรมชาติ</div>
+          </div></div>
+          <div class="sb-caption">ยืนหน้าสถานที่จริงตอนเย็น แสงทอง</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time move">3–30 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">❤️</div>
+            <div class="phone-screen-desc">บอสพูด final message<br>ขอบคุณ<br>อารมณ์จริง</div>
+          </div></div>
+          <div class="sb-caption">พูดจากใจ ไม่ต้อง script ตรงๆ</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time move">30–48 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">📦</div>
+            <div class="phone-screen-desc">หยิบซองปิดผนึก<br>"บอกไม่ได้ตอนนี้<br>เฉลยหน้างาน"</div>
+          </div></div>
+          <div class="sb-caption">ซองจริง ปิดผนึกจริง</div>
+        </div>
+        <div class="sb-frame">
+          <span class="sb-time move">48–58 วิ</span>
+          <div class="phone-sketch"><div class="phone-screen">
+            <div class="phone-screen-icon">🔔</div>
+            <div class="phone-screen-desc">นาฬิกา countdown<br>"พรุ่งนี้ 10:00 น."<br>ใหญ่บนจอ</div>
+          </div></div>
+          <div class="sb-caption">ตัดทันที ไม่ต้อง outro</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Script เต็ม</div>
+      <div class="script-grid">
+        <div class="script-block hook">
+          <span class="block-label">🔴 HOOK — 3 วิแรก (ยืนหน้าสถานที่จริง ยามเย็น)</span>
+"พรุ่งนี้เปิดประตู 10 โมง — และจะมีสิ่งที่ผมไม่เคยทำมาก่อนในชีวิต"
+        </div>
+        <div class="script-block body">
+          <span class="block-label">🎬 BODY — วินาที 4–48 (พูดตรงๆ จากใจ)</span>
+"10 วันที่ผ่านมา... ขอบคุณนะครับ
+ขอบคุณทุกคนที่พิมพ์ 'ไปแน่'
+ทุกคนที่แอด LINE ทุกคนที่แท็กเพื่อนมา
+ทุกคำถามใต้คลิป
+
+มันทำให้ผมรู้ว่า — งานนี้จะเป็นงานที่ดีที่สุดที่เราเคยทำ
+
+[หยิบซองปิดผนึกขึ้นมา]
+
+ซองนี้มีสิ่งที่ผมจะทำพรุ่งนี้
+ที่ผมยังบอกตอนนี้ไม่ได้
+เฉลยหน้างาน พรุ่งนี้ 10 โมงตรง
+
+ถ้าอยากรู้ว่าอะไรอยู่ในนั้น — มาเอง
+ไม่มีทาง live ให้ดูครับ ต้องมาจริงๆ"
+        </div>
+        <div class="script-block mission">
+          <span class="block-label">💬 ภารกิจคอมเมนต์</span>
+"เปิดกระดิ่ง Live ไว้นะครับ พรุ่งนี้ 10:00 น. ไลฟ์สดเปิดประตู
+และลงชื่อใต้นี้ว่าจะมา — นัดเจอกันพรุ่งนี้ครับ 🙏"
+        </div>
+        <div class="script-block close-ep">
+          <span class="block-label">🔚 ปิด Series</span>
+"เหลืออีก 1 วัน... โกดังต้องว่าง 🐶
+
+เจอกันพรุ่งนี้ [เวลา] น. นะครับ"
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Caption + Hashtag (TikTok)</div>
+      <div class="caption-block">
+        <span class="block-label">📝 Caption</span>ตอนสุดท้าย 🙏 ขอบคุณทุกคนที่ติดตามมา 10 วัน
+
+ในซองนี้มีอะไร? — เฉลยหน้างานพรุ่งนี้ 10:00 น. เท่านั้น ไม่มี live ให้ดูครับ ต้องมาจริงๆ
+
+ลงชื่อใต้นี้ว่าจะมา นัดเจอกัน 🐶
+        <div class="hashtags">
+          <span class="ht">#RUDEDOGFair2026</span>
+          <span class="ht">#FinalCall</span>
+          <span class="ht">#โกดังต้องว่าง</span>
+          <span class="ht">#1วันแล้ว</span>
+          <span class="ht">#เซอร์ไพรส์</span>
+          <span class="ht">#นัดเจอ</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="section-label">Viral Tips</div>
+      <div class="viral-tips">
+        <span class="block-label">💡 EASY VIRAL MECHANICS</span>
+        <ul class="tip-list">
+          <li>ซองปิดผนึก = open loop ที่แรงที่สุดใน series — คนต้องมาเองเพื่อรู้คำตอบ</li>
+          <li>แสงทองยามเย็น = เป็น cinematic ให้ฟรีๆ ไม่ต้องกรอง ไม่ต้องจัดไฟ</li>
+          <li>พูดจากใจตอนนี้ ไม่ต้อง polish อย่าซ้อมมาก — อารมณ์จริงคือสิ่งที่คนรู้สึกได้และ share ต่อ</li>
+          <li>"ลงชื่อว่าจะมา" ใต้คลิป = commitment สาธารณะ คนที่ลงชื่อแล้วมีแนวโน้มมาจริงสูงกว่า 3 เท่า</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /.wrap -->
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <span><b>RUDEDOG FAIR 2026</b> — Script Pack 10 EP · Mid Year Sale · ถ่ายด้วยโทรศัพท์เดียว</span>
+    <span>อ้างอิงจาก FB Ads Manager จริง · เป้า 8,000 คน · โกดังต้องว่าง 🐶</span>
+  </div>
+</footer>
+
+<script>
+function toggleEp(id) {
+  var card = document.getElementById(id);
+  var isOpen = card.classList.contains('open');
+  // close all
+  document.querySelectorAll('.ep-card').forEach(function(c){ c.classList.remove('open'); });
+  if (!isOpen) {
+    card.classList.add('open');
+    setTimeout(function(){
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }
+}
+
+// Open EP1 by default
+document.addEventListener('DOMContentLoaded', function(){
+  document.getElementById('ep1').classList.add('open');
+});
+</script>
+
+</body>
+</html>
