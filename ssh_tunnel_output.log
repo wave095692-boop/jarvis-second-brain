@@ -21,174 +21,38 @@ https://localhost.run/docs/
 
 ===============================================================================
 
-** your connection id is edb0bb0f-9e22-4632-b205-9883900cb5e4, please mention it if you send me a message about an issue. **
+** your connection id is cc640b21-fb31-41e2-b29d-8c85600ce2c3, please mention it if you send me a message about an issue. **
 
 authenticated as anonymous user
-4a708f63583257.lhr.life tunneled with tls termination, https://4a708f63583257.lhr.life
-create an account and add your key for a longer lasting domain name. see https://localhost.run/docs/forever-free/ for more information.
-Open your tunnel address on your mobile with this QR:
-
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-45a8b0b81e1ca2.lhr.life tunneled with tls termination, https://45a8b0b81e1ca2.lhr.life
+8b4c1c73de3e73.lhr.life tunneled with tls termination, https://8b4c1c73de3e73.lhr.life
 create an account and add your key for a longer lasting domain name. see https://localhost.run/docs/forever-free/ for more information.
 Open your tunnel address on your mobile with this QR:
 
 [7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
 [7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
 [7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
 [7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m
-[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
+[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
+[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m
+[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
+[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m
+[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
+[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
+[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
+[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
 [7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
 
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-7014e595f133a2.lhr.life tunneled with tls termination, https://7014e595f133a2.lhr.life
-create an account and add your key for a longer lasting domain name. see https://localhost.run/docs/forever-free/ for more information.
-Open your tunnel address on your mobile with this QR:
-
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m
-[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[49m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[49m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m[7m  [0m[49m  [0m[7m  [0m
-[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m[7m  [0m
-
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
-setsockopt TCP_NODELAY: Invalid argument
