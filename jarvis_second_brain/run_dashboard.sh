@@ -1,7 +1,8 @@
 #!/bin/bash
 # Launcher script for Jarvis Second Brain Dashboard
 
-DIRECTORY="/Users/apple/.gemini/antigravity-ide/scratch/jarvis_second_brain"
+# Dynamically resolve directory containing this script
+DIRECTORY="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$DIRECTORY"
 
 # Kill any existing server on port 8500
