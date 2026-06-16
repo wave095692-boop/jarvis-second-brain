@@ -319,14 +319,14 @@ function fetchStatus() {
                 tunnelLink.href = ytUrl;
             }
             if (openYtBtn) {
-                openYtBtn.href = ytUrl;
+                openYtBtn.href = "https://www.youtube.com/";
             }
             if (openYtBtnUrl) {
-                openYtBtnUrl.innerText = ytUrl;
+                openYtBtnUrl.innerText = "https://www.youtube.com/";
             }
             const navYtBtn = document.getElementById('nav-btn-youtube');
             if (navYtBtn) {
-                navYtBtn.href = ytUrl;
+                navYtBtn.href = "https://www.youtube.com/";
             }
 
             // YouTube Diagnostics

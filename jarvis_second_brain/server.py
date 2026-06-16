@@ -886,24 +886,15 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                         log_message = f"Error during compile: {result.stderr}"
                         
                 elif action == 'restart_youtube':
-                    # Stop if running on port 8000
                     try:
-                        # Find process listening on port 8000
-                        lsof_res = subprocess.run(['lsof', '-t', '-i', ':8000'], capture_output=True, text=True)
-                        if lsof_res.stdout.strip():
-                            pids = lsof_res.stdout.strip().split('\n')
-                            for pid in pids:
-                                subprocess.run(['kill', '-9', pid])
-                            log_message = "Killed existing YouTube Premium clone processes. "
+                        import platform
+                        if platform.system() == 'Darwin':
+                            subprocess.run(['open', '-a', '/Applications/Brave Browser.app', 'https://www.youtube.com/'])
+                            log_message = "Successfully opened official YouTube in Brave Browser on local Mac."
                         else:
-                            log_message = "YouTube Premium was not running. "
+                            log_message = "Not on macOS. Brave Browser cannot be launched from cloud container."
                     except Exception as ex:
-                        log_message = f"Check/kill failed: {ex}. "
-
-                    # Start YouTube Premium server
-                    server_script = os.path.join(WORKSPACE_DIR, "youtube_premium_clone", "server.py")
-                    subprocess.Popen(['python3', server_script], start_new_session=True)
-                    log_message += "Launched server.py asynchronously on Port 8000."
+                        log_message = f"Failed to launch Brave: {ex}"
                     
                 elif action == 'restart_tunnel':
                     # Stop existing localtunnel if any

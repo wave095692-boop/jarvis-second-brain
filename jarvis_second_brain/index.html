@@ -10,7 +10,7 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css?v=4.2">
+    <link rel="stylesheet" href="index.css?v=4.3">
     <style>
         /* Embed docx styles directly to avoid browser CSS caching */
         .docx-viewer {
@@ -464,8 +464,8 @@
                                 <button class="btn-hud btn-cyan" onclick="runAction('restart_youtube')">
                                     <i data-lucide="play-circle"></i>
                                     <div class="btn-text">
-                                        <b>LAUNCH YOUTUBE PREMIUM</b>
-                                        <span>Restart python server.py on port 8000</span>
+                                        <b>LAUNCH YOUTUBE ON BRAVE</b>
+                                        <span>Open official YouTube in Brave Browser locally</span>
                                     </div>
                                 </button>
                                 <button class="btn-hud btn-pink" onclick="runAction('restart_tunnel')">
@@ -482,11 +482,11 @@
                                         <span>Compile create_pdf.py to Desktop</span>
                                     </div>
                                 </button>
-                                <a id="btn-open-youtube" href="#" target="_blank" class="btn-hud btn-green" style="text-decoration: none;">
+                                <a id="btn-open-youtube" href="https://www.youtube.com/" target="_blank" class="btn-hud btn-green" style="text-decoration: none;">
                                     <i data-lucide="external-link"></i>
                                     <div class="btn-text">
-                                        <b>OPEN YOUTUBE PREMIUM</b>
-                                        <span id="btn-open-youtube-url">Go to client interface</span>
+                                        <b>OPEN YOUTUBE</b>
+                                        <span id="btn-open-youtube-url">Go to youtube.com</span>
                                     </div>
                                 </a>
                             </div>
@@ -648,6 +648,6 @@
     </div>
 
     <!-- Script file -->
-    <script src="app.js?v=4.2"></script>
+    <script src="app.js?v=4.3"></script>
 </body>
 </html>
