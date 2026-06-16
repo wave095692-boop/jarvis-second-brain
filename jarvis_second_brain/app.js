@@ -17,6 +17,27 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Start status polling loop (every 3 seconds)
     setInterval(fetchStatus, 3000);
+
+    // Bind YouTube links to launch Brave Browser locally for Boss
+    const isLocalHost = (host) => {
+        return host === "localhost" || 
+               host === "127.0.0.1" || 
+               host.startsWith("10.") || 
+               host.startsWith("192.168.") || 
+               host.startsWith("172.");
+    };
+
+    const handleYtClick = (e) => {
+        if (isLocalHost(window.location.hostname)) {
+            e.preventDefault();
+            runAction('restart_youtube');
+        }
+    };
+
+    const openYtBtn = document.getElementById('btn-open-youtube');
+    const navYtBtn = document.getElementById('nav-btn-youtube');
+    if (openYtBtn) openYtBtn.addEventListener('click', handleYtClick);
+    if (navYtBtn) navYtBtn.addEventListener('click', handleYtClick);
 });
 
 
