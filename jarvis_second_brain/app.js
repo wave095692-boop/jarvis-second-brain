@@ -675,20 +675,20 @@ function renderUploadedFiles(roomsData, roomLabels) {
                 
         // Only allow folder renaming if unlocked (or if it's not Boss)
         const canRenameFolder = (room.key !== 'Boss' || sessionStorage.getItem('boss_unlocked') === 'true');
-        const renameFolderBtn = canRenameFolder 
-            ? `<span onclick="event.stopPropagation(); renameRoomFolder('${room.key}')" title="เปลี่ยนชื่อโฟลเดอร์" class="btn-icon-action" style="margin-left: auto; width: 18px; height: 18px; border: 1px solid rgba(0, 242, 254, 0.3) !important; color: var(--neon-cyan) !important; background: rgba(0,0,0,0.3) !important;">
-                   <i data-lucide="edit-3" style="width: 10px; height: 10px;"></i>
+        const roomLabelHtml = canRenameFolder 
+            ? `<span onclick="event.stopPropagation(); renameRoomFolder('${room.key}')" title="คลิกเพื่อเปลี่ยนชื่อห้อง" style="cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='var(--neon-pink)'" onmouseout="this.style.color='var(--neon-cyan)'">
+                   <span>${room.label}</span>
+                   <i data-lucide="edit-2" style="width: 10px; height: 10px; opacity: 0.6;"></i>
                </span>`
-            : '';
+            : `<span>${room.label}</span>`;
                 
         return `
             <div class="room-folder" style="margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.02); border-radius: 6px; overflow: hidden;">
                 <div class="room-title" onclick="toggleRoomCollapse('${room.key}')" style="font-weight: 600; font-size: 11.5px; color: var(--neon-cyan); padding: 8px 12px; display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.2); cursor: pointer; user-select: none; transition: background 0.2s;">
                     <i data-lucide="${arrowIcon}" style="width: 12px; height: 12px; color: var(--text-secondary);"></i>
                     <i data-lucide="${folderIcon}" style="width: 12px; height: 12px; color: var(--neon-yellow);"></i> 
-                    <span style="flex: 1; display: flex; align-items: center; justify-content: space-between; margin-right: 8px;">
-                        <span>${room.label}</span>
-                        ${renameFolderBtn}
+                    <span style="flex: 1; display: flex; align-items: center;">
+                        ${roomLabelHtml}
                     </span>
                     <span style="font-size: 10px; color: var(--text-dim); background: rgba(255,255,255,0.05); padding: 1px 6px; border-radius: 10px;">${files.length}</span>
                 </div>
