@@ -51,6 +51,15 @@
             "label": "แผ่นๅ.pdf",
             "canOpen": true,
             "openUrl": "/view/pdf_old"
+        },
+        {
+            "key": "pdf_sheet3",
+            "name": "แผ่น3.pdf",
+            "path": "/Users/apple/Desktop/แผ่น3.pdf",
+            "type": "pdf",
+            "label": "แผ่นที่3.pdf",
+            "canOpen": true,
+            "openUrl": "/view/pdf_sheet3"
         }
     ],
     "youtube": [

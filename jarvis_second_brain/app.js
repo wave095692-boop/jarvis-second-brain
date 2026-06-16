@@ -303,6 +303,8 @@ function fetchStatus() {
             
             // Dynamic YouTube Clone URL based on client connection network
             const tunnelLink = document.getElementById('tunnel-link');
+            const openYtBtn = document.getElementById('btn-open-youtube');
+            const openYtBtnUrl = document.getElementById('btn-open-youtube-url');
             let ytUrl = data.youtube_clone.url; // Dynamic URL from backend
             const currentHost = window.location.hostname;
             
@@ -312,8 +314,16 @@ function fetchStatus() {
                 ytUrl = `${window.location.protocol}//${currentHost}:8000`;
             }
             
-            tunnelLink.innerText = ytUrl;
-            tunnelLink.href = ytUrl;
+            if (tunnelLink) {
+                tunnelLink.innerText = ytUrl;
+                tunnelLink.href = ytUrl;
+            }
+            if (openYtBtn) {
+                openYtBtn.href = ytUrl;
+            }
+            if (openYtBtnUrl) {
+                openYtBtnUrl.innerText = ytUrl;
+            }
 
             // YouTube Diagnostics
             const ytTxt = document.getElementById('yt-status-text');

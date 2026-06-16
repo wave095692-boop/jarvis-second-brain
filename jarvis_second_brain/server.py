@@ -397,6 +397,28 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 self.end_headers()
                 self.wfile.write(json.dumps({'error': 'Old PDF not found'}).encode('utf-8'))
 
+        elif path == '/view/pdf_sheet3':
+            data = load_project_files()
+            file_path = None
+            for item in data.get('campaign', []):
+                if item['key'] == 'pdf_sheet3':
+                    file_path = item['path']
+                    break
+            if not file_path:
+                file_path = '/Users/apple/Desktop/แผ่น3.pdf'
+            file_path = resolve_file_path(file_path)
+            if os.path.exists(file_path):
+
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/pdf')
+                self.end_headers()
+                with open(file_path, 'rb') as f:
+                    self.wfile.write(f.read())
+            else:
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'Sheet 3 PDF not found'}).encode('utf-8'))
+
         elif path == '/api/project-files':
             self.send_response(200)
             self.send_header('Content-Type', 'application/json')

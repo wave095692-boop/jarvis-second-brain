@@ -345,6 +345,13 @@ body {
 .btn-orange { border: 1px solid var(--border-color); color: var(--neon-orange); }
 .btn-orange:hover { background: rgba(255, 77, 0, 0.08); border-color: var(--neon-orange); box-shadow: 0 0 15px rgba(255, 77, 0, 0.15); }
 
+.btn-yellow { border: 1px solid var(--border-color); color: var(--neon-yellow); }
+.btn-yellow:hover { background: rgba(255, 210, 63, 0.08); border-color: var(--neon-yellow); box-shadow: 0 0 15px rgba(255, 210, 63, 0.15); }
+
+.btn-green { border: 1px solid var(--border-color); color: var(--neon-green); }
+.btn-green:hover { background: rgba(0, 245, 118, 0.08); border-color: var(--neon-green); box-shadow: 0 0 15px rgba(0, 245, 118, 0.15); }
+
+
 /* Terminal Logs */
 .terminal-container {
     flex: 1;
