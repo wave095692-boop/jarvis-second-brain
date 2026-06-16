@@ -892,9 +892,25 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                             subprocess.run(['open', '-a', '/Applications/Brave Browser.app', 'https://www.youtube.com/'])
                             log_message = "Successfully opened official YouTube in Brave Browser on local Mac."
                         else:
-                            log_message = "Not on macOS. Brave Browser cannot be launched from cloud container."
+                            self.send_response(200)
+                            self.send_header('Content-Type', 'application/json')
+                            self.end_headers()
+                            self.wfile.write(json.dumps({
+                                'status': 'error',
+                                'reason': 'not_macos',
+                                'error': 'Not on macOS. Brave Browser cannot be launched from cloud container.'
+                            }).encode('utf-8'))
+                            return
                     except Exception as ex:
-                        log_message = f"Failed to launch Brave: {ex}"
+                        self.send_response(200)
+                        self.send_header('Content-Type', 'application/json')
+                        self.end_headers()
+                        self.wfile.write(json.dumps({
+                            'status': 'error',
+                            'reason': 'exception',
+                            'error': f"Failed to launch Brave: {ex}"
+                        }).encode('utf-8'))
+                        return
                     
                 elif action == 'restart_tunnel':
                     # Stop existing localtunnel if any

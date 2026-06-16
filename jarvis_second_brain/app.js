@@ -19,19 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(fetchStatus, 3000);
 
     // Bind YouTube links to launch Brave Browser locally for Boss
-    const isLocalHost = (host) => {
-        return host === "localhost" || 
-               host === "127.0.0.1" || 
-               host.startsWith("10.") || 
-               host.startsWith("192.168.") || 
-               host.startsWith("172.");
-    };
-
     const handleYtClick = (e) => {
-        if (isLocalHost(window.location.hostname)) {
-            e.preventDefault();
-            runAction('restart_youtube');
-        }
+        e.preventDefault();
+        runAction('restart_youtube').then(result => {
+            if (!result || !result.success) {
+                // Fallback to opening YouTube in a new tab of the current browser
+                window.open("https://www.youtube.com/", "_blank");
+            }
+        });
     };
 
     const openYtBtn = document.getElementById('btn-open-youtube');
@@ -388,7 +383,7 @@ function runAction(actionName) {
     playSynthSound('click');
     logToTerminal(`[EXECUTE] Triggered control command: ${actionName.toUpperCase()}...`);
     
-    fetch('/api/action', {
+    return fetch('/api/action', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: actionName })
@@ -399,14 +394,17 @@ function runAction(actionName) {
             playSynthSound('success');
             logToTerminal(`[SUCCESS] ${data.log}`);
             fetchStatus(); // Immediately poll status
+            return { success: true, data: data };
         } else {
             playSynthSound('delete');
             logToTerminal(`[FAILED] Command returned error: ${data.error}`);
+            return { success: false, error: data.error };
         }
     })
     .catch(err => {
         playSynthSound('delete');
         logToTerminal(`[CRITICAL] Server connection timed out during execution: ${err.message}`);
+        return { success: false, error: err.message };
     });
 }
 
