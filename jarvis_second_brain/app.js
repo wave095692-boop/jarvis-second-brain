@@ -2,6 +2,7 @@
 let notesList = [];
 let audioCtx = null;
 let collapsedRooms = { Boss: false, Friend1: true, Friend2: true, Friend3: true, Friend4: true };
+let currentRoomLabels = {};
 
 // Initialize System
 document.addEventListener("DOMContentLoaded", () => {
@@ -607,24 +608,38 @@ function fetchUploadedFiles() {
     fetch('/api/uploads')
         .then(res => res.json())
         .then(data => {
-            renderUploadedFiles(data);
+            renderUploadedFiles(data.files, data.labels);
         })
         .catch(err => {
             console.error("Failed to load uploaded files list:", err);
         });
 }
 
-function renderUploadedFiles(roomsData) {
+function renderUploadedFiles(roomsData, roomLabels) {
     const container = document.getElementById("uploaded-files-list");
     if (!container) return;
     
+    if (!roomLabels) {
+        roomLabels = {
+            Boss: "บอส (Boss)",
+            Friend1: "เพื่อน 1 (Friend 1)",
+            Friend2: "เพื่อน 2 (Friend 2)",
+            Friend3: "เพื่อน 3 (Friend 3)",
+            Friend4: "เพื่อน 4 (Friend 4)"
+        };
+    }
+    currentRoomLabels = roomLabels;
+    
     const rooms = [
-        { key: "Boss", label: "บอส (Boss)" },
-        { key: "Friend1", label: "เพื่อน 1 (Friend 1)" },
-        { key: "Friend2", label: "เพื่อน 2 (Friend 2)" },
-        { key: "Friend3", label: "เพื่อน 3 (Friend 3)" },
-        { key: "Friend4", label: "เพื่อน 4 (Friend 4)" }
+        { key: "Boss", label: roomLabels.Boss || "บอส (Boss)" },
+        { key: "Friend1", label: roomLabels.Friend1 || "เพื่อน 1 (Friend 1)" },
+        { key: "Friend2", label: roomLabels.Friend2 || "เพื่อน 2 (Friend 2)" },
+        { key: "Friend3", label: roomLabels.Friend3 || "เพื่อน 3 (Friend 3)" },
+        { key: "Friend4", label: roomLabels.Friend4 || "เพื่อน 4 (Friend 4)" }
     ];
+    
+    // Update dropdown select option elements in index.html dynamically
+    updateRoomDropdownLabels(roomLabels);
     
     container.innerHTML = rooms.map(room => {
         const files = roomsData[room.key] || [];
@@ -658,20 +673,32 @@ function renderUploadedFiles(roomsData) {
                     `;
                 }).join(''));
                 
+        // Only allow folder renaming if unlocked (or if it's not Boss)
+        const canRenameFolder = (room.key !== 'Boss' || sessionStorage.getItem('boss_unlocked') === 'true');
+        const renameFolderBtn = canRenameFolder 
+            ? `<span onclick="event.stopPropagation(); renameRoomFolder('${room.key}')" title="เปลี่ยนชื่อโฟลเดอร์" class="btn-icon-action" style="margin-left: auto; width: 18px; height: 18px; border: 1px solid rgba(0, 242, 254, 0.3) !important; color: var(--neon-cyan) !important; background: rgba(0,0,0,0.3) !important;">
+                   <i data-lucide="edit-3" style="width: 10px; height: 10px;"></i>
+               </span>`
+            : '';
+                
         return `
             <div class="room-folder" style="margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.02); border-radius: 6px; overflow: hidden;">
                 <div class="room-title" onclick="toggleRoomCollapse('${room.key}')" style="font-weight: 600; font-size: 11.5px; color: var(--neon-cyan); padding: 8px 12px; display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.2); cursor: pointer; user-select: none; transition: background 0.2s;">
                     <i data-lucide="${arrowIcon}" style="width: 12px; height: 12px; color: var(--text-secondary);"></i>
                     <i data-lucide="${folderIcon}" style="width: 12px; height: 12px; color: var(--neon-yellow);"></i> 
-                    <span style="flex: 1;">${room.label}</span>
+                    <span style="flex: 1; display: flex; align-items: center; justify-content: space-between; margin-right: 8px;">
+                        <span>${room.label}</span>
+                        ${renameFolderBtn}
+                    </span>
                     <span style="font-size: 10px; color: var(--text-dim); background: rgba(255,255,255,0.05); padding: 1px 6px; border-radius: 10px;">${files.length}</span>
                 </div>
                 ${!isCollapsed ? `<div class="room-files" style="padding: 4px 0; background: rgba(255,255,255,0.01); border-top: 1px solid rgba(255,255,255,0.03);">
-                    ${filesHtml}
+                     ${filesHtml}
                 </div>` : ''}
             </div>
         `;
     }).join('');
+
     
     lucide.createIcons();
 }
@@ -1481,6 +1508,62 @@ function handleRoomSelectChange() {
     }
 }
 
+function renameRoomFolder(roomKey) {
+    playSynthSound('click');
+    const currentLabel = currentRoomLabels[roomKey] || roomKey;
+    let newLabel = prompt(`เปลี่ยนชื่อกลุ่มโฟลเดอร์ "${currentLabel}" เป็น:`, currentLabel);
+    if (newLabel === null) return;
+    newLabel = newLabel.trim();
+    if (!newLabel) {
+        alert("กรุณากรอกชื่อกลุ่มโฟลเดอร์!");
+        return;
+    }
+    
+    logToTerminal(`[ROOM] Requesting folder rename for key ${roomKey} to: ${newLabel}...`);
+    
+    fetch(`/api/rename-room?room=${roomKey}&label=${encodeURIComponent(newLabel)}`, {
+        method: 'POST'
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            playSynthSound('success');
+            logToTerminal(`[ROOM SUCCESS] Room key ${roomKey} display name updated to: ${newLabel}`);
+            fetchUploadedFiles();
+            fetchNotes();
+        } else {
+            playSynthSound('delete');
+            alert(`ไม่สามารถเปลี่ยนชื่อโฟลเดอร์ได้: ${data.error}`);
+        }
+    })
+    .catch(err => {
+        playSynthSound('delete');
+        alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
+    });
+}
+
+function updateRoomDropdownLabels(roomLabels) {
+    const isUnlocked = sessionStorage.getItem('boss_unlocked') === 'true';
+    
+    const optBoss = document.getElementById('room-opt-boss');
+    const optF1 = document.getElementById('room-opt-friend1');
+    const optF2 = document.getElementById('room-opt-friend2');
+    const optF3 = document.getElementById('room-opt-friend3');
+    const optF4 = document.getElementById('room-opt-friend4');
+    
+    if (optBoss) {
+        optBoss.disabled = !isUnlocked;
+        optBoss.style.display = isUnlocked ? 'block' : 'none';
+        optBoss.innerText = isUnlocked 
+            ? (roomLabels.Boss || "บอส (Boss)") 
+            : `${roomLabels.Boss || "บอส (Boss)"} - Locked`;
+    }
+    if (optF1) optF1.innerText = roomLabels.Friend1 || "เพื่อน 1 (Friend 1)";
+    if (optF2) optF2.innerText = roomLabels.Friend2 || "เพื่อน 2 (Friend 2)";
+    if (optF3) optF3.innerText = roomLabels.Friend3 || "เพื่อน 3 (Friend 3)";
+    if (optF4) optF4.innerText = roomLabels.Friend4 || "เพื่อน 4 (Friend 4)";
+}
+
 // Bind keyboard support for PIN
 document.addEventListener('keyup', (e) => {
     const activeTab = document.querySelector('.tab-content.active');
@@ -1494,6 +1577,7 @@ document.addEventListener('keyup', (e) => {
         }
     }
 });
+
 
 
 

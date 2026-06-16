@@ -26,6 +26,36 @@ if not os.path.exists(os.path.dirname(PDF_PATH_OLD)):
 
 NOTES_FILE = os.path.join(DIRECTORY, "notes.json")
 PROJECT_FILES_FILE = os.path.join(DIRECTORY, "project_files.json")
+ROOM_LABELS_FILE = os.path.join(DIRECTORY, "room_labels.json")
+
+def load_room_labels():
+    default_labels = {
+        "Boss": "บอส (Boss)",
+        "Friend1": "เพื่อน 1 (Friend 1)",
+        "Friend2": "เพื่อน 2 (Friend 2)",
+        "Friend3": "เพื่อน 3 (Friend 3)",
+        "Friend4": "เพื่อน 4 (Friend 4)"
+    }
+    if os.path.exists(ROOM_LABELS_FILE):
+        try:
+            with open(ROOM_LABELS_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                for k in default_labels:
+                    if k not in data:
+                        data[k] = default_labels[k]
+                return data
+        except Exception:
+            pass
+    return default_labels
+
+def save_room_labels(data):
+    try:
+        with open(ROOM_LABELS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+        return True
+    except Exception:
+        return False
+
 
 def load_project_files():
     if os.path.exists(PROJECT_FILES_FILE):
@@ -231,7 +261,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
         elif path == '/api/uploads':
             upload_dir = os.path.join(DIRECTORY, "uploads")
             rooms = ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]
-            response_data = {}
+            files_data = {}
             for r in rooms:
                 r_dir = os.path.join(upload_dir, r)
                 if not os.path.exists(r_dir):
@@ -239,12 +269,17 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 files = os.listdir(r_dir)
                 files = [f for f in files if not f.startswith('.')]
                 files.sort()
-                response_data[r] = files
-                
+                files_data[r] = files
+            
+            response_data = {
+                'files': files_data,
+                'labels': load_room_labels()
+            }
             self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
             self.end_headers()
-            self.wfile.write(json.dumps(response_data).encode('utf-8'))
+            self.wfile.write(json.dumps(response_data, ensure_ascii=False).encode('utf-8'))
+
 
         elif path == '/view/upload':
             file_name = query_params.get("file", [""])[0]
@@ -432,6 +467,51 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
             return
 
+        elif path == '/api/rename-room':
+            room = query_params.get("room", [""])[0]
+            label = query_params.get("label", [""])[0]
+            
+            if room not in ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]:
+                self.send_response(400)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'Invalid room key'}).encode('utf-8'))
+                return
+                
+            try:
+                labels = load_room_labels()
+                labels[room] = label
+                save_room_labels(labels)
+                
+                if os.path.exists(NOTES_FILE):
+                    with open(NOTES_FILE, 'r', encoding='utf-8') as nf:
+                        try:
+                            notes = json.load(nf)
+                        except Exception:
+                            notes = []
+                else:
+                    notes = []
+                import datetime
+                next_id = max([n.get("id", 0) for n in notes]) + 1 if notes else 1
+                now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                notes.append({
+                    "id": next_id,
+                    "text": f"เปลี่ยนชื่อกลุ่มโฟลเดอร์สำหรับ '{room}' เป็น '{label}' สำเร็จ",
+                    "timestamp": now_str
+                })
+                with open(NOTES_FILE, 'w', encoding='utf-8') as nf:
+                    json.dump(notes, nf, ensure_ascii=False, indent=4)
+                
+                self.send_response(200)
+                self.send_header('Content-Type', 'application/json; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(json.dumps({'status': 'success', 'room': room, 'label': label}, ensure_ascii=False).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
+            return
+
+
         elif path == '/api/upload-file':
             filename = query_params.get("filename", ["document.dat"])[0]
             filename = os.path.basename(filename)
@@ -469,14 +549,9 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 import datetime
                 next_id = max([n.get("id", 0) for n in notes]) + 1 if notes else 1
                 now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                room_labels = {
-                    "Boss": "บอส (Boss)",
-                    "Friend1": "เพื่อน 1",
-                    "Friend2": "เพื่อน 2",
-                    "Friend3": "เพื่อน 3",
-                    "Friend4": "เพื่อน 4"
-                }
+                room_labels = load_room_labels()
                 room_lbl = room_labels.get(room, room)
+
                 notes.append({
                     "id": next_id,
                     "text": f"อัปโหลดไฟล์สำเร็จ: '{final_filename}' ไปยังห้อง '{room_lbl}'",
@@ -521,14 +596,9 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     import datetime
                     next_id = max([n.get("id", 0) for n in notes]) + 1 if notes else 1
                     now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    room_labels = {
-                        "Boss": "บอส (Boss)",
-                        "Friend1": "เพื่อน 1",
-                        "Friend2": "เพื่อน 2",
-                        "Friend3": "เพื่อน 3",
-                        "Friend4": "เพื่อน 4"
-                    }
+                    room_labels = load_room_labels()
                     room_lbl = room_labels.get(room, room)
+
                     notes.append({
                         "id": next_id,
                         "text": f"ลบไฟล์สำเร็จ: '{filename}' จากห้อง '{room_lbl}'",
@@ -584,14 +654,9 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     import datetime
                     next_id = max([n.get("id", 0) for n in notes]) + 1 if notes else 1
                     now_str = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                    room_labels = {
-                        "Boss": "บอส (Boss)",
-                        "Friend1": "เพื่อน 1",
-                        "Friend2": "เพื่อน 2",
-                        "Friend3": "เพื่อน 3",
-                        "Friend4": "เพื่อน 4"
-                    }
+                    room_labels = load_room_labels()
                     room_lbl = room_labels.get(room, room)
+
                     notes.append({
                         "id": next_id,
                         "text": f"เปลี่ยนชื่อไฟล์สำเร็จ: '{old_filename}' เป็น '{new_filename}' ในห้อง '{room_lbl}'",
