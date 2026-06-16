@@ -411,7 +411,28 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
         query_params = parse_qs(parsed_url.query)
         content_length = int(self.headers['Content-Length'])
         
-        if path == '/api/upload-file':
+        if path == '/api/verify-pin':
+            try:
+                post_data = self.rfile.read(content_length).decode('utf-8')
+                data = json.loads(post_data) if post_data else {}
+                pin = data.get("pin", "")
+                if pin == "1112":
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'success': True, 'token': 'boss_authorized_token_xyz123'}).encode('utf-8'))
+                else:
+                    self.send_response(401)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'success': False, 'error': 'Invalid keycode'}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
+            return
+
+        elif path == '/api/upload-file':
             filename = query_params.get("filename", ["document.dat"])[0]
             filename = os.path.basename(filename)
             room = query_params.get("room", ["Boss"])[0]

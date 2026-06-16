@@ -11,9 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Initialize the Game-like loader overlay flow
     initGameLoader();
     
+    // Check boss session state
+    checkBossSession();
+    
     // Start status polling loop (every 3 seconds)
     setInterval(fetchStatus, 3000);
 });
+
 
 // Web Audio API Synthesizer (Cyber HUD Sound FX)
 function initAudio() {
@@ -673,9 +677,16 @@ function renderUploadedFiles(roomsData) {
 }
 
 function toggleRoomCollapse(roomKey) {
+    if (roomKey === 'Boss' && sessionStorage.getItem('boss_unlocked') !== 'true') {
+        playSynthSound('delete');
+        logToTerminal('[ACCESS ERROR] Folder "Boss" is restricted. Redirecting to authorization vault...');
+        switchTab('boss');
+        return;
+    }
     collapsedRooms[roomKey] = !collapsedRooms[roomKey];
     fetchUploadedFiles();
 }
+
 
 function viewUploadedFile(room, file) {
     playSynthSound('click');
@@ -1312,5 +1323,177 @@ function deleteProjectFile(key, currentName) {
         alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
     });
 }
+
+// Tab Navigation Switcher
+function switchTab(tabId) {
+    playSynthSound('click');
+    
+    // Deactivate all tabs and buttons
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+    
+    // Activate target tab and button
+    const targetTab = document.getElementById(`tab-${tabId}`);
+    const targetBtn = document.getElementById(`tab-btn-${tabId}`);
+    if (targetTab) targetTab.classList.add('active');
+    if (targetBtn) targetBtn.classList.add('active');
+    
+    logToTerminal(`[NAV] Switched view to tab: ${tabId.toUpperCase()}`);
+    lucide.createIcons();
+}
+
+// PIN Vault Code Management
+let enteredPin = "";
+
+function pressPin(digit) {
+    if (enteredPin.length >= 4) return;
+    playSynthSound('click');
+    enteredPin += digit;
+    updatePinDisplay();
+}
+
+function clearPin() {
+    playSynthSound('click');
+    enteredPin = "";
+    updatePinDisplay();
+    const errorEl = document.getElementById('pin-error-msg');
+    if (errorEl) errorEl.style.display = 'none';
+}
+
+function updatePinDisplay() {
+    const dots = document.querySelectorAll('.pin-display .pin-dot');
+    dots.forEach((dot, index) => {
+        if (index < enteredPin.length) {
+            dot.classList.add('filled');
+        } else {
+            dot.classList.remove('filled');
+        }
+    });
+}
+
+function submitPin() {
+    if (enteredPin.length < 4) {
+        playSynthSound('delete');
+        return;
+    }
+    
+    logToTerminal(`[SECURITY] Verifying access keycode with auth server...`);
+    
+    fetch('/api/verify-pin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: enteredPin })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            playSynthSound('success');
+            logToTerminal(`[SECURITY SUCCESS] Access granted. Decrypting workspace...`);
+            sessionStorage.setItem('boss_unlocked', 'true');
+            checkBossSession();
+            
+            // Success animation
+            const lockCard = document.querySelector('.lock-card');
+            if (lockCard) {
+                lockCard.style.boxShadow = '0 0 40px rgba(0, 255, 204, 0.25)';
+                lockCard.style.borderColor = 'var(--neon-cyan)';
+            }
+            
+            // Switch view
+            setTimeout(() => {
+                const lockScreen = document.getElementById('boss-lock-screen');
+                const workspaceContent = document.getElementById('boss-workspace-content');
+                if (lockScreen) lockScreen.style.display = 'none';
+                if (workspaceContent) {
+                    workspaceContent.style.display = 'flex';
+                    workspaceContent.classList.add('fade-in');
+                }
+            }, 600);
+        } else {
+            playSynthSound('delete');
+            logToTerminal(`[SECURITY FAILURE] Invalid PIN entered. Access Denied.`);
+            showPinError();
+        }
+    })
+    .catch(err => {
+        playSynthSound('delete');
+        logToTerminal(`[SECURITY ERROR] Connection failed: ${err.message}`);
+        showPinError();
+    });
+}
+
+function showPinError() {
+    const errorEl = document.getElementById('pin-error-msg');
+    if (errorEl) {
+        errorEl.style.display = 'block';
+        errorEl.innerText = "ACCESS DENIED: INVALID KEYCODE";
+    }
+    enteredPin = "";
+    updatePinDisplay();
+}
+
+function checkBossSession() {
+    const isUnlocked = sessionStorage.getItem('boss_unlocked') === 'true';
+    const lockScreen = document.getElementById('boss-lock-screen');
+    const workspaceContent = document.getElementById('boss-workspace-content');
+    const bossOption = document.getElementById('room-opt-boss');
+    const bossNavIcon = document.getElementById('boss-nav-icon');
+    const bossNavText = document.getElementById('boss-nav-text');
+    
+    if (isUnlocked) {
+        if (lockScreen) lockScreen.style.display = 'none';
+        if (workspaceContent) workspaceContent.style.display = 'flex';
+        if (bossOption) {
+            bossOption.disabled = false;
+            bossOption.style.display = 'block';
+            bossOption.innerText = "บอส (Boss)";
+        }
+        if (bossNavIcon) {
+            bossNavIcon.setAttribute('data-lucide', 'unlock');
+            bossNavIcon.style.color = 'var(--neon-cyan)';
+        }
+        if (bossNavText) {
+            bossNavText.innerText = "Boss Center";
+        }
+    } else {
+        if (lockScreen) lockScreen.style.display = 'flex';
+        if (workspaceContent) workspaceContent.style.display = 'none';
+        if (bossOption) {
+            bossOption.disabled = true;
+            bossOption.style.display = 'none';
+        }
+        if (bossNavIcon) {
+            bossNavIcon.setAttribute('data-lucide', 'lock');
+            bossNavIcon.style.color = 'var(--neon-pink)';
+        }
+        if (bossNavText) {
+            bossNavText.innerText = "Boss Workspace";
+        }
+    }
+    lucide.createIcons();
+}
+
+function handleRoomSelectChange() {
+    playSynthSound('click');
+    const select = document.getElementById('user-room-select');
+    if (select) {
+        logToTerminal(`[ROOM] Selected upload room: ${select.value}`);
+    }
+}
+
+// Bind keyboard support for PIN
+document.addEventListener('keyup', (e) => {
+    const activeTab = document.querySelector('.tab-content.active');
+    if (activeTab && activeTab.id === 'tab-boss' && sessionStorage.getItem('boss_unlocked') !== 'true') {
+        if (e.key >= '0' && e.key <= '9') {
+            pressPin(e.key);
+        } else if (e.key === 'Backspace') {
+            clearPin();
+        } else if (e.key === 'Enter') {
+            submitPin();
+        }
+    }
+});
+
 
 

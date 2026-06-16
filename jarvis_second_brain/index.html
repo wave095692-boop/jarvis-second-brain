@@ -381,166 +381,236 @@
             </div>
         </header>
 
-        <!-- Main Workspace Grid -->
-        <main class="hud-grid">
-            <!-- Column 1: Diagnostics & Files -->
-            <div class="grid-column-wrapper">
-                <!-- Diagnostics -->
-                <section class="hud-card diagnostic-panel">
-                    <div class="card-glow"></div>
-                    <h2><i data-lucide="activity"></i> SYSTEM DIAGNOSTICS</h2>
-                    <div class="diagnostic-list">
-                        <div class="diag-item">
-                            <span class="diag-label">YOUTUBE PREMIUM WEB CLIENT</span>
-                            <div class="diag-status">
-                                <span id="yt-status-text" class="status-text text-dim">checking...</span>
-                                <div id="yt-status-led" class="status-led led-gray"></div>
+        <!-- Main Sidebar Layout Wrapper -->
+        <div class="main-layout-wrapper">
+            <!-- Sidebar Navigation -->
+            <nav class="hud-sidebar">
+                <button class="nav-tab active" onclick="switchTab('dashboard')" id="tab-btn-dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Control Panel</span>
+                </button>
+                <button class="nav-tab" onclick="switchTab('boss')" id="tab-btn-boss">
+                    <i data-lucide="lock" id="boss-nav-icon" style="color: var(--neon-pink);"></i>
+                    <span id="boss-nav-text">Boss Workspace</span>
+                </button>
+                <button class="nav-tab" onclick="switchTab('shared')" id="tab-btn-shared">
+                    <i data-lucide="users"></i>
+                    <span>Shared Rooms</span>
+                </button>
+            </nav>
+
+            <!-- Main Content Area -->
+            <div class="hud-content">
+                <!-- Section 1: Dashboard -->
+                <div id="tab-dashboard" class="tab-content active">
+                    <div class="tab-grid-dashboard">
+                        <!-- Diagnostics -->
+                        <section class="hud-card diagnostic-panel">
+                            <div class="card-glow"></div>
+                            <h2><i data-lucide="activity"></i> SYSTEM DIAGNOSTICS</h2>
+                            <div class="diagnostic-list">
+                                <div class="diag-item">
+                                    <span class="diag-label">YOUTUBE PREMIUM WEB CLIENT</span>
+                                    <div class="diag-status">
+                                        <span id="yt-status-text" class="status-text text-dim">checking...</span>
+                                        <div id="yt-status-led" class="status-led led-gray"></div>
+                                    </div>
+                                </div>
+                                <div class="diag-item">
+                                    <span class="diag-label">ONLINE TUNNEL (LOCALTUNNEL)</span>
+                                    <div class="diag-status">
+                                        <span id="tunnel-status-text" class="status-text text-dim">checking...</span>
+                                        <div id="tunnel-status-led" class="status-led led-gray"></div>
+                                    </div>
+                                </div>
+                                <div class="diag-item">
+                                    <span class="diag-label">RUDEDOG CONTENT IDEAS PDF</span>
+                                    <div class="diag-status">
+                                        <span id="pdf-status-text" class="status-text text-dim">checking...</span>
+                                        <div id="pdf-status-led" class="status-led led-gray"></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="diag-item">
-                            <span class="diag-label">ONLINE TUNNEL (LOCALTUNNEL)</span>
-                            <div class="diag-status">
-                                <span id="tunnel-status-text" class="status-text text-dim">checking...</span>
-                                <div id="tunnel-status-led" class="status-led led-gray"></div>
+
+                            <div class="network-info-box">
+                                <h3><i data-lucide="globe"></i> CONNECTIVITY PROFILE</h3>
+                                <div class="net-grid">
+                                    <div class="net-item">
+                                        <span class="net-lbl">DASHBOARD URL:</span>
+                                        <a id="lan-link" href="#" target="_blank" class="net-val text-yellow">loading...</a>
+                                    </div>
+                                    <div class="net-item">
+                                        <span class="net-lbl">YOUTUBE CLONE:</span>
+                                        <a id="tunnel-link" href="#" target="_blank" class="net-val text-pink">loading...</a>
+                                    </div>
+                                    <div class="net-item">
+                                        <span class="net-lbl">PDF ON DESKTOP:</span>
+                                        <span id="pdf-mtime" class="net-val text-cyan">loading...</span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="diag-item">
-                            <span class="diag-label">RUDEDOG CONTENT IDEAS PDF</span>
-                            <div class="diag-status">
-                                <span id="pdf-status-text" class="status-text text-dim">checking...</span>
-                                <div id="pdf-status-led" class="status-led led-gray"></div>
+                        </section>
+
+                        <!-- Quick Command Console -->
+                        <section class="hud-card control-panel">
+                            <div class="card-glow"></div>
+                            <h2><i data-lucide="sliders"></i> QUICK COMMAND CONSOLE</h2>
+                            
+                            <div class="control-actions">
+                                <button class="btn-hud btn-cyan" onclick="runAction('restart_youtube')">
+                                    <i data-lucide="play-circle"></i>
+                                    <div class="btn-text">
+                                        <b>LAUNCH YOUTUBE PREMIUM</b>
+                                        <span>Restart python server.py on port 8000</span>
+                                    </div>
+                                </button>
+                                <button class="btn-hud btn-pink" onclick="runAction('restart_tunnel')">
+                                    <i data-lucide="share-2"></i>
+                                    <div class="btn-text">
+                                        <b>ESTABLISH LOCALTUNNEL</b>
+                                        <span>Forward port 8000 to public subdomain</span>
+                                    </div>
+                                </button>
+                                <button class="btn-hud btn-orange" onclick="runAction('regenerate_pdf')">
+                                    <i data-lucide="file-text"></i>
+                                    <div class="btn-text">
+                                        <b>REGENERATE STRATEGY PDF</b>
+                                        <span>Compile create_pdf.py to Desktop</span>
+                                    </div>
+                                </button>
                             </div>
+
+                            <div class="terminal-container">
+                                <div class="term-header">
+                                    <span class="term-title"><i data-lucide="terminal"></i> JARVIS COMMAND LOGS</span>
+                                    <span class="term-status">READY</span>
+                                </div>
+                                <div id="terminal-body" class="term-body">
+                                    [13:18:04] SYSTEM INITIALIZED // WALKING THROUGH MEMORY STATUS...
+                                    [13:18:05] ACTIVE INSTANCE CONNECTED ON PORT 8500.
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Section 2: Boss Workspace -->
+                <div id="tab-boss" class="tab-content">
+                    <!-- Lock Overlay -->
+                    <div id="boss-lock-screen" class="boss-lock-screen">
+                        <div class="lock-card">
+                            <div class="lock-glow"></div>
+                            <div class="lock-icon-wrapper">
+                                <i data-lucide="lock" class="lock-icon"></i>
+                            </div>
+                            <h2>ENTER ACCESS PIN</h2>
+                            <p>Boss Workspace is restricted. Enter PIN to decrypt.</p>
+                            
+                            <div class="pin-display">
+                                <div class="pin-dot"></div>
+                                <div class="pin-dot"></div>
+                                <div class="pin-dot"></div>
+                                <div class="pin-dot"></div>
+                            </div>
+                            
+                            <div class="pin-keypad">
+                                <button class="btn-key" onclick="pressPin('1')">1</button>
+                                <button class="btn-key" onclick="pressPin('2')">2</button>
+                                <button class="btn-key" onclick="pressPin('3')">3</button>
+                                <button class="btn-key" onclick="pressPin('4')">4</button>
+                                <button class="btn-key" onclick="pressPin('5')">5</button>
+                                <button class="btn-key" onclick="pressPin('6')">6</button>
+                                <button class="btn-key" onclick="pressPin('7')">7</button>
+                                <button class="btn-key" onclick="pressPin('8')">8</button>
+                                <button class="btn-key" onclick="pressPin('9')">9</button>
+                                <button class="btn-key text-pink" onclick="clearPin()">CLEAR</button>
+                                <button class="btn-key" onclick="pressPin('0')">0</button>
+                                <button class="btn-key text-cyan" onclick="submitPin()">ENTER</button>
+                            </div>
+                            <div id="pin-error-msg" class="pin-error" style="display: none;">ACCESS DENIED: INVALID KEYCODE</div>
                         </div>
                     </div>
 
-                    <div class="network-info-box">
-                        <h3><i data-lucide="globe"></i> CONNECTIVITY PROFILE</h3>
-                        <div class="net-grid">
-                            <div class="net-item">
-                                <span class="net-lbl">DASHBOARD URL:</span>
-                                <a id="lan-link" href="#" target="_blank" class="net-val text-yellow">loading...</a>
+                    <!-- Unlocked Content -->
+                    <div id="boss-workspace-content" style="display: none; flex-direction: column; gap: 24px;">
+                        <!-- Project File Explorer -->
+                        <section class="hud-card explorer-panel">
+                            <div class="card-glow"></div>
+                            <h2 style="color: var(--neon-cyan);"><i data-lucide="folder-open"></i> PROJECT FILE EXPLORER</h2>
+                            
+                            <div class="explorer-groups">
+                                <div class="exp-group">
+                                    <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-down" class="group-arrow"></i> RUDEDOG FAIR CAMPAIGN</div>
+                                    <div class="exp-files" id="project-campaign-files">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+
+                                <div class="exp-group">
+                                    <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-right" class="group-arrow"></i> YOUTUBE PREMIUM APP</div>
+                                    <div class="exp-files" id="project-youtube-files" style="display: none;">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+
+                                <div class="exp-group">
+                                    <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-right" class="group-arrow"></i> COMPILER SCRIPTS</div>
+                                    <div class="exp-files" id="project-compiler-files" style="display: none;">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
                             </div>
-                            <div class="net-item">
-                                <span class="net-lbl">YOUTUBE CLONE:</span>
-                                <a id="tunnel-link" href="#" target="_blank" class="net-val text-pink">loading...</a>
-                            </div>
-                            <div class="net-item">
-                                <span class="net-lbl">PDF ON DESKTOP:</span>
-                                <span id="pdf-mtime" class="net-val text-cyan">loading...</span>
-                            </div>
-                        </div>
+                        </section>
                     </div>
-                </section>
+                </div>
 
-                <!-- Project File Explorer -->
-                <section class="hud-card explorer-panel" style="margin-top: 24px;">
-                    <div class="card-glow"></div>
-                    <h2 style="color: var(--neon-cyan);"><i data-lucide="folder-open"></i> PROJECT FILE EXPLORER</h2>
-                    
-                    <div class="explorer-groups">
-                        <div class="exp-group">
-                            <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-down" class="group-arrow"></i> RUDEDOG FAIR CAMPAIGN</div>
-                            <div class="exp-files" id="project-campaign-files">
-                                <!-- Loaded dynamically -->
-                            </div>
-                        </div>
-
-                        <div class="exp-group">
-                            <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-right" class="group-arrow"></i> YOUTUBE PREMIUM APP</div>
-                            <div class="exp-files" id="project-youtube-files" style="display: none;">
-                                <!-- Loaded dynamically -->
-                            </div>
-                        </div>
-
-                        <div class="exp-group">
-                            <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-right" class="group-arrow"></i> COMPILER SCRIPTS</div>
-                            <div class="exp-files" id="project-compiler-files" style="display: none;">
-                                <!-- Loaded dynamically -->
-                            </div>
-                        </div>
-
-                        <div class="exp-group">
-                            <div class="exp-group-title" style="color: var(--neon-pink); display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px;">
-                                <span><i data-lucide="chevron-right"></i> SHARED ROOMS</span>
+                <!-- Section 3: Shared Rooms -->
+                <div id="tab-shared" class="tab-content">
+                    <div class="tab-grid-shared">
+                        <!-- Shared Hub Panel -->
+                        <section class="hud-card shared-panel">
+                            <div class="card-glow"></div>
+                            <h2 style="color: var(--neon-pink); display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px;">
+                                <span><i data-lucide="users"></i> SHARED HUB</span>
                                 <div style="display: flex; align-items: center; gap: 4px; margin-left: auto;">
-                                    <select id="user-room-select" class="btn-exp-action" style="background: var(--dark); border: 1px solid var(--neon-pink); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 2px 4px; border-radius: 2px; height: 20px; cursor: pointer;">
-                                        <option value="Boss">บอส (Boss)</option>
+                                    <select id="user-room-select" class="btn-exp-action" onchange="handleRoomSelectChange()" style="background: var(--dark); border: 1px solid var(--neon-pink); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 2px 4px; border-radius: 2px; height: 22px; cursor: pointer;">
+                                        <!-- Option Boss is hidden/disabled by default until PIN is entered -->
+                                        <option value="Boss" id="room-opt-boss" disabled style="display: none;">บอส (Boss) - Locked</option>
                                         <option value="Friend1">เพื่อน 1 (Friend 1)</option>
                                         <option value="Friend2">เพื่อน 2 (Friend 2)</option>
                                         <option value="Friend3">เพื่อน 3 (Friend 3)</option>
                                         <option value="Friend4">เพื่อน 4 (Friend 4)</option>
                                     </select>
-                                    <button class="btn-exp-action text-pink" onclick="triggerFileUpload()" style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; cursor: pointer; border: 1px solid var(--neon-pink); height: 20px;">
+                                    <button class="btn-exp-action text-pink" onclick="triggerFileUpload()" style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; cursor: pointer; border: 1px solid var(--neon-pink); height: 22px; border-radius: 4px;">
                                         <i data-lucide="upload-cloud" style="width: 12px; height: 12px;"></i> UPLOAD
                                     </button>
                                 </div>
                                 <input type="file" id="pdf-upload-file" style="display: none;" onchange="handleFileUpload(event)">
-                            </div>
-                            <div class="exp-files" id="uploaded-files-list">
+                            </h2>
+                            <div class="exp-files" id="uploaded-files-list" style="margin-top: 16px;">
                                 <!-- Loaded dynamically via JS -->
                             </div>
-                        </div>
+                        </section>
+
+                        <!-- Column 3: Notes (Second Brain Memory) -->
+                        <section class="hud-card memory-panel">
+                            <div class="card-glow"></div>
+                            <h2><i data-lucide="brain"></i> SECOND BRAIN MEMORY</h2>
+                            
+                            <!-- Quick input to add note -->
+                            <div class="note-input-wrapper">
+                                <input type="text" id="note-input" placeholder="ป้อนความจำใหม่ บันทึกไอเดีย/ภารกิจค้าง..." onkeypress="handleNoteKeyPress(event)">
+                                <button class="btn-add" onclick="addNote()"><i data-lucide="plus"></i></button>
+                            </div>
+
+                            <div id="notes-list" class="notes-list">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </section>
                     </div>
-                </section>
+                </div>
             </div>
-
-            <!-- Column 2: Controls & Terminal -->
-            <section class="hud-card control-panel">
-                <div class="card-glow"></div>
-                <h2><i data-lucide="sliders"></i> QUICK COMMAND CONSOLE</h2>
-                
-                <div class="control-actions">
-                    <button class="btn-hud btn-cyan" onclick="runAction('restart_youtube')">
-                        <i data-lucide="play-circle"></i>
-                        <div class="btn-text">
-                            <b>LAUNCH YOUTUBE PREMIUM</b>
-                            <span>Restart python server.py on port 8000</span>
-                        </div>
-                    </button>
-                    <button class="btn-hud btn-pink" onclick="runAction('restart_tunnel')">
-                        <i data-lucide="share-2"></i>
-                        <div class="btn-text">
-                            <b>ESTABLISH LOCALTUNNEL</b>
-                            <span>Forward port 8000 to public subdomain</span>
-                        </div>
-                    </button>
-                    <button class="btn-hud btn-orange" onclick="runAction('regenerate_pdf')">
-                        <i data-lucide="file-text"></i>
-                        <div class="btn-text">
-                            <b>REGENERATE STRATEGY PDF</b>
-                            <span>Compile create_pdf.py to Desktop</span>
-                        </div>
-                    </button>
-                </div>
-
-                <div class="terminal-container">
-                    <div class="term-header">
-                        <span class="term-title"><i data-lucide="terminal"></i> JARVIS COMMAND LOGS</span>
-                        <span class="term-status">READY</span>
-                    </div>
-                    <div id="terminal-body" class="term-body">
-                        [13:18:04] SYSTEM INITIALIZED // WALKING THROUGH MEMORY STATUS...
-                        [13:18:05] ACTIVE INSTANCE CONNECTED ON PORT 8500.
-                    </div>
-                </div>
-            </section>
-
-            <!-- Column 3: Notes (Second Brain Memory) -->
-            <section class="hud-card memory-panel">
-                <div class="card-glow"></div>
-                <h2><i data-lucide="brain"></i> SECOND BRAIN MEMORY</h2>
-                
-                <!-- Quick input to add note -->
-                <div class="note-input-wrapper">
-                    <input type="text" id="note-input" placeholder="ป้อนความจำใหม่ บันทึกไอเดีย/ภารกิจค้าง..." onkeypress="handleNoteKeyPress(event)">
-                    <button class="btn-add" onclick="addNote()"><i data-lucide="plus"></i></button>
-                </div>
-
-                <div id="notes-list" class="notes-list">
-                    <!-- Populated by JavaScript -->
-                </div>
-            </section>
-        </main>
+        </div>
 
         <!-- HUD Code Viewer Modal Overlay -->
         <div id="code-viewer-modal" class="hud-modal" style="display: none;">
