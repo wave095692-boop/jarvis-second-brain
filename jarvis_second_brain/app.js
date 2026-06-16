@@ -304,108 +304,155 @@ function logToTerminal(message) {
 
 // Fetch Statuses from server
 function fetchStatus() {
-    fetch('/api/status')
-        .then(res => res.json())
-        .then(data => {
-            // Meta updates
-            document.getElementById('hud-lan-ip').innerText = data.lan_ip;
-            document.getElementById('hud-cpu').innerText = data.system.cpu_load || 'N/A';
-            document.getElementById('hud-disk').innerText = data.system.disk_free || 'N/A';
-            
-            // Dynamic Dashboard URL (using browser window location origin)
-            const lanLink = document.getElementById('lan-link');
-            lanLink.innerText = window.location.origin;
-            lanLink.href = window.location.origin;
-            
-            // Dynamic YouTube Clone URL based on client connection network
-            const tunnelLink = document.getElementById('tunnel-link');
-            const openYtBtn = document.getElementById('btn-open-youtube');
-            const openYtBtnUrl = document.getElementById('btn-open-youtube-url');
-            let ytUrl = data.youtube_clone.url; // Dynamic URL from backend
-            const currentHost = window.location.hostname;
-            
-            if (currentHost === "localhost" || currentHost === "127.0.0.1") {
-                ytUrl = `http://${currentHost}:8000`;
-            } else if (currentHost.match(/^\d+\.\d+\.\d+\.\d+$/)) {
-                ytUrl = `${window.location.protocol}//${currentHost}:8000`;
-            }
-            
-            if (tunnelLink) {
-                tunnelLink.innerText = ytUrl;
-                tunnelLink.href = ytUrl;
-            }
-            if (openYtBtn) {
-                openYtBtn.href = "https://www.youtube.com/";
-            }
-            if (openYtBtnUrl) {
-                openYtBtnUrl.innerText = "https://www.youtube.com/";
-            }
-            const navYtBtn = document.getElementById('nav-btn-youtube');
-            if (navYtBtn) {
-                navYtBtn.href = "https://www.youtube.com/";
-            }
+    const isCloud = !window.location.hostname.includes("localhost") && 
+                    !window.location.hostname.includes("127.0.0.1") && 
+                    !window.location.hostname.startsWith("10.") && 
+                    !window.location.hostname.startsWith("192.168.") && 
+                    !window.location.hostname.startsWith("172.");
 
-            // YouTube Diagnostics
-            const ytTxt = document.getElementById('yt-status-text');
-            const ytLed = document.getElementById('yt-status-led');
-            ytTxt.innerText = data.youtube_clone.status;
-            ytLed.className = 'status-led ' + (data.youtube_clone.status === 'ONLINE' ? 'led-green' : 'led-red');
-            
-            // Tunnel Diagnostics
-            const tunTxt = document.getElementById('tunnel-status-text');
-            const tunLed = document.getElementById('tunnel-status-led');
-            tunTxt.innerText = data.tunnel.status;
-            tunLed.className = 'status-led ' + (data.tunnel.status === 'ONLINE' ? 'led-green' : 'led-red');
-            
-            // PDF Diagnostics
-            const pdfTxt = document.getElementById('pdf-status-text');
-            const pdfLed = document.getElementById('pdf-status-led');
-            const pdfMtime = document.getElementById('pdf-mtime');
-            pdfTxt.innerText = data.pdf.status;
-            pdfLed.className = 'status-led ' + (data.pdf.status === 'FOUND' ? 'led-cyan' : 'led-red');
-            pdfMtime.innerText = data.pdf.last_modified || 'Unavailable';
-        })
-        .catch(err => {
-            console.error("Dashboard diagnostics polling failed:", err);
-            // Gray out HUD on connection drop
-            document.getElementById('hud-lan-ip').innerText = "DISCONNECTED";
-            document.getElementById('yt-status-text').innerText = "UNAVAILABLE";
-            document.getElementById('yt-status-led').className = 'status-led led-gray';
-            document.getElementById('tunnel-status-text').innerText = "UNAVAILABLE";
-            document.getElementById('tunnel-status-led').className = 'status-led led-gray';
-            document.getElementById('pdf-status-text').innerText = "UNAVAILABLE";
-            document.getElementById('pdf-status-led').className = 'status-led led-gray';
-        });
+    const updateUI = (data) => {
+        // Meta updates
+        document.getElementById('hud-lan-ip').innerText = data.lan_ip;
+        document.getElementById('hud-cpu').innerText = data.system.cpu_load || 'N/A';
+        document.getElementById('hud-disk').innerText = data.system.disk_free || 'N/A';
+        
+        // Dynamic Dashboard URL
+        const lanLink = document.getElementById('lan-link');
+        lanLink.innerText = window.location.origin;
+        lanLink.href = window.location.origin;
+        
+        // Dynamic YouTube Clone URL based on client connection network
+        const tunnelLink = document.getElementById('tunnel-link');
+        const openYtBtn = document.getElementById('btn-open-youtube');
+        const openYtBtnUrl = document.getElementById('btn-open-youtube-url');
+        let ytUrl = data.youtube_clone.url; // Dynamic URL from backend
+        const currentHost = window.location.hostname;
+        
+        if (currentHost === "localhost" || currentHost === "127.0.0.1") {
+            ytUrl = `http://${currentHost}:8000`;
+        } else if (currentHost.match(/^\d+\.\d+\.\d+\.\d+$/)) {
+            ytUrl = `${window.location.protocol}//${currentHost}:8000`;
+        }
+        
+        if (tunnelLink) {
+            tunnelLink.innerText = ytUrl;
+            tunnelLink.href = ytUrl;
+        }
+        if (openYtBtn) {
+            openYtBtn.href = "https://www.youtube.com/";
+        }
+        if (openYtBtnUrl) {
+            openYtBtnUrl.innerText = "https://www.youtube.com/";
+        }
+        const navYtBtn = document.getElementById('nav-btn-youtube');
+        if (navYtBtn) {
+            navYtBtn.href = "https://www.youtube.com/";
+        }
+
+        // YouTube Diagnostics
+        const ytTxt = document.getElementById('yt-status-text');
+        const ytLed = document.getElementById('yt-status-led');
+        ytTxt.innerText = data.youtube_clone.status;
+        ytLed.className = 'status-led ' + (data.youtube_clone.status === 'ONLINE' ? 'led-green' : 'led-red');
+        
+        // Tunnel Diagnostics
+        const tunTxt = document.getElementById('tunnel-status-text');
+        const tunLed = document.getElementById('tunnel-status-led');
+        tunTxt.innerText = data.tunnel.status;
+        tunLed.className = 'status-led ' + (data.tunnel.status === 'ONLINE' ? 'led-green' : 'led-red');
+        
+        // PDF Diagnostics
+        const pdfTxt = document.getElementById('pdf-status-text');
+        const pdfLed = document.getElementById('pdf-status-led');
+        const pdfMtime = document.getElementById('pdf-mtime');
+        pdfTxt.innerText = data.pdf.status;
+        pdfLed.className = 'status-led ' + (data.pdf.status === 'FOUND' ? 'led-cyan' : 'led-red');
+        pdfMtime.innerText = data.pdf.last_modified || 'Unavailable';
+    };
+
+    const handleDisconnect = (err) => {
+        console.error("Dashboard diagnostics polling failed:", err);
+        // Gray out HUD on connection drop
+        document.getElementById('hud-lan-ip').innerText = "DISCONNECTED";
+        document.getElementById('yt-status-text').innerText = "UNAVAILABLE";
+        document.getElementById('yt-status-led').className = 'status-led led-gray';
+        document.getElementById('tunnel-status-text').innerText = "UNAVAILABLE";
+        document.getElementById('tunnel-status-led').className = 'status-led led-gray';
+        document.getElementById('pdf-status-text').innerText = "UNAVAILABLE";
+        document.getElementById('pdf-status-led').className = 'status-led led-gray';
+    };
+
+    if (isCloud) {
+        // Try local backend first for Boss's Mac status, fallback to Cloud status
+        fetch('http://localhost:8500/api/status')
+            .then(res => res.json())
+            .then(data => updateUI(data))
+            .catch(() => {
+                fetch('/api/status')
+                    .then(res => res.json())
+                    .then(data => updateUI(data))
+                    .catch(handleDisconnect);
+            });
+    } else {
+        fetch('/api/status')
+            .then(res => res.json())
+            .then(data => updateUI(data))
+            .catch(handleDisconnect);
+    }
 }
 
 // Action Trigger
 function runAction(actionName) {
     playSynthSound('click');
     logToTerminal(`[EXECUTE] Triggered control command: ${actionName.toUpperCase()}...`);
-    
-    return fetch('/api/action', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: actionName })
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.status === 'success') {
-            playSynthSound('success');
-            logToTerminal(`[SUCCESS] ${data.log}`);
-            fetchStatus(); // Immediately poll status
-            return { success: true, data: data };
-        } else {
-            playSynthSound('delete');
-            logToTerminal(`[FAILED] Command returned error: ${data.error}`);
-            return { success: false, error: data.error };
-        }
-    })
-    .catch(err => {
-        playSynthSound('delete');
-        logToTerminal(`[CRITICAL] Server connection timed out during execution: ${err.message}`);
-        return { success: false, error: err.message };
-    });
+
+    const isCloud = !window.location.hostname.includes("localhost") && 
+                    !window.location.hostname.includes("127.0.0.1") && 
+                    !window.location.hostname.startsWith("10.") && 
+                    !window.location.hostname.startsWith("192.168.") && 
+                    !window.location.hostname.startsWith("172.");
+
+    const sendRequest = (url) => {
+        return fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: actionName })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                playSynthSound('success');
+                logToTerminal(`[SUCCESS] ${data.log}`);
+                fetchStatus(); // Immediately poll status
+                return { success: true, data: data };
+            } else {
+                playSynthSound('delete');
+                logToTerminal(`[FAILED] Command returned error: ${data.error}`);
+                return { success: false, error: data.error };
+            }
+        });
+    };
+
+    if (isCloud) {
+        logToTerminal(`[INFO] Cloud UI active. Routing command to local Mac backend (localhost:8500)...`);
+        return sendRequest('http://localhost:8500/api/action')
+            .catch(err => {
+                logToTerminal(`[WARNING] Local Mac backend unreachable (${err.message}). Falling back to Cloud Server...`);
+                return sendRequest('/api/action')
+                    .catch(cloudErr => {
+                        playSynthSound('delete');
+                        logToTerminal(`[CRITICAL] Cloud server connection timed out: ${cloudErr.message}`);
+                        return { success: false, error: cloudErr.message };
+                    });
+            });
+    } else {
+        return sendRequest('/api/action')
+            .catch(err => {
+                playSynthSound('delete');
+                logToTerminal(`[CRITICAL] Server connection timed out during execution: ${err.message}`);
+                return { success: false, error: err.message };
+            });
+    }
 }
 
 // Fetch Notes list
