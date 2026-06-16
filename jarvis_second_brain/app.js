@@ -324,6 +324,10 @@ function fetchStatus() {
             if (openYtBtnUrl) {
                 openYtBtnUrl.innerText = ytUrl;
             }
+            const navYtBtn = document.getElementById('nav-btn-youtube');
+            if (navYtBtn) {
+                navYtBtn.href = ytUrl;
+            }
 
             // YouTube Diagnostics
             const ytTxt = document.getElementById('yt-status-text');
