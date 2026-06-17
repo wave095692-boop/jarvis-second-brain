@@ -1611,6 +1611,14 @@ function checkBossSession() {
     lucide.createIcons();
 }
 
+function lockBossWorkspace() {
+    playSynthSound('delete');
+    sessionStorage.removeItem('boss_unlocked');
+    clearPin();
+    checkBossSession();
+    logToTerminal(`[SECURITY] Boss Workspace manually locked by user.`);
+}
+
 function handleRoomSelectChange() {
     playSynthSound('click');
     const select = document.getElementById('user-room-select');
