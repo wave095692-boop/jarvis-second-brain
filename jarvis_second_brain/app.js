@@ -1580,7 +1580,10 @@ function checkBossSession() {
     
     if (isUnlocked) {
         if (lockScreen) lockScreen.style.display = 'none';
-        if (workspaceContent) workspaceContent.style.display = 'flex';
+        if (workspaceContent) {
+            workspaceContent.style.display = 'flex';
+            setTimeout(() => { scanFarmDevices(); }, 100);
+        }
         if (bossOption) {
             bossOption.disabled = false;
             bossOption.style.display = 'block';
@@ -1615,6 +1618,7 @@ function lockBossWorkspace() {
     playSynthSound('delete');
     sessionStorage.removeItem('boss_unlocked');
     clearPin();
+    stopFarmingLogPolling();
     checkBossSession();
     logToTerminal(`[SECURITY] Boss Workspace manually locked by user.`);
 }
@@ -1696,6 +1700,155 @@ document.addEventListener('keyup', (e) => {
         }
     }
 });
+
+// TikTok Farming Bot Integration
+let farmingPollInterval = null;
+
+function scanFarmDevices() {
+    logToTerminal("[FARM] Scanning connected devices...");
+    const select = document.getElementById("farm-device-select");
+    if (select) select.innerHTML = '<option value="">Scanning devices...</option>';
+    
+    fetch('/api/farming_status')
+    .then(res => res.json())
+    .then(data => {
+        if (select) {
+            select.innerHTML = '';
+            if (data.devices && data.devices.length > 0) {
+                data.devices.forEach(d => {
+                    const opt = document.createElement("option");
+                    opt.value = d;
+                    opt.innerText = `Device: ${d}`;
+                    select.appendChild(opt);
+                });
+            } else {
+                const opt = document.createElement("option");
+                opt.value = "";
+                opt.innerText = "No devices detected (please open emulator)";
+                select.appendChild(opt);
+            }
+        }
+        updateFarmingUI(data);
+    })
+    .catch(err => {
+        logToTerminal(`[FARM ERROR] Scan failed: ${err.message}`);
+    });
+}
+
+function updateFarmingUI(data) {
+    const logsEl = document.getElementById("farm-logs");
+    const badgeEl = document.getElementById("farm-status-badge");
+    const logTimeEl = document.getElementById("farm-log-time");
+    
+    if (logsEl && data.logs) {
+        logsEl.innerText = data.logs;
+        logsEl.scrollTop = logsEl.scrollHeight;
+    }
+    
+    if (badgeEl) {
+        if (data.running) {
+            badgeEl.className = "badge";
+            badgeEl.style.background = "var(--neon-cyan)";
+            badgeEl.style.color = "var(--bg)";
+            badgeEl.innerText = "FARMING ACTIVE";
+            if (!farmingPollInterval) startFarmingLogPolling();
+        } else {
+            badgeEl.className = "badge";
+            badgeEl.style.background = "transparent";
+            badgeEl.style.color = "var(--text-dim)";
+            badgeEl.innerText = "BOT IDLE";
+            if (farmingPollInterval) stopFarmingLogPolling();
+        }
+    }
+    
+    if (logTimeEl) {
+        logTimeEl.innerText = `UPDATE: ${new Date().toLocaleTimeString()}`;
+    }
+}
+
+function startFarming() {
+    const deviceSelect = document.getElementById("farm-device-select");
+    const loopsInput = document.getElementById("farm-loops");
+    const likeProbInput = document.getElementById("farm-like-prob");
+    const commentProbInput = document.getElementById("farm-comment-prob");
+    const queryInput = document.getElementById("farm-query");
+    
+    const device = deviceSelect ? deviceSelect.value : "";
+    const loops = loopsInput ? parseInt(loopsInput.value) || 10 : 10;
+    const likeProb = likeProbInput ? parseFloat(likeProbInput.value) || 0.15 : 0.15;
+    const commentProb = commentProbInput ? parseFloat(commentProbInput.value) || 0.05 : 0.05;
+    const query = queryInput ? queryInput.value : "";
+    
+    logToTerminal(`[FARM] Initiating bot for device ${device || "default"} (Loops: ${loops}, Like Prob: ${likeProb}, Comment Prob: ${commentProb})...`);
+    playSynthSound('success');
+    
+    fetch('/api/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'start_farming',
+            device: device,
+            loops: loops,
+            like_prob: likeProb,
+            comment_prob: commentProb,
+            query: query
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            logToTerminal(`[FARM SUCCESS] Bot successfully spawned.`);
+            scanFarmDevices();
+            startFarmingLogPolling();
+        } else {
+            alert(`ล้มเหลวในการเริ่มทำงาน: ${data.error}`);
+        }
+    })
+    .catch(err => {
+        alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
+    });
+}
+
+function stopFarming() {
+    logToTerminal("[FARM] Sending termination signal to farming bot...");
+    playSynthSound('delete');
+    
+    fetch('/api/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'stop_farming' })
+    })
+    .then(res => res.json())
+    .then(data => {
+        logToTerminal(`[FARM STOP] Bot terminated.`);
+        stopFarmingLogPolling();
+        scanFarmDevices();
+    })
+    .catch(err => {
+        logToTerminal(`[FARM ERROR] Stop failed: ${err.message}`);
+    });
+}
+
+function startFarmingLogPolling() {
+    if (farmingPollInterval) clearInterval(farmingPollInterval);
+    farmingPollInterval = setInterval(() => {
+        fetch('/api/farming_status')
+        .then(res => res.json())
+        .then(data => {
+            updateFarmingUI(data);
+        })
+        .catch(err => {
+            console.error("Farming status poll failed:", err);
+        });
+    }, 2500);
+}
+
+function stopFarmingLogPolling() {
+    if (farmingPollInterval) {
+        clearInterval(farmingPollInterval);
+        farmingPollInterval = null;
+    }
+}
 
 
 

@@ -463,6 +463,50 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_response(404)
                 self.end_headers()
                 self.wfile.write(json.dumps({'error': f'File not found: {key}'}).encode('utf-8'))
+        elif path == '/api/farming_status':
+            is_running = False
+            try:
+                res = subprocess.run(['pgrep', '-f', 'emulator_bot.py'], capture_output=True, text=True)
+                if res.stdout.strip():
+                    is_running = True
+            except Exception:
+                pass
+                
+            log_file = os.path.join(DIRECTORY, "farming_bot.log")
+            logs = ""
+            if os.path.exists(log_file):
+                try:
+                    with open(log_file, 'r', encoding='utf-8') as f:
+                        lines = f.readlines()
+                        logs = "".join(lines[-100:])
+                except Exception as ex:
+                    logs = f"Error reading logs: {ex}"
+            else:
+                logs = "Farming bot idle. No log file created yet."
+                
+            adb_path = '/opt/homebrew/bin/adb' if os.path.exists('/opt/homebrew/bin/adb') else 'adb'
+            connected_devices = []
+            try:
+                res = subprocess.run([adb_path, 'devices'], capture_output=True, text=True)
+                lines = res.stdout.strip().split('\n')[1:]
+                for line in lines:
+                    if not line.strip():
+                        continue
+                    parts = line.split()
+                    if len(parts) >= 2 and parts[1] == 'device':
+                        connected_devices.append(parts[0])
+            except Exception:
+                pass
+                
+            response_data = {
+                'running': is_running,
+                'logs': logs,
+                'devices': connected_devices
+            }
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(json.dumps(response_data, ensure_ascii=False).encode('utf-8'))
         else:
             super().do_GET()
 
@@ -934,6 +978,45 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     # Start localtunnel
                     subprocess.Popen(['npx', 'localtunnel', '--port', '8000', '--subdomain', 'boswave-gamer'], start_new_session=True)
                     log_message += "Launched localtunnel in background on subdomain 'boswave-gamer'."
+                
+                elif action == 'start_farming':
+                    try:
+                        subprocess.run(['pkill', '-f', 'emulator_bot.py'])
+                    except Exception:
+                        pass
+                    
+                    device = req.get('device', '')
+                    loops = req.get('loops', 10)
+                    like_prob = req.get('like_prob', 0.15)
+                    comment_prob = req.get('comment_prob', 0.05)
+                    query = req.get('query', '')
+                    
+                    log_file = os.path.join(DIRECTORY, "farming_bot.log")
+                    with open(log_file, 'w', encoding='utf-8') as lf:
+                        lf.write(f"--- STARTING TIKTOK FARMING BOT FOR {device or 'ANY'} ---\n")
+                    
+                    cmd = ['python3', os.path.join(DIRECTORY, 'emulator_bot.py')]
+                    if device:
+                        cmd += ['--device', device]
+                    cmd += ['--loops', str(loops)]
+                    cmd += ['--like-prob', str(like_prob)]
+                    cmd += ['--comment-prob', str(comment_prob)]
+                    if query:
+                        cmd += ['--query', query]
+                    
+                    lf_handle = open(log_file, 'a', encoding='utf-8')
+                    subprocess.Popen(cmd, stdout=lf_handle, stderr=lf_handle, start_new_session=True)
+                    log_message = f"Farming bot started successfully for device {device}."
+                    
+                elif action == 'stop_farming':
+                    try:
+                        subprocess.run(['pkill', '-f', 'emulator_bot.py'])
+                        log_file = os.path.join(DIRECTORY, "farming_bot.log")
+                        with open(log_file, 'a', encoding='utf-8') as lf:
+                            lf.write("\n🛑 STOPPED BY USER ACTIONS FROM DASHBOARD.\n")
+                        log_message = "Farming bot stopped successfully."
+                    except Exception as ex:
+                        log_message = f"Failed to stop farming bot: {ex}"
                 
                 else:
                     self.send_response(400)
