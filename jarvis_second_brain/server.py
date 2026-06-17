@@ -298,7 +298,12 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     mime_type = 'application/octet-stream'
                 self.send_header('Content-Type', mime_type)
                 
-                friendly_types = ['application/pdf', 'image/png', 'image/jpeg', 'image/gif', 'text/plain', 'text/html']
+                friendly_types = [
+                    'application/pdf', 'image/png', 'image/jpeg', 'image/gif', 'image/webp', 'image/svg+xml',
+                    'text/plain', 'text/html', 'text/css', 'text/javascript',
+                    'video/mp4', 'video/webm', 'video/ogg', 'video/quicktime', 'video/x-m4v',
+                    'audio/mpeg', 'audio/wav', 'audio/ogg', 'audio/aac', 'audio/mp4', 'audio/x-m4a'
+                ]
                 if mime_type not in friendly_types:
                     self.send_header('Content-Disposition', f'attachment; filename="{file_name}"')
                 self.end_headers()

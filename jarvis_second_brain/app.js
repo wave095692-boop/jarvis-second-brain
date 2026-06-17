@@ -823,12 +823,43 @@ function viewUploadedFile(room, file) {
     const imageExtensions = ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'];
     const textExtensions = ['txt', 'py', 'js', 'json', 'html', 'css', 'md', 'sh', 'log'];
     const officeExtensions = ['doc', 'xls', 'xlsx', 'ppt', 'pptx'];
+    const videoExtensions = ['mp4', 'webm', 'ogg', 'mov', 'm4v'];
+    const audioExtensions = ['mp3', 'wav', 'ogg', 'aac', 'm4a'];
     
     if (imageExtensions.includes(ext)) {
         if (preBlock) preBlock.style.display = "none";
         if (customPreview) {
             customPreview.style.display = "block";
             customPreview.innerHTML = `<img src="${fileUrl}" style="max-width: 100%; max-height: 500px; display: block; margin: 0 auto; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.5);">`;
+        }
+    } else if (videoExtensions.includes(ext)) {
+        if (preBlock) preBlock.style.display = "none";
+        if (customPreview) {
+            customPreview.style.display = "block";
+            customPreview.innerHTML = `
+                <div style="background: #000; padding: 10px; border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+                    <video controls style="width: 100%; max-height: 500px; display: block; margin: 0 auto; outline: none;">
+                        <source src="${fileUrl}" type="video/${ext === 'mov' ? 'mp4' : (ext === 'm4v' ? 'mp4' : ext)}">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            `;
+        }
+    } else if (audioExtensions.includes(ext)) {
+        if (preBlock) preBlock.style.display = "none";
+        if (customPreview) {
+            customPreview.style.display = "block";
+            customPreview.innerHTML = `
+                <div style="padding: 40px 20px; text-align: center; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.5);">
+                    <i data-lucide="music" style="width: 48px; height: 48px; color: var(--neon-pink); margin-bottom: 20px;"></i>
+                    <div style="font-size: 14px; margin-bottom: 20px; color: #fff;">${file}</div>
+                    <audio controls style="width: 80%; display: block; margin: 0 auto; outline: none;">
+                        <source src="${fileUrl}" type="audio/${ext === 'mp3' ? 'mpeg' : (ext === 'm4a' ? 'mp4' : ext)}">
+                        Your browser does not support the audio tag.
+                    </audio>
+                </div>
+            `;
+            lucide.createIcons();
         }
     } else if (ext === 'pdf') {
         if (preBlock) preBlock.style.display = "none";
