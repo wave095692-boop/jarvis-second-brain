@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS SECOND BRAIN — Control Room</title>
+    <!-- Cyan Glowing Neon Game Controller Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ffcc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='6' width='20' height='12' rx='3' /><path d='M6 12h4M8 10v4M15 11h.01M18 13h.01' /></svg>">
+    <!-- Lucide Icons & Fonts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css?v=4.6">
+    <style>
+        /* Embed docx styles directly to avoid browser CSS caching */
+        .docx-viewer {
+            background: #ffffff !important;
+            color: #2b2b2b !important;
+            padding: 40px 50px !important;
+            border-radius: 8px !important;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+            max-height: 550px !important;
+            overflow-y: auto !important;
+            font-family: 'Times New Roman', Georgia, serif, 'Kanit' !important;
+            font-size: 16px !important;
+            line-height: 1.6 !important;
+            text-align: left !important;
+            border: 1px solid #ddd !important;
+            margin: 10px auto !important;
+            max-width: 800px !important;
+        }
+        .docx-viewer h1, .docx-viewer h2, .docx-viewer h3, .docx-viewer h4 {
+            font-family: 'Kanit', sans-serif !important;
+            color: #111111 !important;
+            margin-top: 1.2em !important;
+            margin-bottom: 0.6em !important;
+            font-weight: 700 !important;
+        }
+        .docx-viewer h1 { font-size: 22px !important; border-bottom: 1px solid #ddd !important; padding-bottom: 5px !important; }
+        .docx-viewer h2 { font-size: 18px !important; }
+        .docx-viewer h3 { font-size: 16px !important; }
+        .docx-viewer p {
+            margin-bottom: 1em !important;
+            color: #222222 !important;
+        }
+        .docx-viewer ul, .docx-viewer ol {
+            margin-bottom: 1em !important;
+            padding-left: 20px !important;
+            color: #222222 !important;
+        }
+        .docx-viewer li {
+            margin-bottom: 0.4em !important;
+        }
+        .docx-viewer table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin: 15px 0 !important;
+            font-size: 14px !important;
+        }
+        .docx-viewer th, .docx-viewer td {
+            border: 1px solid #cccccc !important;
+            padding: 8px 12px !important;
+            text-align: left !important;
+            color: #222222 !important;
+        }
+        .docx-viewer th {
+            background-color: #f5f5f5 !important;
+            font-weight: bold !important;
+        }
+
+        /* Beautiful Brutalist DOCX custom dashboard presentation styles */
+        .docx-beautiful-container {
+            background: #FAF9F6 !important;
+            color: #121212 !important;
+            padding: 35px 30px !important;
+            border-radius: 8px !important;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+            max-height: 580px !important;
+            overflow-y: auto !important;
+            font-family: 'Anuphan', 'Kanit', sans-serif !important;
+            font-size: 14.5px !important;
+            line-height: 1.6 !important;
+            text-align: left !important;
+            border: 2px solid #121212 !important;
+            margin: 0 auto !important;
+        }
+
+        .docx-intro-header {
+            border-bottom: 4px solid #121212 !important;
+            padding-bottom: 20px !important;
+            margin-bottom: 25px !important;
+        }
+
+        .docx-intro-header h1 {
+            font-family: 'Kanit', sans-serif !important;
+            font-size: 26px !important;
+            font-weight: 800 !important;
+            margin: 0 0 10px 0 !important;
+            color: #121212 !important;
+            text-transform: uppercase !important;
+        }
+
+        .docx-intro-subtitle {
+            font-size: 14px !important;
+            color: #444444 !important;
+            margin-bottom: 15px !important;
+            font-weight: 600 !important;
+        }
+
+        .docx-meta-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+            gap: 12px !important;
+            margin-top: 15px !important;
+            margin-bottom: 15px !important;
+        }
+
+        .docx-meta-item {
+            border: 2px solid #121212 !important;
+            padding: 10px 12px !important;
+            background: #ffffff !important;
+            box-shadow: 3px 3px 0 #121212 !important;
+        }
+
+        .docx-meta-item b {
+            display: block !important;
+            font-family: 'IBM Plex Mono', monospace !important;
+            font-size: 15px !important;
+            color: #FF4D00 !important;
+        }
+
+        .docx-meta-item span {
+            font-size: 11px !important;
+            color: #555555 !important;
+            font-weight: 600 !important;
+        }
+
+        .docx-phase-box {
+            background: #ffffff !important;
+            border: 2px solid #121212 !important;
+            padding: 12px 15px !important;
+            margin-bottom: 12px !important;
+            box-shadow: 3px 3px 0 #121212 !important;
+        }
+
+        .docx-phase-box h4, .docx-rules-box h4 {
+            font-family: 'Kanit', sans-serif !important;
+            margin: 0 0 8px 0 !important;
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            color: #121212 !important;
+        }
+
+        .docx-rules-box {
+            background: #fff9e6 !important;
+            border: 2px dashed #ffb300 !important;
+            padding: 12px 15px !important;
+            margin-bottom: 15px !important;
+            border-radius: 4px !important;
+        }
+
+        .docx-rules-box ul, .docx-phase-box ul {
+            padding-left: 20px !important;
+            margin: 0 !important;
+        }
+
+        .docx-rules-box li {
+            margin-bottom: 6px !important;
+            font-size: 12.5px !important;
+            color: #664d03 !important;
+        }
+
+        .docx-card {
+            background: #ffffff !important;
+            border: 2px solid #121212 !important;
+            border-left: 10px solid #121212 !important;
+            padding: 20px !important;
+            margin-bottom: 25px !important;
+            box-shadow: 4px 4px 0 #121212 !important;
+            border-radius: 4px !important;
+        }
+
+        .docx-card.reach { border-left-color: #FF4D00 !important; }
+        .docx-card.believe { border-left-color: #0E6BA8 !important; }
+        .docx-card.move { border-left-color: #1F7A3D !important; }
+
+        .docx-card-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+            border-bottom: 2px solid #121212 !important;
+            padding-bottom: 8px !important;
+            margin-bottom: 12px !important;
+        }
+
+        .docx-card-header .ep-info {
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .docx-card-header .ep-num {
+            font-family: 'IBM Plex Mono', monospace !important;
+            color: #FF4D00 !important;
+            font-weight: 700 !important;
+            font-size: 11.5px !important;
+        }
+
+        .docx-card-header .ep-title {
+            font-family: 'Kanit', sans-serif !important;
+            font-size: 16.5px !important;
+            font-weight: 700 !important;
+            margin: 4px 0 0 0 !important;
+            color: #121212 !important;
+        }
+
+        .docx-card-header .badge {
+            font-family: 'Kanit', sans-serif !important;
+            font-weight: 700 !important;
+            font-size: 10px !important;
+            color: #ffffff !important;
+            padding: 3px 8px !important;
+            border-radius: 2px !important;
+            text-transform: uppercase !important;
+        }
+
+        .docx-card-header .badge.reach { background: #FF4D00 !important; }
+        .docx-card-header .badge.believe { background: #0E6BA8 !important; }
+        .docx-card-header .badge.move { background: #1F7A3D !important; }
+
+        .docx-card-meta-line {
+            font-size: 12.5px !important;
+            margin-bottom: 6px !important;
+            color: #333333 !important;
+        }
+
+        .docx-card-meta-line strong {
+            color: #121212 !important;
+        }
+
+        .docx-card-tag {
+            display: inline-block !important;
+            background: #f0f0f0 !important;
+            border: 1px solid #d1cfca !important;
+            padding: 3px 8px !important;
+            font-size: 11px !important;
+            font-family: 'IBM Plex Mono', monospace !important;
+            margin-bottom: 12px !important;
+            border-radius: 4px !important;
+            color: #555555 !important;
+        }
+
+        .docx-idea-box {
+            background: #FAF9F6 !important;
+            border: 1px solid #d1cfca !important;
+            padding: 12px !important;
+            margin-bottom: 12px !important;
+            border-radius: 4px !important;
+        }
+
+        .docx-idea-box:last-child {
+            margin-bottom: 0 !important;
+        }
+
+        .docx-idea-title {
+            font-family: 'Kanit', sans-serif !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            color: #121212 !important;
+            margin-bottom: 6px !important;
+            border-bottom: 1px dashed #d1cfca !important;
+            padding-bottom: 4px !important;
+        }
+
+        .docx-idea-details {
+            margin: 0 !important;
+            padding-left: 15px !important;
+            font-size: 12px !important;
+            line-height: 1.5 !important;
+            color: #333333 !important;
+        }
+
+        .docx-idea-details li {
+            margin-bottom: 4px !important;
+        }
+
+        .docx-idea-details li:last-child {
+            margin-bottom: 0 !important;
+        }
+
+        /* Compact action icon buttons for files */
+        .btn-icon-action {
+            background: rgba(255, 255, 255, 0.02) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--neon-cyan) !important;
+            width: 22px !important;
+            height: 22px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            padding: 0 !important;
+            outline: none !important;
+        }
+        .btn-icon-action:hover {
+            background: rgba(0, 242, 254, 0.1) !important;
+            border-color: var(--neon-cyan) !important;
+            box-shadow: 0 0 8px rgba(0, 242, 254, 0.2) !important;
+            color: #fff !important;
+        }
+        .btn-icon-action.text-pink {
+            color: var(--neon-pink) !important;
+            border-color: rgba(255, 0, 80, 0.3) !important;
+        }
+        .btn-icon-action.text-pink:hover {
+            background: rgba(255, 0, 80, 0.1) !important;
+            border-color: var(--neon-pink) !important;
+            box-shadow: 0 0 8px rgba(255, 0, 80, 0.2) !important;
+            color: #fff !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Game-like Loading Screen Overlay -->
+    <div id="loader-overlay" class="loader-overlay">
+        <div class="loader-container">
+            <div class="loader-cyber-grid"></div>
+            <div class="loader-glitch-text" data-text="JARVIS // SECOND BRAIN">JARVIS // SECOND BRAIN</div>
+            <div class="loader-subtitle">NEURAL LINK INTERFACE</div>
+            
+            <!-- Step 1: Click to Boot (Autoplay workaround & Game vibe) -->
+            <div id="loader-init-screen" class="loader-init-screen">
+                <button id="loader-start-btn" class="loader-start-btn">
+                    <span class="btn-scanlines"></span>
+                    <span class="btn-text">INITIATE NEURAL LINK</span>
+                </button>
+                <div class="loader-tip">System will synthesize tactical audio protocols</div>
+            </div>
+
+            <!-- Step 2: Progress Screen (Hidden initially) -->
+            <div id="loader-progress-screen" class="loader-progress-screen" style="display: none;">
+                <div class="loader-progress-wrapper">
+                    <div class="loader-progress-bar">
+                        <div id="loader-progress-fill" class="loader-progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="loader-progress-details">
+                        <span id="loader-status-text">WAITING FOR HANDSHAKE...</span>
+                        <span id="loader-percentage">0%</span>
+                    </div>
+                </div>
+
+                <div class="loader-terminal-box">
+                    <div id="loader-terminal-logs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hud-container">
+        <!-- Header HUD -->
+        <header class="hud-header">
+            <div class="hud-title-wrapper">
+                <div class="cyber-blink red-blink"></div>
+                <h1>JARVIS // SECOND BRAIN</h1>
+                <span class="premium-badge">TACTICAL COMMAND</span>
+            </div>
+            <div class="hud-meta">
+                <div class="meta-block">
+                    <span class="lbl">LAN IP:</span>
+                    <span id="hud-lan-ip" class="val text-cyan">loading...</span>
+                </div>
+                <div class="meta-block">
+                    <span class="lbl">SYSTEM:</span>
+                    <span id="hud-cpu" class="val text-pink">loading...</span>
+                </div>
+                <div class="meta-block">
+                    <span class="lbl">DISK STATUS:</span>
+                    <span id="hud-disk" class="val text-yellow">loading...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Sidebar Layout Wrapper -->
+        <div class="main-layout-wrapper">
+            <!-- Sidebar Navigation -->
+            <nav class="hud-sidebar">
+                <button class="nav-tab active" onclick="switchTab('dashboard')" id="tab-btn-dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Control Panel</span>
+                </button>
+                <button class="nav-tab" onclick="switchTab('boss')" id="tab-btn-boss">
+                    <i data-lucide="lock" id="boss-nav-icon" style="color: var(--neon-pink);"></i>
+                    <span id="boss-nav-text">Boss Workspace</span>
+                </button>
+                <button class="nav-tab" onclick="switchTab('shared')" id="tab-btn-shared">
+                    <i data-lucide="users"></i>
+                    <span>Shared Rooms</span>
+                </button>
+                <a class="nav-tab" id="nav-btn-youtube" href="#" target="_blank" style="text-decoration: none; color: var(--text-primary);">
+                    <i data-lucide="youtube" style="color: var(--neon-pink);"></i>
+                    <span>YouTube App</span>
+                </a>
+            </nav>
+
+            <!-- Main Content Area -->
+            <div class="hud-content">
+                <!-- Section 1: Dashboard -->
+                <div id="tab-dashboard" class="tab-content active">
+                    <div class="tab-grid-dashboard">
+                        <!-- Diagnostics -->
+                        <section class="hud-card diagnostic-panel">
+                            <div class="card-glow"></div>
+                            <h2><i data-lucide="activity"></i> SYSTEM DIAGNOSTICS</h2>
+                            <div class="diagnostic-list">
+                                <div class="diag-item">
+                                    <span class="diag-label">YOUTUBE PREMIUM WEB CLIENT</span>
+                                    <div class="diag-status">
+                                        <span id="yt-status-text" class="status-text text-dim">checking...</span>
+                                        <div id="yt-status-led" class="status-led led-gray"></div>
+                                    </div>
+                                </div>
+                                <div class="diag-item">
+                                    <span class="diag-label">ONLINE TUNNEL (LOCALTUNNEL)</span>
+                                    <div class="diag-status">
+                                        <span id="tunnel-status-text" class="status-text text-dim">checking...</span>
+                                        <div id="tunnel-status-led" class="status-led led-gray"></div>
+                                    </div>
+                                </div>
+                                <div class="diag-item">
+                                    <span class="diag-label">RUDEDOG CONTENT IDEAS PDF</span>
+                                    <div class="diag-status">
+                                        <span id="pdf-status-text" class="status-text text-dim">checking...</span>
+                                        <div id="pdf-status-led" class="status-led led-gray"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="network-info-box">
+                                <h3><i data-lucide="globe"></i> CONNECTIVITY PROFILE</h3>
+                                <div class="net-grid">
+                                    <div class="net-item">
+                                        <span class="net-lbl">DASHBOARD URL:</span>
+                                        <a id="lan-link" href="#" target="_blank" class="net-val text-yellow">loading...</a>
+                                    </div>
+                                    <div class="net-item">
+                                        <span class="net-lbl">YOUTUBE CLONE:</span>
+                                        <a id="tunnel-link" href="#" target="_blank" class="net-val text-pink">loading...</a>
+                                    </div>
+                                    <div class="net-item">
+                                        <span class="net-lbl">PDF ON DESKTOP:</span>
+                                        <span id="pdf-mtime" class="net-val text-cyan">loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Quick Command Console -->
+                        <section class="hud-card control-panel">
+                            <div class="card-glow"></div>
+                            <h2><i data-lucide="sliders"></i> QUICK COMMAND CONSOLE</h2>
+                            
+                            <div class="control-actions">
+                                <button class="btn-hud btn-cyan" onclick="runAction('restart_youtube')">
+                                    <i data-lucide="play-circle"></i>
+                                    <div class="btn-text">
+                                        <b>LAUNCH YOUTUBE ON BRAVE</b>
+                                        <span>Open official YouTube in Brave Browser locally</span>
+                                    </div>
+                                </button>
+                                <button class="btn-hud btn-pink" onclick="runAction('restart_tunnel')">
+                                    <i data-lucide="share-2"></i>
+                                    <div class="btn-text">
+                                        <b>ESTABLISH LOCALTUNNEL</b>
+                                        <span>Forward port 8000 to public subdomain</span>
+                                    </div>
+                                </button>
+                                <button class="btn-hud btn-orange" onclick="runAction('regenerate_pdf')">
+                                    <i data-lucide="file-text"></i>
+                                    <div class="btn-text">
+                                        <b>REGENERATE STRATEGY PDF</b>
+                                        <span>Compile create_pdf.py to Desktop</span>
+                                    </div>
+                                </button>
+                                <a id="btn-open-youtube" href="https://www.youtube.com/" target="_blank" class="btn-hud btn-green" style="text-decoration: none;">
+                                    <i data-lucide="external-link"></i>
+                                    <div class="btn-text">
+                                        <b>OPEN YOUTUBE</b>
+                                        <span id="btn-open-youtube-url">Go to youtube.com</span>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="terminal-container">
+                                <div class="term-header">
+                                    <span class="term-title"><i data-lucide="terminal"></i> JARVIS COMMAND LOGS</span>
+                                    <span class="term-status">READY</span>
+                                </div>
+                                <div id="terminal-body" class="term-body">
+                                    [13:18:04] SYSTEM INITIALIZED // WALKING THROUGH MEMORY STATUS...
+                                    [13:18:05] ACTIVE INSTANCE CONNECTED ON PORT 8500.
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Section 2: Boss Workspace -->
+                <div id="tab-boss" class="tab-content">
+                    <!-- Lock Overlay -->
+                    <div id="boss-lock-screen" class="boss-lock-screen">
+                        <div class="lock-card">
+                            <div class="lock-glow"></div>
+                            <div class="lock-icon-wrapper">
+                                <i data-lucide="lock" class="lock-icon"></i>
+                            </div>
+                            <h2>ENTER ACCESS PIN</h2>
+                            <p>Boss Workspace is restricted. Enter PIN to decrypt.</p>
+                            
+                            <div class="pin-display">
+                                <div class="pin-dot"></div>
+                                <div class="pin-dot"></div>
+                                <div class="pin-dot"></div>
+                                <div class="pin-dot"></div>
+                            </div>
+                            
+                            <div class="pin-keypad">
+                                <button class="btn-key" onclick="pressPin('1')">1</button>
+                                <button class="btn-key" onclick="pressPin('2')">2</button>
+                                <button class="btn-key" onclick="pressPin('3')">3</button>
+                                <button class="btn-key" onclick="pressPin('4')">4</button>
+                                <button class="btn-key" onclick="pressPin('5')">5</button>
+                                <button class="btn-key" onclick="pressPin('6')">6</button>
+                                <button class="btn-key" onclick="pressPin('7')">7</button>
+                                <button class="btn-key" onclick="pressPin('8')">8</button>
+                                <button class="btn-key" onclick="pressPin('9')">9</button>
+                                <button class="btn-key text-pink" onclick="clearPin()">CLEAR</button>
+                                <button class="btn-key" onclick="pressPin('0')">0</button>
+                                <button class="btn-key text-cyan" onclick="submitPin()">ENTER</button>
+                            </div>
+                            <div id="pin-error-msg" class="pin-error" style="display: none;">ACCESS DENIED: INVALID KEYCODE</div>
+                        </div>
+                    </div>
+
+                    <!-- Unlocked Content -->
+                    <div id="boss-workspace-content" style="display: none; flex-direction: column; gap: 24px;">
+                        <div style="display: flex; justify-content: flex-end; margin-bottom: -8px;">
+                            <button class="btn-hud btn-pink" onclick="lockBossWorkspace()" style="padding: 6px 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; height: 32px; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;">
+                                <i data-lucide="lock" style="width: 12px; height: 12px;"></i> LOCK WORKSPACE
+                            </button>
+                        </div>
+                        <!-- Project File Explorer -->
+                        <section class="hud-card explorer-panel">
+                            <div class="card-glow"></div>
+                            <h2 style="color: var(--neon-cyan);"><i data-lucide="folder-open"></i> PROJECT FILE EXPLORER</h2>
+                            
+                            <div class="explorer-groups">
+                                <div class="exp-group">
+                                    <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-down" class="group-arrow"></i> RUDEDOG FAIR CAMPAIGN</div>
+                                    <div class="exp-files" id="project-campaign-files">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+
+                                <div class="exp-group">
+                                    <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-right" class="group-arrow"></i> YOUTUBE PREMIUM APP</div>
+                                    <div class="exp-files" id="project-youtube-files" style="display: none;">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+
+                                <div class="exp-group">
+                                    <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-right" class="group-arrow"></i> COMPILER SCRIPTS</div>
+                                    <div class="exp-files" id="project-compiler-files" style="display: none;">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- TikTok Auto-Farming Control -->
+                        <section class="hud-card farming-panel" style="margin-top: 12px; border-left: 4px solid var(--neon-pink);">
+                            <div class="card-glow" style="background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(255, 0, 80, 0.15), transparent 40%);"></div>
+                            <h2 style="color: var(--neon-pink);"><i data-lucide="bot"></i> TIKTOK AUTO-FARMING CONTROL</h2>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 12px;">
+                                <!-- Configuration options -->
+                                <div style="display: flex; flex-wrap: wrap; gap: 16px; background: rgba(0,0,0,0.25); padding: 16px; border-radius: 6px; border: 1px solid var(--border-color);">
+                                    <div style="flex: 1.5; min-width: 180px;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">TARGET DEVICE (ADB SERIAL)</label>
+                                        <select id="farm-device-select" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px; cursor: pointer;">
+                                            <option value="">Scanning devices...</option>
+                                        </select>
+                                    </div>
+                                    <div style="flex: 0.8; min-width: 100px;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">LOOPS (ROUND)</label>
+                                        <input type="number" id="farm-loops" value="10" min="1" max="1000" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                    <div style="flex: 1; min-width: 120px;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">LIKE PROB (0.0-1.0)</label>
+                                        <input type="number" id="farm-like-prob" value="0.15" step="0.05" min="0.0" max="1.0" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                    <div style="flex: 1; min-width: 120px;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">COMMENT PROB (0.0-1.0)</label>
+                                        <input type="number" id="farm-comment-prob" value="0.05" step="0.05" min="0.0" max="1.0" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                    <div style="flex: 2; min-width: 200px; width: 100%;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">AUTO-SEARCH QUERY (OPTIONAL)</label>
+                                        <input type="text" id="farm-query" placeholder="e.g., #กางเกงยีนส์, @rudedog (ปล่อยว่างหากต้องการฟีดแนะนำ)" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'Anuphan', 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                </div>
+
+                                <!-- Action controls -->
+                                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                                    <button class="btn-hud" onclick="scanFarmDevices()" style="padding: 0 16px; font-size: 11px; cursor: pointer; border-radius: 4px; height: 36px; border: 1px solid var(--border-color); display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); color: #fff;">
+                                        <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> SCAN DEVICES
+                                    </button>
+                                    <button class="btn-hud btn-cyan" id="btn-start-farm" onclick="startFarming()" style="padding: 0 20px; font-size: 11px; cursor: pointer; border-radius: 4px; height: 36px; display: inline-flex; align-items: center; gap: 6px;">
+                                        <i data-lucide="play" style="width: 14px; height: 14px;"></i> START BOT
+                                    </button>
+                                    <button class="btn-hud btn-pink" id="btn-stop-farm" onclick="stopFarming()" style="padding: 0 20px; font-size: 11px; cursor: pointer; border-radius: 4px; height: 36px; display: inline-flex; align-items: center; gap: 6px;">
+                                        <i data-lucide="square" style="width: 14px; height: 14px;"></i> STOP BOT
+                                    </button>
+                                    <div id="farm-status-badge" class="badge badge-offline" style="margin-left: auto; font-family: 'IBM Plex Mono'; font-size: 10px; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15);">BOT IDLE</div>
+                                </div>
+
+                                <!-- Logs container -->
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <label style="font-size: 11px; color: var(--text-dim); font-family: 'IBM Plex Mono';">LIVE BOT TELEMETRY & LOGS</label>
+                                        <span id="farm-log-time" style="font-size: 9px; color: var(--text-dim); font-family: 'IBM Plex Mono';">UPDATE: NEVER</span>
+                                    </div>
+                                    <div id="farm-logs" style="background: #040508; border: 1px solid var(--border-color); border-radius: 6px; height: 180px; overflow-y: auto; padding: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--neon-cyan); white-space: pre-wrap; box-shadow: inset 0 0 15px rgba(0,0,0,0.9); line-height: 1.5; border-left: 2px solid var(--neon-pink);">System online. Please click 'SCAN DEVICES' to discover active emulators.</div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- TikTok Web-Farming Control -->
+                        <section class="hud-card web-farming-panel" style="margin-top: 12px; border-left: 4px solid var(--neon-cyan);">
+                            <div class="card-glow" style="background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(0, 242, 254, 0.15), transparent 40%);"></div>
+                            <h2 style="color: var(--neon-cyan);"><i data-lucide="globe"></i> TIKTOK WEB-FARMING CONTROL</h2>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 12px;">
+                                <!-- Configuration options -->
+                                <div style="display: flex; flex-wrap: wrap; gap: 16px; background: rgba(0,0,0,0.25); padding: 16px; border-radius: 6px; border: 1px solid var(--border-color);">
+                                    <div style="flex: 1.5; min-width: 180px;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">TARGET PROFILE</label>
+                                        <select id="web-farm-profile-select" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px; cursor: pointer;">
+                                            <option value="profile_1">profile_1</option>
+                                            <option value="profile_2">profile_2</option>
+                                            <option value="profile_3">profile_3</option>
+                                        </select>
+                                    </div>
+                                    <div style="flex: 0.8; min-width: 100px;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">LOOPS (ROUND)</label>
+                                        <input type="number" id="web-farm-loops" value="10" min="1" max="1000" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                    <div style="flex: 1; min-width: 120px;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">LIKE PROB (0.0-1.0)</label>
+                                        <input type="number" id="web-farm-like-prob" value="0.15" step="0.05" min="0.0" max="1.0" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                    <div style="flex: 1; min-width: 120px;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">COMMENT PROB (0.0-1.0)</label>
+                                        <input type="number" id="web-farm-comment-prob" value="0.05" step="0.05" min="0.0" max="1.0" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                    <div style="flex: 1; min-width: 120px;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">FOLLOW PROB (0.0-1.0)</label>
+                                        <input type="number" id="web-farm-follow-prob" value="0.0" step="0.05" min="0.0" max="1.0" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                    <div style="flex: 1.2; min-width: 150px; display: flex; align-items: center; gap: 8px; margin-top: 15px;">
+                                        <input type="checkbox" id="web-farm-headed" checked style="cursor: pointer; width: 18px; height: 18px;">
+                                        <label for="web-farm-headed" style="font-size: 11px; color: var(--text-dim); font-family: 'IBM Plex Mono'; cursor: pointer; user-select: none;">SHOW BROWSER (HEADED)</label>
+                                    </div>
+                                    <div style="flex: 2; min-width: 200px; width: 100%;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">AUTO-SEARCH QUERY (OPTIONAL)</label>
+                                        <input type="text" id="web-farm-query" placeholder="e.g., #กางเกงยีนส์, @rudedog (ปล่อยว่างหากต้องการฟีดแนะนำ)" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'Anuphan', 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                    <div style="flex: 1.5; min-width: 180px; width: 100%;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">TARGET USER TO FOLLOW (OPTIONAL)</label>
+                                        <input type="text" id="web-farm-target-user" placeholder="e.g., @rudedog, @my_channel" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                    <div style="flex: 2; min-width: 200px; width: 100%;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">VIDEO TO UPLOAD (FROM UPLOADS BOSS)</label>
+                                        <select id="web-farm-upload-video" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px; cursor: pointer;">
+                                            <option value="">-- NO VIDEO UPLOAD --</option>
+                                        </select>
+                                    </div>
+                                    <div style="flex: 2; min-width: 200px; width: 100%;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">VIDEO CAPTION</label>
+                                        <input type="text" id="web-farm-upload-caption" placeholder="e.g., #ฟอลมาฟอลกลับ #fyp" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'Anuphan', 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
+                                    </div>
+                                </div>
+                                
+                                <!-- Action controls -->
+                                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                                    <button class="btn-hud" onclick="scanWebFarmProfiles()" style="padding: 0 16px; font-size: 11px; cursor: pointer; border-radius: 4px; height: 36px; border: 1px solid var(--border-color); display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,0.05); color: #fff;">
+                                        <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> SCAN PROFILES
+                                    </button>
+                                    <button class="btn-hud btn-cyan" id="btn-start-web-farm" onclick="startWebFarming()" style="padding: 0 20px; font-size: 11px; cursor: pointer; border-radius: 4px; height: 36px; display: inline-flex; align-items: center; gap: 6px;">
+                                        <i data-lucide="play" style="width: 14px; height: 14px;"></i> START WEB BOT
+                                    </button>
+                                    <button class="btn-hud btn-pink" id="btn-stop-web-farm" onclick="stopWebFarming()" style="padding: 0 20px; font-size: 11px; cursor: pointer; border-radius: 4px; height: 36px; display: inline-flex; align-items: center; gap: 6px;">
+                                        <i data-lucide="square" style="width: 14px; height: 14px;"></i> STOP WEB BOT
+                                    </button>
+                                    <div id="web-farm-status-badge" class="badge badge-offline" style="margin-left: auto; font-family: 'IBM Plex Mono'; font-size: 10px; padding: 4px 10px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.15);">WEB BOT IDLE</div>
+                                </div>
+                                
+                                <!-- Logs container -->
+                                <div style="display: flex; flex-direction: column; gap: 6px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <label style="font-size: 11px; color: var(--text-dim); font-family: 'IBM Plex Mono';">LIVE WEB BOT TELEMETRY & LOGS</label>
+                                        <span id="web-farm-log-time" style="font-size: 9px; color: var(--text-dim); font-family: 'IBM Plex Mono';">UPDATE: NEVER</span>
+                                    </div>
+                                    <div id="web-farm-logs" style="background: #040508; border: 1px solid var(--border-color); border-radius: 6px; height: 180px; overflow-y: auto; padding: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--neon-cyan); white-space: pre-wrap; box-shadow: inset 0 0 15px rgba(0,0,0,0.9); line-height: 1.5; border-left: 2px solid var(--neon-cyan);">System online. Please click 'SCAN PROFILES' to discover active user profile sessions.</div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Section 3: Shared Rooms -->
+                <div id="tab-shared" class="tab-content">
+                    <div class="tab-grid-shared">
+                        <!-- Shared Hub Panel -->
+                        <section class="hud-card shared-panel">
+                            <div class="card-glow"></div>
+                            <h2 style="color: var(--neon-pink); display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px;">
+                                <span><i data-lucide="users"></i> SHARED HUB</span>
+                                <div style="display: flex; align-items: center; gap: 4px; margin-left: auto;">
+                                    <select id="user-room-select" class="btn-exp-action" onchange="handleRoomSelectChange()" style="background: var(--dark); border: 1px solid var(--neon-pink); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 2px 4px; border-radius: 2px; height: 22px; cursor: pointer;">
+                                        <!-- Option Boss is hidden/disabled by default until PIN is entered -->
+                                        <option value="Boss" id="room-opt-boss" disabled style="display: none;">บอส (Boss) - Locked</option>
+                                        <option value="Friend1" id="room-opt-friend1">เพื่อน 1 (Friend 1)</option>
+                                        <option value="Friend2" id="room-opt-friend2">เพื่อน 2 (Friend 2)</option>
+                                        <option value="Friend3" id="room-opt-friend3">เพื่อน 3 (Friend 3)</option>
+                                        <option value="Friend4" id="room-opt-friend4">เพื่อน 4 (Friend 4)</option>
+                                    </select>
+                                    <button class="btn-exp-action text-pink" onclick="triggerFileUpload()" style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; cursor: pointer; border: 1px solid var(--neon-pink); height: 22px; border-radius: 4px;">
+                                        <i data-lucide="upload-cloud" style="width: 12px; height: 12px;"></i> UPLOAD
+                                    </button>
+                                </div>
+                                <input type="file" id="pdf-upload-file" style="display: none;" onchange="handleFileUpload(event)">
+                            </h2>
+                            <div class="exp-files" id="uploaded-files-list" style="margin-top: 16px;">
+                                <!-- Loaded dynamically via JS -->
+                            </div>
+                        </section>
+
+                        <!-- Column 3: Notes (Second Brain Memory) -->
+                        <section class="hud-card memory-panel">
+                            <div class="card-glow"></div>
+                            <h2><i data-lucide="brain"></i> SECOND BRAIN MEMORY</h2>
+                            
+                            <!-- Quick input to add note -->
+                            <div class="note-input-wrapper">
+                                <input type="text" id="note-input" placeholder="ป้อนความจำใหม่ บันทึกไอเดีย/ภารกิจค้าง..." onkeypress="handleNoteKeyPress(event)">
+                                <button class="btn-add" onclick="addNote()"><i data-lucide="plus"></i></button>
+                            </div>
+
+                            <div id="notes-list" class="notes-list">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HUD Code Viewer Modal Overlay -->
+        <div id="code-viewer-modal" class="hud-modal" style="display: none;">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <span id="modal-file-title" class="modal-title"><i data-lucide="file-code"></i> FILE VIEWER // LOADING...</span>
+                    <button class="btn-close" onclick="closeFileViewer()"><i data-lucide="x"></i></button>
+                </header>
+                <div class="modal-body" id="modal-body-container">
+                    <pre id="modal-pre-block"><code id="modal-code-block" class="code-block">loading file contents...</code></pre>
+                    <div id="modal-custom-preview" style="display: none; width: 100%; height: 100%;"></div>
+                </div>
+                <footer class="modal-footer-box">
+                    <span id="modal-file-path">PATH: /unknown/file</span>
+                    <button class="btn-modal-action" onclick="closeFileViewer()">CLOSE VIEW</button>
+                </footer>
+            </div>
+        </div>
+        
+        <footer class="hud-footer">
+            <span>JARVIS SYSTEM v4.0 // ACTIVE COMMAND AND MEMORY DASHBOARD</span>
+            <span>TONY STARK PRIVATE WORKSPACE</span>
+        </footer>
+    </div>
+
+    <!-- Script file -->
+    <script src="app.js?v=4.6"></script>
+</body>
+</html>
