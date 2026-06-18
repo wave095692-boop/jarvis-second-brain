@@ -638,13 +638,13 @@
                         <!-- TikTok Web-Farming Control -->
                         <section class="hud-card web-farming-panel" style="margin-top: 12px; border-left: 4px solid var(--neon-cyan);">
                             <div class="card-glow" style="background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(0, 242, 254, 0.15), transparent 40%);"></div>
-                            <h2 style="color: var(--neon-cyan);"><i data-lucide="globe"></i> TIKTOK WEB-FARMING CONTROL</h2>
+                            <h2 style="color: var(--neon-cyan);"><i data-lucide="globe"></i> ระบบควบคุมบอตติ๊กต็อก (TIKTOK WEB-FARMING CONTROL)</h2>
                             
                             <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 12px;">
                                 <!-- Configuration options -->
                                 <div style="display: flex; flex-wrap: wrap; gap: 16px; background: rgba(0,0,0,0.25); padding: 16px; border-radius: 6px; border: 1px solid var(--border-color);">
                                     <div style="flex: 1.5; min-width: 180px;">
-                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">TARGET PROFILE</label>
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">โปรไฟล์บัญชีเป้าหมาย (TARGET PROFILE)</label>
                                         <select id="web-farm-profile-select" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px; cursor: pointer;">
                                             <option value="profile_1">profile_1</option>
                                             <option value="profile_2">profile_2</option>
@@ -652,45 +652,45 @@
                                         </select>
                                     </div>
                                     <div style="flex: 0.8; min-width: 100px;">
-                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">LOOPS (ROUND)</label>
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">จำนวนรอบดูคลิป (LOOPS/ROUND)</label>
                                         <input type="number" id="web-farm-loops" value="10" min="1" max="1000" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
                                     </div>
                                     <div style="flex: 1; min-width: 120px;">
-                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">LIKE PROB (0.0-1.0)</label>
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">โอกาสกดใจ (LIKE PROB 0.0-1.0)</label>
                                         <input type="number" id="web-farm-like-prob" value="0.15" step="0.05" min="0.0" max="1.0" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
                                     </div>
                                     <div style="flex: 1; min-width: 120px;">
-                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">COMMENT PROB (0.0-1.0)</label>
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">โอกาสคอมเมนต์ (COMMENT PROB 0.0-1.0)</label>
                                         <input type="number" id="web-farm-comment-prob" value="0.05" step="0.05" min="0.0" max="1.0" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
                                     </div>
                                     <div style="flex: 1; min-width: 120px;">
-                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">FOLLOW PROB (0.0-1.0)</label>
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">โอกาสกดติดตาม (FOLLOW PROB 0.0-1.0)</label>
                                         <input type="number" id="web-farm-follow-prob" value="0.0" step="0.05" min="0.0" max="1.0" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
                                     </div>
                                     <div style="flex: 1.2; min-width: 150px; display: flex; align-items: center; gap: 8px; margin-top: 15px;">
                                         <input type="checkbox" id="web-farm-headed" checked style="cursor: pointer; width: 18px; height: 18px;">
-                                        <label for="web-farm-headed" style="font-size: 11px; color: var(--text-dim); font-family: 'IBM Plex Mono'; cursor: pointer; user-select: none;">SHOW BROWSER (HEADED)</label>
+                                        <label for="web-farm-headed" style="font-size: 11px; color: var(--text-dim); font-family: 'Anuphan', 'IBM Plex Mono'; cursor: pointer; user-select: none;">เปิดหน้าจอเบราว์เซอร์ (SHOW BROWSER)</label>
                                     </div>
                                     <div style="flex: 1.5; min-width: 180px; display: flex; align-items: center; gap: 8px; margin-top: 15px;">
                                         <input type="checkbox" id="web-farm-login-mode" style="cursor: pointer; width: 18px; height: 18px;">
-                                        <label for="web-farm-login-mode" style="font-size: 11px; color: var(--neon-cyan); font-family: 'IBM Plex Mono'; cursor: pointer; user-select: none;">WAIT FOR LOGIN (รอเข้าสู่ระบบ)</label>
+                                        <label for="web-farm-login-mode" style="font-size: 11px; color: var(--neon-cyan); font-family: 'Anuphan', 'IBM Plex Mono'; cursor: pointer; user-select: none;">โหมดรอเข้าสู่ระบบ (WAIT FOR LOGIN)</label>
                                     </div>
                                     <div style="flex: 2; min-width: 200px; width: 100%;">
-                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">AUTO-SEARCH QUERY (OPTIONAL)</label>
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">คำค้นหาอัตโนมัติ (AUTO-SEARCH QUERY - ไม่บังคับ)</label>
                                         <input type="text" id="web-farm-query" placeholder="e.g., #กางเกงยีนส์, @rudedog (ปล่อยว่างหากต้องการฟีดแนะนำ)" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'Anuphan', 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
                                     </div>
                                     <div style="flex: 1.5; min-width: 180px; width: 100%;">
-                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">TARGET USER TO FOLLOW (OPTIONAL)</label>
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">กดติดตามช่องเป้าหมาย (TARGET USER TO FOLLOW - ไม่บังคับ)</label>
                                         <input type="text" id="web-farm-target-user" placeholder="e.g., @rudedog, @my_channel" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
                                     </div>
                                     <div style="flex: 2; min-width: 200px; width: 100%;">
-                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">VIDEO TO UPLOAD (FROM UPLOADS BOSS)</label>
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">วิดีโอที่จะอัปโหลด (VIDEO TO UPLOAD - จากคลังของบอส)</label>
                                         <select id="web-farm-upload-video" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px; cursor: pointer;">
                                             <option value="">-- NO VIDEO UPLOAD --</option>
                                         </select>
                                     </div>
                                     <div style="flex: 2; min-width: 200px; width: 100%;">
-                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'IBM Plex Mono';">VIDEO CAPTION</label>
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">คำอธิบายและแฮชแท็กวิดีโอ (VIDEO CAPTION)</label>
                                         <input type="text" id="web-farm-upload-caption" placeholder="e.g., #ฟอลมาฟอลกลับ #fyp" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'Anuphan', 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">
                                     </div>
                                 </div>
