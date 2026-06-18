@@ -335,10 +335,32 @@ def main():
                 if random.random() < args.like_prob:
                     print("💖 Randomly liking video...")
                     try:
-                        # Try double clicking the middle of the page (in the video container)
-                        # This works well to trigger like on TikTok web
-                        page.mouse.dblclick(640, 400)
-                        print("✅ Double clicked video container to like.")
+                        # Try to find and click the like button/icon first
+                        like_selectors = [
+                            'button[data-e2e="like-icon"]',
+                            '[data-e2e="like-icon"]',
+                            'button[data-e2e="like-button"]',
+                            'span[class*="LikeIcon"]',
+                            'svg[class*="Like"]'
+                        ]
+                        like_clicked = False
+                        for sel in like_selectors:
+                            elements = page.locator(sel)
+                            count = elements.count()
+                            for i in range(count):
+                                el = elements.nth(i)
+                                if el.is_visible() and el.is_enabled():
+                                    el.click()
+                                    print(f"✅ Clicked like button using selector: {sel}")
+                                    like_clicked = True
+                                    break
+                            if like_clicked:
+                                break
+                        
+                        if not like_clicked:
+                            # Fallback: Double click the middle of the page (in the video container)
+                            page.mouse.dblclick(640, 400)
+                            print("✅ Double clicked video container to like (fallback).")
                         time.sleep(1.5)
                     except Exception as le:
                         print(f"⚠️ Like failed: {le}")
