@@ -651,6 +651,13 @@
                                             <option value="profile_3">profile_3</option>
                                         </select>
                                     </div>
+                                    <div style="flex: 1.5; min-width: 180px;">
+                                        <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">สร้างโปรไฟล์ใหม่ (CREATE PROFILE)</label>
+                                        <div style="display: flex; gap: 6px;">
+                                            <input type="text" id="web-farm-new-profile" placeholder="e.g., profile_4" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; flex: 1; height: 34px;">
+                                            <button class="btn-hud btn-cyan" onclick="createWebFarmProfile()" style="padding: 0 12px; font-size: 11px; cursor: pointer; border-radius: 4px; height: 34px; display: inline-flex; align-items: center; justify-content: center; background: var(--neon-cyan); color: var(--bg); font-family: 'Anuphan'; font-weight: bold;">สร้าง</button>
+                                        </div>
+                                    </div>
                                     <div style="flex: 0.8; min-width: 100px;">
                                         <label style="font-size: 11px; color: var(--text-dim); display: block; margin-bottom: 6px; font-family: 'Anuphan', 'IBM Plex Mono';">จำนวนรอบดูคลิป (LOOPS/ROUND)</label>
                                         <input type="number" id="web-farm-loops" value="10" min="1" max="1000" style="background: var(--dark); border: 1px solid var(--border-color); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 8px; border-radius: 4px; width: 100%; height: 34px;">

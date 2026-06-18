@@ -1139,6 +1139,28 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                         log_message = f"Opened Google Chrome manually for profile {profile}."
                     except Exception as e:
                         log_message = f"Failed to open Google Chrome: {e}"
+                elif action == 'create_profile':
+                    name = req.get('name', '').strip()
+                    import re
+                    name = re.sub(r'[^a-zA-Z0-9_-]', '', name)
+                    if not name:
+                        self.send_response(400)
+                        self.end_headers()
+                        self.wfile.write(json.dumps({'error': 'Invalid profile name'}).encode('utf-8'))
+                        return
+                    
+                    profile_dir = os.path.join(DIRECTORY, "profiles", name)
+                    try:
+                        if os.path.exists(profile_dir):
+                            log_message = f"Profile '{name}' already exists."
+                        else:
+                            os.makedirs(profile_dir)
+                            log_message = f"Profile '{name}' created successfully."
+                    except Exception as e:
+                        self.send_response(500)
+                        self.end_headers()
+                        self.wfile.write(json.dumps({'error': f"Failed to create profile: {e}"}).encode('utf-8'))
+                        return
                 
                 else:
                     self.send_response(400)

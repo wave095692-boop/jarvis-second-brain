@@ -2069,6 +2069,41 @@ function openLoginChrome() {
     });
 }
 
+function createWebFarmProfile() {
+    const input = document.getElementById("web-farm-new-profile");
+    const name = input ? input.value.trim() : "";
+    
+    if (!name) {
+        alert("กรุณากรอกชื่อโปรไฟล์ที่ต้องการสร้าง!");
+        return;
+    }
+    
+    logToTerminal(`[WEB FARM] Requesting creation of new profile: ${name}...`);
+    playSynthSound('success');
+    
+    fetch(getApiUrl('/api/action'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'create_profile',
+            name: name
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            logToTerminal(`[WEB FARM SUCCESS] ${data.log}`);
+            if (input) input.value = "";
+            scanWebFarmProfiles(); // Refresh the list
+        } else {
+            alert(`ล้มเหลวในการสร้างโปรไฟล์ใหม่: ${data.error}`);
+        }
+    })
+    .catch(err => {
+        alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
+    });
+}
+
 function startWebFarmingLogPolling() {
     if (webFarmingPollInterval) clearInterval(webFarmingPollInterval);
     webFarmingPollInterval = setInterval(() => {
