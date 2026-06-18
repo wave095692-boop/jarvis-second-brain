@@ -1129,6 +1129,9 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     cmd = [
                         "open", "-n", "-a", "Google Chrome", "--args",
                         f"--user-data-dir={profile_dir}",
+                        "--password-store=basic",
+                        "--use-mock-keychain",
+                        "--disable-blink-features=AutomationControlled",
                         "https://www.tiktok.com/login"
                     ]
                     try:
