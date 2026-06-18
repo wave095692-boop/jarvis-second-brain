@@ -1071,6 +1071,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     upload_caption = req.get('upload_caption', '')
                     query = req.get('query', '')
                     headed = req.get('headed', True)
+                    login_mode = req.get('login_mode', False)
                     
                     log_file = os.path.join(DIRECTORY, "web_farming_bot.log")
                     with open(log_file, 'w', encoding='utf-8') as lf:
@@ -1087,6 +1088,8 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     cmd += ['--comment-prob', str(comment_prob)]
                     cmd += ['--follow-prob', str(follow_prob)]
                     cmd += ['--headed', 'true' if headed else 'false']
+                    if login_mode:
+                        cmd += ['--login-mode']
                     if target_user:
                         cmd += ['--target-user', target_user]
                     if upload_video:

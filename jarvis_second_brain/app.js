@@ -1969,6 +1969,7 @@ function startWebFarming() {
     const uploadCaptionInput = document.getElementById("web-farm-upload-caption");
     const queryInput = document.getElementById("web-farm-query");
     const headedInput = document.getElementById("web-farm-headed");
+    const loginModeInput = document.getElementById("web-farm-login-mode");
     
     const profile = profileSelect ? profileSelect.value : "profile_1";
     const loops = loopsInput ? parseInt(loopsInput.value) || 10 : 10;
@@ -1980,8 +1981,9 @@ function startWebFarming() {
     const uploadCaption = uploadCaptionInput ? uploadCaptionInput.value.trim() : "";
     const query = queryInput ? queryInput.value : "";
     const headed = headedInput ? headedInput.checked : true;
+    const loginMode = loginModeInput ? loginModeInput.checked : false;
     
-    logToTerminal(`[WEB FARM] Initiating Playwright bot for profile ${profile} (Loops: ${loops}, Like Prob: ${likeProb}, Comment Prob: ${commentProb}, Follow Prob: ${followProb}, Headed: ${headed})...`);
+    logToTerminal(`[WEB FARM] Initiating Playwright bot for profile ${profile} (Loops: ${loops}, Like Prob: ${likeProb}, Comment Prob: ${commentProb}, Follow Prob: ${followProb}, Headed: ${headed}, Login Mode: ${loginMode})...`);
     if (targetUser) logToTerminal(`[WEB FARM] Target user to follow: ${targetUser}`);
     if (uploadVideo) logToTerminal(`[WEB FARM] Video to upload: ${uploadVideo}`);
     playSynthSound('success');
@@ -2000,7 +2002,8 @@ function startWebFarming() {
             upload_video: uploadVideo,
             upload_caption: uploadCaption,
             query: query,
-            headed: headed
+            headed: headed,
+            login_mode: loginMode
         })
     })
     .then(res => res.json())

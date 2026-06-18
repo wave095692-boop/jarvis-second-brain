@@ -30,10 +30,11 @@ def main():
     parser.add_argument("--upload-caption", type=str, default="", help="Caption for uploaded video")
     parser.add_argument("--query", type=str, default="", help="Search query keyword")
     parser.add_argument("--headed", type=str, default="true", help="Run browser in headed mode ('true' or 'false')")
+    parser.add_argument("--login-mode", action="store_true", help="Wait for user to login manually first before farming")
 
     args = parser.parse_args()
     
-    headed_mode = args.headed.lower() == "true"
+    headed_mode = (args.headed.lower() == "true") or args.login_mode
     profile_name = args.profile
     
     # Path setup
@@ -104,6 +105,51 @@ def main():
         except Exception as e:
             print(f"⚠️ Warning: Navigation timeout or networkidle issue: {e}")
             # Continue anyway
+
+        # Wait for login if login-mode is enabled
+        if args.login_mode:
+            print("\n⏳ [LOGIN MODE] Please log in manually in the opened browser window (QR code, phone, or email)...")
+            start_time = time.time()
+            login_timeout = 600  # 10 minutes
+            logged_in = False
+            last_ping_time = start_time
+            
+            while time.time() - start_time < login_timeout:
+                try:
+                    # Look for profile selectors and login buttons specifically
+                    profile_visible = page.locator('[data-e2e="profile-icon"]').first.is_visible()
+                    avatar_visible = page.locator('[data-e2e="avatar-icon"]').first.is_visible()
+                    inbox_visible = page.locator('[data-e2e="notification-icon"]').first.is_visible()
+                    login_button_visible = page.locator('[data-e2e="nav-login-button"]').first.is_visible()
+                    
+                    # Logged in if profile/avatar/inbox is visible and login button is gone
+                    if (profile_visible or avatar_visible or inbox_visible) and not login_button_visible:
+                        print("🎉 [LOGIN SUCCESS] Login detected successfully!")
+                        logged_in = True
+                        break
+                except Exception:
+                    pass
+                
+                # Print a reminder every 10 seconds
+                now = time.time()
+                if now - last_ping_time >= 10:
+                    elapsed = int(now - start_time)
+                    print(f"⏳ Waiting for manual login... ({elapsed}s elapsed)")
+                    last_ping_time = now
+                
+                time.sleep(2)
+                
+            if not logged_in:
+                print("❌ [LOGIN TIMEOUT] Login timeout of 10 minutes reached.")
+            else:
+                # Save session storage state
+                try:
+                    state_path = os.path.join(user_data_dir, "storage_state.json")
+                    context.storage_state(path=state_path)
+                    print(f"✅ Saved session storage state to {state_path}")
+                except Exception as sse:
+                    print(f"⚠️ Warning: Failed to save storage state: {sse}")
+                time.sleep(3)
 
         # Follow target user if specified
         if args.target_user:
