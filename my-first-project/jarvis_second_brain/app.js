@@ -1595,7 +1595,7 @@ function checkBossSession() {
         if (lockScreen) lockScreen.style.display = 'none';
         if (workspaceContent) {
             workspaceContent.style.display = 'flex';
-            setTimeout(() => { scanFarmDevices(); scanWebFarmProfiles(); }, 100);
+            setTimeout(() => { scanWebFarmProfiles(); }, 100);
         }
         if (bossOption) {
             bossOption.disabled = false;
@@ -1969,6 +1969,7 @@ function startWebFarming() {
     const uploadCaptionInput = document.getElementById("web-farm-upload-caption");
     const queryInput = document.getElementById("web-farm-query");
     const headedInput = document.getElementById("web-farm-headed");
+    const loginModeInput = document.getElementById("web-farm-login-mode");
     
     const profile = profileSelect ? profileSelect.value : "profile_1";
     const loops = loopsInput ? parseInt(loopsInput.value) || 10 : 10;
@@ -1980,8 +1981,9 @@ function startWebFarming() {
     const uploadCaption = uploadCaptionInput ? uploadCaptionInput.value.trim() : "";
     const query = queryInput ? queryInput.value : "";
     const headed = headedInput ? headedInput.checked : true;
+    const loginMode = loginModeInput ? loginModeInput.checked : false;
     
-    logToTerminal(`[WEB FARM] Initiating Playwright bot for profile ${profile} (Loops: ${loops}, Like Prob: ${likeProb}, Comment Prob: ${commentProb}, Follow Prob: ${followProb}, Headed: ${headed})...`);
+    logToTerminal(`[WEB FARM] Initiating Playwright bot for profile ${profile} (Loops: ${loops}, Like Prob: ${likeProb}, Comment Prob: ${commentProb}, Follow Prob: ${followProb}, Headed: ${headed}, Login Mode: ${loginMode})...`);
     if (targetUser) logToTerminal(`[WEB FARM] Target user to follow: ${targetUser}`);
     if (uploadVideo) logToTerminal(`[WEB FARM] Video to upload: ${uploadVideo}`);
     playSynthSound('success');
@@ -2000,7 +2002,8 @@ function startWebFarming() {
             upload_video: uploadVideo,
             upload_caption: uploadCaption,
             query: query,
-            headed: headed
+            headed: headed,
+            login_mode: loginMode
         })
     })
     .then(res => res.json())
@@ -2038,6 +2041,69 @@ function stopWebFarming() {
     });
 }
 
+function openLoginChrome() {
+    const profileSelect = document.getElementById("web-farm-profile-select");
+    const profile = profileSelect ? profileSelect.value : "profile_1";
+    
+    logToTerminal(`[WEB FARM] Launching standard Google Chrome window for manual login (Profile: ${profile}). Please log in completely on Chrome, then close the browser window.`);
+    playSynthSound('success');
+    
+    fetch(getApiUrl('/api/action'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'open_login_chrome',
+            profile: profile
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            logToTerminal(`[WEB FARM SUCCESS] Clean Google Chrome window opened successfully.`);
+        } else {
+            alert(`ล้มเหลวในการเปิดเบราว์เซอร์จริง: ${data.error}`);
+        }
+    })
+    .catch(err => {
+        alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
+    });
+}
+
+function createWebFarmProfile() {
+    const input = document.getElementById("web-farm-new-profile");
+    const name = input ? input.value.trim() : "";
+    
+    if (!name) {
+        alert("กรุณากรอกชื่อโปรไฟล์ที่ต้องการสร้าง!");
+        return;
+    }
+    
+    logToTerminal(`[WEB FARM] Requesting creation of new profile: ${name}...`);
+    playSynthSound('success');
+    
+    fetch(getApiUrl('/api/action'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'create_profile',
+            name: name
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            logToTerminal(`[WEB FARM SUCCESS] ${data.log}`);
+            if (input) input.value = "";
+            scanWebFarmProfiles(); // Refresh the list
+        } else {
+            alert(`ล้มเหลวในการสร้างโปรไฟล์ใหม่: ${data.error}`);
+        }
+    })
+    .catch(err => {
+        alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
+    });
+}
+
 function startWebFarmingLogPolling() {
     if (webFarmingPollInterval) clearInterval(webFarmingPollInterval);
     webFarmingPollInterval = setInterval(() => {
@@ -2058,6 +2124,15 @@ function stopWebFarmingLogPolling() {
         webFarmingPollInterval = null;
     }
 }
+
+function clearWebFarmLogs() {
+    const el = document.getElementById("web-farm-logs");
+    if (el) {
+        el.textContent = "Console ready.\n";
+    }
+    playSynthSound('delete');
+}
+
 
 
 
