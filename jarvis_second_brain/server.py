@@ -8,13 +8,9 @@ import shutil
 import urllib.request
 import urllib.error
 
+DIRECTORY = os.path.dirname(os.path.abspath(__file__))
+WORKSPACE_DIR = os.path.dirname(DIRECTORY)
 PORT = int(os.environ.get("PORT", 8500))
-# Dynamic path resolution for portability
-DEFAULT_DIR = "/Users/apple/.gemini/antigravity-ide/scratch/jarvis_second_brain"
-DEFAULT_WORKSPACE = "/Users/apple/.gemini/antigravity-ide/scratch"
-
-DIRECTORY = DEFAULT_DIR if os.path.exists(DEFAULT_DIR) else os.path.dirname(os.path.abspath(__file__))
-WORKSPACE_DIR = DEFAULT_WORKSPACE if os.path.exists(DEFAULT_WORKSPACE) else os.path.dirname(DIRECTORY)
 
 PDF_PATH = "/Users/apple/Desktop/rudedog_content_ideas.pdf"
 if not os.path.exists(os.path.dirname(PDF_PATH)):
@@ -502,6 +498,47 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 'running': is_running,
                 'logs': logs,
                 'devices': connected_devices
+            }
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(json.dumps(response_data, ensure_ascii=False).encode('utf-8'))
+        elif path == '/api/web_farming_status':
+            is_running = False
+            try:
+                res = subprocess.run(['pgrep', '-f', 'web_farming_bot.py'], capture_output=True, text=True)
+                if res.stdout.strip():
+                    is_running = True
+            except Exception:
+                pass
+                
+            log_file = os.path.join(DIRECTORY, "web_farming_bot.log")
+            logs = ""
+            if os.path.exists(log_file):
+                try:
+                    with open(log_file, 'r', encoding='utf-8') as f:
+                        lines = f.readlines()
+                        logs = "".join(lines[-100:])
+                except Exception as ex:
+                    logs = f"Error reading logs: {ex}"
+            else:
+                logs = "Web farming bot idle. No log file created yet."
+                
+            profiles_dir = os.path.join(DIRECTORY, "profiles")
+            profiles = []
+            if os.path.exists(profiles_dir):
+                try:
+                    profiles = [d for d in os.listdir(profiles_dir) if os.path.isdir(os.path.join(profiles_dir, d)) and not d.startswith('.')]
+                except Exception:
+                    pass
+            if not profiles:
+                profiles = ["profile_1", "profile_2", "profile_3"]
+            profiles.sort()
+            
+            response_data = {
+                'running': is_running,
+                'logs': logs,
+                'profiles': profiles
             }
             self.send_response(200)
             self.send_header('Content-Type', 'application/json; charset=utf-8')
@@ -1017,6 +1054,63 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                         log_message = "Farming bot stopped successfully."
                     except Exception as ex:
                         log_message = f"Failed to stop farming bot: {ex}"
+                        
+                elif action == 'start_web_farming':
+                    try:
+                        subprocess.run(['pkill', '-f', 'web_farming_bot.py'])
+                    except Exception:
+                        pass
+                    
+                    profile = req.get('profile', 'profile_1')
+                    loops = req.get('loops', 10)
+                    like_prob = req.get('like_prob', 0.15)
+                    comment_prob = req.get('comment_prob', 0.05)
+                    follow_prob = req.get('follow_prob', 0.0)
+                    target_user = req.get('target_user', '')
+                    upload_video = req.get('upload_video', '')
+                    upload_caption = req.get('upload_caption', '')
+                    query = req.get('query', '')
+                    headed = req.get('headed', True)
+                    
+                    log_file = os.path.join(DIRECTORY, "web_farming_bot.log")
+                    with open(log_file, 'w', encoding='utf-8') as lf:
+                        lf.write(f"--- STARTING TIKTOK WEB FARMING BOT FOR {profile} ---\n")
+                    
+                    venv_python = os.path.join(os.path.dirname(DIRECTORY), '.venv', 'bin', 'python')
+                    if not os.path.exists(venv_python):
+                        venv_python = 'python3'
+                        
+                    cmd = [venv_python, '-u', os.path.join(DIRECTORY, 'web_farming_bot.py')]
+                    cmd += ['--profile', profile]
+                    cmd += ['--loops', str(loops)]
+                    cmd += ['--like-prob', str(like_prob)]
+                    cmd += ['--comment-prob', str(comment_prob)]
+                    cmd += ['--follow-prob', str(follow_prob)]
+                    cmd += ['--headed', 'true' if headed else 'false']
+                    if target_user:
+                        cmd += ['--target-user', target_user]
+                    if upload_video:
+                        # Map uploaded file from the 'Boss' uploads directory
+                        video_path = os.path.join(DIRECTORY, 'uploads', 'Boss', upload_video)
+                        cmd += ['--upload-video', video_path]
+                    if upload_caption:
+                        cmd += ['--upload-caption', upload_caption]
+                    if query:
+                        cmd += ['--query', query]
+                    
+                    lf_handle = open(log_file, 'a', encoding='utf-8')
+                    subprocess.Popen(cmd, stdout=lf_handle, stderr=lf_handle, start_new_session=True)
+                    log_message = f"Web farming bot started successfully for profile {profile}."
+                    
+                elif action == 'stop_web_farming':
+                    try:
+                        subprocess.run(['pkill', '-f', 'web_farming_bot.py'])
+                        log_file = os.path.join(DIRECTORY, "web_farming_bot.log")
+                        with open(log_file, 'a', encoding='utf-8') as lf:
+                            lf.write("\n🛑 STOPPED BY USER ACTIONS FROM DASHBOARD.\n")
+                        log_message = "Web farming bot stopped successfully."
+                    except Exception as ex:
+                        log_message = f"Failed to stop web farming bot: {ex}"
                 
                 else:
                     self.send_response(400)

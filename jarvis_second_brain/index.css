@@ -1388,3 +1388,13 @@ body {
     }
 }
 
+/* Web Farming Bot Styling */
+.web-farming-panel .card-glow {
+    background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(0, 242, 254, 0.15), transparent 40%) !important;
+}
+
+#web-farm-headed {
+    accent-color: var(--neon-cyan);
+    filter: drop-shadow(0 0 4px var(--neon-cyan));
+}
+

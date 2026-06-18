@@ -1582,7 +1582,7 @@ function checkBossSession() {
         if (lockScreen) lockScreen.style.display = 'none';
         if (workspaceContent) {
             workspaceContent.style.display = 'flex';
-            setTimeout(() => { scanFarmDevices(); }, 100);
+            setTimeout(() => { scanFarmDevices(); scanWebFarmProfiles(); }, 100);
         }
         if (bossOption) {
             bossOption.disabled = false;
@@ -1847,6 +1847,202 @@ function stopFarmingLogPolling() {
     if (farmingPollInterval) {
         clearInterval(farmingPollInterval);
         farmingPollInterval = null;
+    }
+}
+
+// TikTok Web Farming Bot Integration
+let webFarmingPollInterval = null;
+
+function scanWebFarmUploads() {
+    const select = document.getElementById("web-farm-upload-video");
+    if (!select) return;
+    
+    fetch('/api/uploads')
+    .then(res => res.json())
+    .then(data => {
+        select.innerHTML = '<option value="">-- NO VIDEO UPLOAD --</option>';
+        const bossFiles = data.files ? data.files.Boss || [] : [];
+        const videoExtensions = ['.mp4', '.mov', '.webm', '.avi', '.mkv', '.m4v'];
+        
+        bossFiles.forEach(file => {
+            const lowerFile = file.toLowerCase();
+            const isVideo = videoExtensions.some(ext => lowerFile.endsWith(ext));
+            if (isVideo) {
+                const opt = document.createElement("option");
+                opt.value = file;
+                opt.innerText = file;
+                select.appendChild(opt);
+            }
+        });
+    })
+    .catch(err => {
+        console.error("Failed to load uploaded video files: ", err);
+    });
+}
+
+function scanWebFarmProfiles() {
+    logToTerminal("[WEB FARM] Scanning configured browser profiles...");
+    const select = document.getElementById("web-farm-profile-select");
+    if (select) select.innerHTML = '<option value="">Scanning profiles...</option>';
+    
+    // Scan uploads to populate video dropdown
+    scanWebFarmUploads();
+    
+    fetch('/api/web_farming_status')
+    .then(res => res.json())
+    .then(data => {
+        if (select) {
+            select.innerHTML = '';
+            if (data.profiles && data.profiles.length > 0) {
+                data.profiles.forEach(p => {
+                    const opt = document.createElement("option");
+                    opt.value = p;
+                    opt.innerText = `Profile: ${p}`;
+                    select.appendChild(opt);
+                });
+            } else {
+                const opt = document.createElement("option");
+                opt.value = "profile_1";
+                opt.innerText = "profile_1 (default)";
+                select.appendChild(opt);
+            }
+        }
+        updateWebFarmingUI(data);
+    })
+    .catch(err => {
+        logToTerminal(`[WEB FARM ERROR] Scan failed: ${err.message}`);
+    });
+}
+
+function updateWebFarmingUI(data) {
+    const logsEl = document.getElementById("web-farm-logs");
+    const badgeEl = document.getElementById("web-farm-status-badge");
+    const logTimeEl = document.getElementById("web-farm-log-time");
+    
+    if (logsEl && data.logs) {
+        logsEl.innerText = data.logs;
+        logsEl.scrollTop = logsEl.scrollHeight;
+    }
+    
+    if (badgeEl) {
+        if (data.running) {
+            badgeEl.className = "badge";
+            badgeEl.style.background = "var(--neon-cyan)";
+            badgeEl.style.color = "var(--bg)";
+            badgeEl.innerText = "WEB FARMING ACTIVE";
+            if (!webFarmingPollInterval) startWebFarmingLogPolling();
+        } else {
+            badgeEl.className = "badge";
+            badgeEl.style.background = "transparent";
+            badgeEl.style.color = "var(--text-dim)";
+            badgeEl.innerText = "WEB BOT IDLE";
+            if (webFarmingPollInterval) stopWebFarmingLogPolling();
+        }
+    }
+    
+    if (logTimeEl) {
+        logTimeEl.innerText = `UPDATE: ${new Date().toLocaleTimeString()}`;
+    }
+}
+
+function startWebFarming() {
+    const profileSelect = document.getElementById("web-farm-profile-select");
+    const loopsInput = document.getElementById("web-farm-loops");
+    const likeProbInput = document.getElementById("web-farm-like-prob");
+    const commentProbInput = document.getElementById("web-farm-comment-prob");
+    const followProbInput = document.getElementById("web-farm-follow-prob");
+    const targetUserInput = document.getElementById("web-farm-target-user");
+    const uploadVideoSelect = document.getElementById("web-farm-upload-video");
+    const uploadCaptionInput = document.getElementById("web-farm-upload-caption");
+    const queryInput = document.getElementById("web-farm-query");
+    const headedInput = document.getElementById("web-farm-headed");
+    
+    const profile = profileSelect ? profileSelect.value : "profile_1";
+    const loops = loopsInput ? parseInt(loopsInput.value) || 10 : 10;
+    const likeProb = likeProbInput ? parseFloat(likeProbInput.value) || 0.15 : 0.15;
+    const commentProb = commentProbInput ? parseFloat(commentProbInput.value) || 0.05 : 0.05;
+    const followProb = followProbInput ? parseFloat(followProbInput.value) || 0.0 : 0.0;
+    const targetUser = targetUserInput ? targetUserInput.value.trim() : "";
+    const uploadVideo = uploadVideoSelect ? uploadVideoSelect.value : "";
+    const uploadCaption = uploadCaptionInput ? uploadCaptionInput.value.trim() : "";
+    const query = queryInput ? queryInput.value : "";
+    const headed = headedInput ? headedInput.checked : true;
+    
+    logToTerminal(`[WEB FARM] Initiating Playwright bot for profile ${profile} (Loops: ${loops}, Like Prob: ${likeProb}, Comment Prob: ${commentProb}, Follow Prob: ${followProb}, Headed: ${headed})...`);
+    if (targetUser) logToTerminal(`[WEB FARM] Target user to follow: ${targetUser}`);
+    if (uploadVideo) logToTerminal(`[WEB FARM] Video to upload: ${uploadVideo}`);
+    playSynthSound('success');
+    
+    fetch('/api/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'start_web_farming',
+            profile: profile,
+            loops: loops,
+            like_prob: likeProb,
+            comment_prob: commentProb,
+            follow_prob: followProb,
+            target_user: targetUser,
+            upload_video: uploadVideo,
+            upload_caption: uploadCaption,
+            query: query,
+            headed: headed
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            logToTerminal(`[WEB FARM SUCCESS] Playwright bot successfully spawned.`);
+            scanWebFarmProfiles();
+            startWebFarmingLogPolling();
+        } else {
+            alert(`ล้มเหลวในการเริ่มทำงานเว็บคอมพิวเตอร์: ${data.error}`);
+        }
+    })
+    .catch(err => {
+        alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
+    });
+}
+
+function stopWebFarming() {
+    logToTerminal("[WEB FARM] Sending termination signal to web farming bot...");
+    playSynthSound('delete');
+    
+    fetch('/api/action', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'stop_web_farming' })
+    })
+    .then(res => res.json())
+    .then(data => {
+        logToTerminal(`[WEB FARM STOP] Web bot terminated.`);
+        stopWebFarmingLogPolling();
+        scanWebFarmProfiles();
+    })
+    .catch(err => {
+        logToTerminal(`[WEB FARM ERROR] Stop failed: ${err.message}`);
+    });
+}
+
+function startWebFarmingLogPolling() {
+    if (webFarmingPollInterval) clearInterval(webFarmingPollInterval);
+    webFarmingPollInterval = setInterval(() => {
+        fetch('/api/web_farming_status')
+        .then(res => res.json())
+        .then(data => {
+            updateWebFarmingUI(data);
+        })
+        .catch(err => {
+            console.error("Web farming status poll failed:", err);
+        });
+    }, 2500);
+}
+
+function stopWebFarmingLogPolling() {
+    if (webFarmingPollInterval) {
+        clearInterval(webFarmingPollInterval);
+        webFarmingPollInterval = null;
     }
 }
 
