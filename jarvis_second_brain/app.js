@@ -2041,6 +2041,34 @@ function stopWebFarming() {
     });
 }
 
+function openLoginChrome() {
+    const profileSelect = document.getElementById("web-farm-profile-select");
+    const profile = profileSelect ? profileSelect.value : "profile_1";
+    
+    logToTerminal(`[WEB FARM] Launching standard Google Chrome window for manual login (Profile: ${profile}). Please log in completely on Chrome, then close the browser window.`);
+    playSynthSound('success');
+    
+    fetch(getApiUrl('/api/action'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'open_login_chrome',
+            profile: profile
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            logToTerminal(`[WEB FARM SUCCESS] Clean Google Chrome window opened successfully.`);
+        } else {
+            alert(`ล้มเหลวในการเปิดเบราว์เซอร์จริง: ${data.error}`);
+        }
+    })
+    .catch(err => {
+        alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
+    });
+}
+
 function startWebFarmingLogPolling() {
     if (webFarmingPollInterval) clearInterval(webFarmingPollInterval);
     webFarmingPollInterval = setInterval(() => {

@@ -1115,6 +1115,23 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     except Exception as ex:
                         log_message = f"Failed to stop web farming bot: {ex}"
                 
+                elif action == 'open_login_chrome':
+                    profile = req.get('profile', 'profile_1')
+                    profile_dir = os.path.join(DIRECTORY, "profiles", profile)
+                    if not os.path.exists(profile_dir):
+                        os.makedirs(profile_dir)
+                    
+                    cmd = [
+                        "open", "-n", "-a", "Google Chrome", "--args",
+                        f"--user-data-dir={profile_dir}",
+                        "https://www.tiktok.com/login"
+                    ]
+                    try:
+                        subprocess.Popen(cmd)
+                        log_message = f"Opened Google Chrome manually for profile {profile}."
+                    except Exception as e:
+                        log_message = f"Failed to open Google Chrome: {e}"
+                
                 else:
                     self.send_response(400)
                     self.end_headers()
