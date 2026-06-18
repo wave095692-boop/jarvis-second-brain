@@ -1,3 +1,16 @@
+// Helper to resolve API URLs (routes to local Mac backend if on cloud)
+function getApiUrl(path) {
+    const isCloud = !window.location.hostname.includes("localhost") && 
+                    !window.location.hostname.includes("127.0.0.1") && 
+                    !window.location.hostname.startsWith("10.") && 
+                    !window.location.hostname.startsWith("192.168.") && 
+                    !window.location.hostname.startsWith("172.");
+    if (isCloud) {
+        return `http://localhost:8500${path}`;
+    }
+    return path;
+}
+
 // System State
 let notesList = [];
 let audioCtx = null;
@@ -1709,7 +1722,7 @@ function scanFarmDevices() {
     const select = document.getElementById("farm-device-select");
     if (select) select.innerHTML = '<option value="">Scanning devices...</option>';
     
-    fetch('/api/farming_status')
+    fetch(getApiUrl('/api/farming_status'))
     .then(res => res.json())
     .then(data => {
         if (select) {
@@ -1782,7 +1795,7 @@ function startFarming() {
     logToTerminal(`[FARM] Initiating bot for device ${device || "default"} (Loops: ${loops}, Like Prob: ${likeProb}, Comment Prob: ${commentProb})...`);
     playSynthSound('success');
     
-    fetch('/api/action', {
+    fetch(getApiUrl('/api/action'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -1813,7 +1826,7 @@ function stopFarming() {
     logToTerminal("[FARM] Sending termination signal to farming bot...");
     playSynthSound('delete');
     
-    fetch('/api/action', {
+    fetch(getApiUrl('/api/action'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'stop_farming' })
@@ -1832,7 +1845,7 @@ function stopFarming() {
 function startFarmingLogPolling() {
     if (farmingPollInterval) clearInterval(farmingPollInterval);
     farmingPollInterval = setInterval(() => {
-        fetch('/api/farming_status')
+        fetch(getApiUrl('/api/farming_status'))
         .then(res => res.json())
         .then(data => {
             updateFarmingUI(data);
@@ -1857,7 +1870,7 @@ function scanWebFarmUploads() {
     const select = document.getElementById("web-farm-upload-video");
     if (!select) return;
     
-    fetch('/api/uploads')
+    fetch(getApiUrl('/api/uploads'))
     .then(res => res.json())
     .then(data => {
         select.innerHTML = '<option value="">-- NO VIDEO UPLOAD --</option>';
@@ -1888,7 +1901,7 @@ function scanWebFarmProfiles() {
     // Scan uploads to populate video dropdown
     scanWebFarmUploads();
     
-    fetch('/api/web_farming_status')
+    fetch(getApiUrl('/api/web_farming_status'))
     .then(res => res.json())
     .then(data => {
         if (select) {
@@ -1973,7 +1986,7 @@ function startWebFarming() {
     if (uploadVideo) logToTerminal(`[WEB FARM] Video to upload: ${uploadVideo}`);
     playSynthSound('success');
     
-    fetch('/api/action', {
+    fetch(getApiUrl('/api/action'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -2009,7 +2022,7 @@ function stopWebFarming() {
     logToTerminal("[WEB FARM] Sending termination signal to web farming bot...");
     playSynthSound('delete');
     
-    fetch('/api/action', {
+    fetch(getApiUrl('/api/action'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'stop_web_farming' })
@@ -2028,7 +2041,7 @@ function stopWebFarming() {
 function startWebFarmingLogPolling() {
     if (webFarmingPollInterval) clearInterval(webFarmingPollInterval);
     webFarmingPollInterval = setInterval(() => {
-        fetch('/api/web_farming_status')
+        fetch(getApiUrl('/api/web_farming_status'))
         .then(res => res.json())
         .then(data => {
             updateWebFarmingUI(data);
