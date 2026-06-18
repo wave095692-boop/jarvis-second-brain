@@ -1056,12 +1056,12 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                         log_message = f"Failed to stop farming bot: {ex}"
                         
                 elif action == 'start_web_farming':
+                    profile = req.get('profile', 'profile_1')
                     try:
                         subprocess.run(['pkill', '-f', 'web_farming_bot.py'])
+                        subprocess.run(['pkill', '-9', '-f', f'profiles/{profile}'])
                     except Exception:
                         pass
-                    
-                    profile = req.get('profile', 'profile_1')
                     loops = req.get('loops', 10)
                     like_prob = req.get('like_prob', 0.15)
                     comment_prob = req.get('comment_prob', 0.05)
@@ -1120,6 +1120,11 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     profile_dir = os.path.join(DIRECTORY, "profiles", profile)
                     if not os.path.exists(profile_dir):
                         os.makedirs(profile_dir)
+                    
+                    try:
+                        subprocess.run(['pkill', '-9', '-f', f'profiles/{profile}'])
+                    except Exception:
+                        pass
                     
                     cmd = [
                         "open", "-n", "-a", "Google Chrome", "--args",
