@@ -1974,12 +1974,14 @@ function startWebFarming() {
     const headedInput = document.getElementById("web-farm-headed");
     const loginModeInput = document.getElementById("web-farm-login-mode");
     const commentStyleSelect = document.getElementById("web-farm-comment-style");
+    const customCommentsTextarea = document.getElementById("web-farm-custom-comments");
     
     const profile = profileSelect ? profileSelect.value : "profile_1";
     const loops = loopsInput ? parseInt(loopsInput.value) || 10 : 10;
     const likeProb = likeProbInput ? parseFloat(likeProbInput.value) || 0.15 : 0.15;
     const commentProb = commentProbInput ? parseFloat(commentProbInput.value) || 0.05 : 0.05;
     const commentStyle = commentStyleSelect ? commentStyleSelect.value : "mixed";
+    const customComments = customCommentsTextarea ? customCommentsTextarea.value : "";
     const followProb = followProbInput ? parseFloat(followProbInput.value) || 0.0 : 0.0;
     const targetUser = targetUserInput ? targetUserInput.value.trim() : "";
     const uploadVideo = uploadVideoSelect ? uploadVideoSelect.value : "";
@@ -2003,6 +2005,7 @@ function startWebFarming() {
             like_prob: likeProb,
             comment_prob: commentProb,
             comment_style: commentStyle,
+            custom_comments: customComments,
             follow_prob: followProb,
             target_user: targetUser,
             upload_video: uploadVideo,
@@ -2174,17 +2177,83 @@ const COMMENT_PREVIEWS = {
 function initCommentStylePreview() {
     const styleSelect = document.getElementById("web-farm-comment-style");
     const previewDiv = document.getElementById("comment-style-preview");
-    if (!styleSelect || !previewDiv) return;
+    const profileSelect = document.getElementById("web-farm-profile-select");
+    const customCommentsTextarea = document.getElementById("web-farm-custom-comments");
+    const saveCommentsBtn = document.getElementById("web-farm-save-comments-btn");
     
-    function updatePreview() {
-        const val = styleSelect.value;
-        const list = COMMENT_PREVIEWS[val] || [];
-        const previewText = list.slice(0, 5).join(" | ");
-        previewDiv.innerHTML = `<strong>ตัวอย่างข้อความ (${list.length} แบบ):</strong><br><span style="color:var(--yellow);">${previewText}</span> และอื่น ๆ...`;
+    if (styleSelect && previewDiv) {
+        function updatePreview() {
+            const val = styleSelect.value;
+            const list = COMMENT_PREVIEWS[val] || [];
+            const previewText = list.slice(0, 5).join(" | ");
+            previewDiv.innerHTML = `<strong>ตัวอย่างข้อความ (${list.length} แบบ):</strong><br><span style="color:var(--yellow);">${previewText}</span> และอื่น ๆ...`;
+        }
+        styleSelect.addEventListener("change", updatePreview);
+        updatePreview();
     }
     
-    styleSelect.addEventListener("change", updatePreview);
-    updatePreview();
+    // Function to load custom comments for the selected profile
+    function loadProfileComments() {
+        if (!profileSelect || !customCommentsTextarea) return;
+        const profile = profileSelect.value || "profile_1";
+        fetch(getApiUrl(`/api/get_comments?profile=${profile}`))
+        .then(res => res.json())
+        .then(data => {
+            customCommentsTextarea.value = data.comments || "";
+        })
+        .catch(err => {
+            console.error("Failed to load comments for profile", profile, err);
+        });
+    }
+    
+    if (profileSelect) {
+        profileSelect.addEventListener("change", loadProfileComments);
+        // Load initial comments after a short delay to let profile dropdown populate
+        setTimeout(loadProfileComments, 1000);
+    }
+    
+    // Save comments action
+    if (saveCommentsBtn && profileSelect && customCommentsTextarea) {
+        saveCommentsBtn.addEventListener("click", () => {
+            const profile = profileSelect.value || "profile_1";
+            const customComments = customCommentsTextarea.value;
+            
+            saveCommentsBtn.innerHTML = `<i data-lucide="loader" style="width: 10px; height: 10px; margin-right: 4px; animation: spin 1s linear infinite;"></i> กำลังบันทึก...`;
+            if (window.lucide) lucide.createIcons();
+            
+            fetch(getApiUrl('/api/action'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'save_comments',
+                    profile: profile,
+                    custom_comments: customComments
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    saveCommentsBtn.innerHTML = `<i data-lucide="check" style="width: 10px; height: 10px; margin-right: 4px;"></i> บันทึกสำเร็จ!`;
+                    saveCommentsBtn.className = "cyber-btn cyber-btn-yellow";
+                    playSynthSound('success');
+                    if (window.lucide) lucide.createIcons();
+                    setTimeout(() => {
+                        saveCommentsBtn.innerHTML = `<i data-lucide="save" style="width: 10px; height: 10px; margin-right: 4px;"></i> บันทึกข้อความคอมเมนต์`;
+                        if (window.lucide) lucide.createIcons();
+                    }, 2000);
+                } else {
+                    alert(`ล้มเหลวในการบันทึกคอมเมนต์: ${data.error}`);
+                    saveCommentsBtn.innerHTML = `<i data-lucide="save" style="width: 10px; height: 10px; margin-right: 4px;"></i> บันทึกข้อความคอมเมนต์`;
+                    if (window.lucide) lucide.createIcons();
+                }
+            })
+            .catch(err => {
+                alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
+                saveCommentsBtn.innerHTML = `<i data-lucide="save" style="width: 10px; height: 10px; margin-right: 4px;"></i> บันทึกข้อความคอมเมนต์`;
+                if (window.lucide) lucide.createIcons();
+            });
+        });
+    }
 }
 
 

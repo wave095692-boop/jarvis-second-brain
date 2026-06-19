@@ -544,6 +544,25 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header('Content-Type', 'application/json; charset=utf-8')
             self.end_headers()
             self.wfile.write(json.dumps(response_data, ensure_ascii=False).encode('utf-8'))
+        elif path == '/api/get_comments':
+            profile = query_params.get('profile', ['profile_1'])[0]
+            import re
+            profile = re.sub(r'[^a-zA-Z0-9_-]', '', profile)
+            comments_file = os.path.join(DIRECTORY, "profiles", profile, "custom_comments.txt")
+            content = ""
+            if os.path.exists(comments_file):
+                try:
+                    with open(comments_file, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                except Exception:
+                    pass
+            response_data = {
+                'comments': content
+            }
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.end_headers()
+            self.wfile.write(json.dumps(response_data, ensure_ascii=False).encode('utf-8'))
         else:
             super().do_GET()
 
@@ -1073,6 +1092,25 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     query = req.get('query', '')
                     headed = req.get('headed', True)
                     login_mode = req.get('login_mode', False)
+                    custom_comments = req.get('custom_comments', '')
+                    
+                    profile_dir = os.path.join(DIRECTORY, "profiles", profile)
+                    if not os.path.exists(profile_dir):
+                        os.makedirs(profile_dir)
+                    comments_file = os.path.join(profile_dir, "custom_comments.txt")
+                    
+                    if custom_comments.strip():
+                        try:
+                            with open(comments_file, 'w', encoding='utf-8') as f:
+                                f.write(custom_comments)
+                        except Exception:
+                            pass
+                    else:
+                        if os.path.exists(comments_file):
+                            try:
+                                os.remove(comments_file)
+                            except Exception:
+                                pass
                     
                     log_file = os.path.join(DIRECTORY, "web_farming_bot.log")
                     with open(log_file, 'w', encoding='utf-8') as lf:
@@ -1088,6 +1126,8 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     cmd += ['--like-prob', str(like_prob)]
                     cmd += ['--comment-prob', str(comment_prob)]
                     cmd += ['--comment-style', comment_style]
+                    if os.path.exists(comments_file):
+                        cmd += ['--custom-comments-file', comments_file]
                     cmd += ['--follow-prob', str(follow_prob)]
                     cmd += ['--headed', 'true' if headed else 'false']
                     if login_mode:
@@ -1163,6 +1203,20 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                         self.end_headers()
                         self.wfile.write(json.dumps({'error': f"Failed to create profile: {e}"}).encode('utf-8'))
                         return
+                
+                elif action == 'save_comments':
+                    profile = req.get('profile', 'profile_1')
+                    custom_comments = req.get('custom_comments', '')
+                    profile_dir = os.path.join(DIRECTORY, "profiles", profile)
+                    if not os.path.exists(profile_dir):
+                        os.makedirs(profile_dir)
+                    comments_file = os.path.join(profile_dir, "custom_comments.txt")
+                    try:
+                        with open(comments_file, 'w', encoding='utf-8') as f:
+                            f.write(custom_comments)
+                        log_message = "Comments saved successfully."
+                    except Exception as e:
+                        log_message = f"Failed to save comments: {e}"
                 
                 else:
                     self.send_response(400)

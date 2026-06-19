@@ -95,6 +95,7 @@ def main():
     parser.add_argument("--like-prob", type=float, default=0.15, help="Probability of liking (0.0 - 1.0)")
     parser.add_argument("--comment-prob", type=float, default=0.05, help="Probability of commenting (0.0 - 1.0)")
     parser.add_argument("--comment-style", type=str, default="mixed", choices=["text", "emoji", "mixed"], help="Style of comments to post")
+    parser.add_argument("--custom-comments-file", type=str, default="", help="Path to file containing custom comments (one per line)")
     parser.add_argument("--follow-prob", type=float, default=0.0, help="Probability of following creators in feed (0.0 - 1.0)")
     parser.add_argument("--target-user", type=str, default="", help="TikTok username to search/follow at startup")
     parser.add_argument("--upload-video", type=str, default="", help="Path to local video file to upload")
@@ -107,6 +108,16 @@ def main():
     
     headed_mode = (args.headed.lower() == "true") or args.login_mode
     profile_name = args.profile
+    
+    # Load custom comments pool if file is provided
+    custom_comments_pool = []
+    if args.custom_comments_file and os.path.exists(args.custom_comments_file):
+        try:
+            with open(args.custom_comments_file, 'r', encoding='utf-8') as f:
+                custom_comments_pool = [line.strip() for line in f if line.strip()]
+            print(f"✅ Loaded {len(custom_comments_pool)} custom comments from {args.custom_comments_file}")
+        except Exception as ce_err:
+            print(f"⚠️ Failed to load custom comments: {ce_err}")
     
     # Path setup
     current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -444,13 +455,19 @@ def main():
                 
                 # Comment probability
                 if random.random() < args.comment_prob:
-                    if args.comment_style == "text":
+                    if custom_comments_pool:
+                        comment_text = random.choice(custom_comments_pool)
+                        style_info = "custom"
+                    elif args.comment_style == "text":
                         comment_text = random.choice(TEXT_COMMENTS)
+                        style_info = args.comment_style
                     elif args.comment_style == "emoji":
                         comment_text = random.choice(EMOJI_COMMENTS)
+                        style_info = args.comment_style
                     else:
                         comment_text = random.choice(MIXED_COMMENTS)
-                    print(f"💬 Randomly commenting ({args.comment_style}): \"{comment_text}\"")
+                        style_info = args.comment_style
+                    print(f"💬 Randomly commenting ({style_info}): \"{comment_text}\"")
                     try:
                         comment_input_selectors = [
                             "div[data-e2e='comment-input']",

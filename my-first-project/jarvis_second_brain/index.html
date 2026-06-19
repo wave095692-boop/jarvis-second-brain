@@ -665,6 +665,18 @@
                                              <!-- Will be updated dynamically by app.js -->
                                          </div>
                                          
+                                         <div class="cyber-input-group" style="margin-top: 8px;">
+                                             <label class="cyber-input-label" for="web-farm-custom-comments">
+                                                 <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i> ข้อความคอมเมนต์กำหนดเอง (กำหนดได้บรรทัดละ 1 ข้อความ)
+                                             </label>
+                                             <textarea id="web-farm-custom-comments" class="cyber-input" style="height: 70px; resize: vertical; font-family: monospace; font-size: 0.8rem;" placeholder="เช่น:&#10;สุดยอดเลยครับบอส 👍&#10;🔥🔥🔥&#10;เสื้อสวยมากก (เว้นว่างไว้หากต้องการใช้ชุดข้อความมาตรฐานด้านบน)"></textarea>
+                                         </div>
+                                         <div style="margin-top: -4px; margin-bottom: 12px; display: flex; justify-content: flex-end;">
+                                             <button type="button" id="web-farm-save-comments-btn" class="cyber-btn cyber-btn-yellow" style="font-size: 0.72rem; padding: 4px 10px; min-width: auto; height: auto; border-radius: 3px;">
+                                                 <i data-lucide="save" style="width: 10px; height: 10px; margin-right: 4px;"></i> บันทึกข้อความคอมเมนต์
+                                             </button>
+                                         </div>
+                                         
                                          <div class="cyber-input-group">
                                              <label class="cyber-input-label" for="web-farm-follow-prob"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> โอกาสกดติดตาม (FOLLOW PROBABILITY - 0.0 ถึง 1.0)</label>
                                              <input type="number" id="web-farm-follow-prob" value="0.0" step="0.05" min="0.0" max="1.0" class="cyber-input">
@@ -810,6 +822,6 @@
     </div>
 
     <!-- Script file -->
-    <script src="app.js?v=4.10"></script>
+    <script src="app.js?v=4.11"></script>
 </body>
 </html>
