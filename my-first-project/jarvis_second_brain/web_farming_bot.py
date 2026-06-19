@@ -30,10 +30,11 @@ def main():
     parser.add_argument("--upload-caption", type=str, default="", help="Caption for uploaded video")
     parser.add_argument("--query", type=str, default="", help="Search query keyword")
     parser.add_argument("--headed", type=str, default="true", help="Run browser in headed mode ('true' or 'false')")
+    parser.add_argument("--login-mode", action="store_true", help="Wait for user to login manually first before farming")
 
     args = parser.parse_args()
     
-    headed_mode = args.headed.lower() == "true"
+    headed_mode = (args.headed.lower() == "true") or args.login_mode
     profile_name = args.profile
     
     # Path setup
@@ -67,7 +68,6 @@ def main():
                 viewport={"width": 1280, "height": 800},
                 args=[
                     "--disable-blink-features=AutomationControlled",
-                    "--use-fake-ui-for-media-stream",
                     "--mute-audio"
                 ]
             )
@@ -82,7 +82,6 @@ def main():
                     viewport={"width": 1280, "height": 800},
                     args=[
                         "--disable-blink-features=AutomationControlled",
-                        "--use-fake-ui-for-media-stream",
                         "--mute-audio"
                     ]
                 )
@@ -91,6 +90,13 @@ def main():
                 sys.exit(1)
             
         page = context.pages[0] if context.pages else context.new_page()
+        
+        # Grant microphone permissions for TikTok to allow real voice typing
+        try:
+            context.grant_permissions(["microphone"], origin="https://www.tiktok.com")
+            print("✅ Granted microphone permissions for TikTok.")
+        except Exception as pe:
+            print(f"⚠️ Warning: Failed to grant microphone permissions: {pe}")
         
         # Override navigator.webdriver to bypass basic bot checks
         page.add_init_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
@@ -104,6 +110,51 @@ def main():
         except Exception as e:
             print(f"⚠️ Warning: Navigation timeout or networkidle issue: {e}")
             # Continue anyway
+
+        # Wait for login if login-mode is enabled
+        if args.login_mode:
+            print("\n⏳ [LOGIN MODE] Please log in manually in the opened browser window (QR code, phone, or email)...")
+            start_time = time.time()
+            login_timeout = 600  # 10 minutes
+            logged_in = False
+            last_ping_time = start_time
+            
+            while time.time() - start_time < login_timeout:
+                try:
+                    # Look for profile selectors and login buttons specifically
+                    profile_visible = page.locator('[data-e2e="profile-icon"]').first.is_visible()
+                    avatar_visible = page.locator('[data-e2e="avatar-icon"]').first.is_visible()
+                    inbox_visible = page.locator('[data-e2e="notification-icon"]').first.is_visible()
+                    login_button_visible = page.locator('[data-e2e="nav-login-button"]').first.is_visible()
+                    
+                    # Logged in if profile/avatar/inbox is visible and login button is gone
+                    if (profile_visible or avatar_visible or inbox_visible) and not login_button_visible:
+                        print("🎉 [LOGIN SUCCESS] Login detected successfully!")
+                        logged_in = True
+                        break
+                except Exception:
+                    pass
+                
+                # Print a reminder every 10 seconds
+                now = time.time()
+                if now - last_ping_time >= 10:
+                    elapsed = int(now - start_time)
+                    print(f"⏳ Waiting for manual login... ({elapsed}s elapsed)")
+                    last_ping_time = now
+                
+                time.sleep(2)
+                
+            if not logged_in:
+                print("❌ [LOGIN TIMEOUT] Login timeout of 10 minutes reached.")
+            else:
+                # Save session storage state
+                try:
+                    state_path = os.path.join(user_data_dir, "storage_state.json")
+                    context.storage_state(path=state_path)
+                    print(f"✅ Saved session storage state to {state_path}")
+                except Exception as sse:
+                    print(f"⚠️ Warning: Failed to save storage state: {sse}")
+                time.sleep(3)
 
         # Follow target user if specified
         if args.target_user:
@@ -289,10 +340,32 @@ def main():
                 if random.random() < args.like_prob:
                     print("💖 Randomly liking video...")
                     try:
-                        # Try double clicking the middle of the page (in the video container)
-                        # This works well to trigger like on TikTok web
-                        page.mouse.dblclick(640, 400)
-                        print("✅ Double clicked video container to like.")
+                        # Try to find and click the like button/icon first
+                        like_selectors = [
+                            'button[data-e2e="like-icon"]',
+                            '[data-e2e="like-icon"]',
+                            'button[data-e2e="like-button"]',
+                            'span[class*="LikeIcon"]',
+                            'svg[class*="Like"]'
+                        ]
+                        like_clicked = False
+                        for sel in like_selectors:
+                            elements = page.locator(sel)
+                            count = elements.count()
+                            for i in range(count):
+                                el = elements.nth(i)
+                                if el.is_visible() and el.is_enabled():
+                                    el.click()
+                                    print(f"✅ Clicked like button using selector: {sel}")
+                                    like_clicked = True
+                                    break
+                            if like_clicked:
+                                break
+                        
+                        if not like_clicked:
+                            # Fallback: Double click the middle of the page (in the video container)
+                            page.mouse.dblclick(640, 400)
+                            print("✅ Double clicked video container to like (fallback).")
                         time.sleep(1.5)
                     except Exception as le:
                         print(f"⚠️ Like failed: {le}")
