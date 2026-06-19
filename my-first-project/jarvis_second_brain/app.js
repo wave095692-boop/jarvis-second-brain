@@ -1970,11 +1970,13 @@ function startWebFarming() {
     const queryInput = document.getElementById("web-farm-query");
     const headedInput = document.getElementById("web-farm-headed");
     const loginModeInput = document.getElementById("web-farm-login-mode");
+    const commentStyleSelect = document.getElementById("web-farm-comment-style");
     
     const profile = profileSelect ? profileSelect.value : "profile_1";
     const loops = loopsInput ? parseInt(loopsInput.value) || 10 : 10;
     const likeProb = likeProbInput ? parseFloat(likeProbInput.value) || 0.15 : 0.15;
     const commentProb = commentProbInput ? parseFloat(commentProbInput.value) || 0.05 : 0.05;
+    const commentStyle = commentStyleSelect ? commentStyleSelect.value : "mixed";
     const followProb = followProbInput ? parseFloat(followProbInput.value) || 0.0 : 0.0;
     const targetUser = targetUserInput ? targetUserInput.value.trim() : "";
     const uploadVideo = uploadVideoSelect ? uploadVideoSelect.value : "";
@@ -1983,7 +1985,7 @@ function startWebFarming() {
     const headed = headedInput ? headedInput.checked : true;
     const loginMode = loginModeInput ? loginModeInput.checked : false;
     
-    logToTerminal(`[WEB FARM] Initiating Playwright bot for profile ${profile} (Loops: ${loops}, Like Prob: ${likeProb}, Comment Prob: ${commentProb}, Follow Prob: ${followProb}, Headed: ${headed}, Login Mode: ${loginMode})...`);
+    logToTerminal(`[WEB FARM] Initiating Playwright bot for profile ${profile} (Loops: ${loops}, Like Prob: ${likeProb}, Comment Prob: ${commentProb}, Comment Style: ${commentStyle}, Follow Prob: ${followProb}, Headed: ${headed}, Login Mode: ${loginMode})...`);
     if (targetUser) logToTerminal(`[WEB FARM] Target user to follow: ${targetUser}`);
     if (uploadVideo) logToTerminal(`[WEB FARM] Video to upload: ${uploadVideo}`);
     playSynthSound('success');
@@ -1997,6 +1999,7 @@ function startWebFarming() {
             loops: loops,
             like_prob: likeProb,
             comment_prob: commentProb,
+            comment_style: commentStyle,
             follow_prob: followProb,
             target_user: targetUser,
             upload_video: uploadVideo,

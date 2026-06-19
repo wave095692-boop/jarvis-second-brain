@@ -654,6 +654,15 @@
                                          </div>
                                          
                                          <div class="cyber-input-group">
+                                             <label class="cyber-input-label" for="web-farm-comment-style"><i data-lucide="smile" style="width: 12px; height: 12px;"></i> รูปแบบคอมเมนต์ (COMMENT STYLE)</label>
+                                             <select id="web-farm-comment-style" class="cyber-input">
+                                                 <option value="mixed" selected>Mixed (ข้อความและอีโมจิ)</option>
+                                                 <option value="text">Text Only (ข้อความอย่างเดียว)</option>
+                                                 <option value="emoji">Emoji Only (อีโมจิอย่างเดียว)</option>
+                                             </select>
+                                         </div>
+                                         
+                                         <div class="cyber-input-group">
                                              <label class="cyber-input-label" for="web-farm-follow-prob"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> โอกาสกดติดตาม (FOLLOW PROBABILITY - 0.0 ถึง 1.0)</label>
                                              <input type="number" id="web-farm-follow-prob" value="0.0" step="0.05" min="0.0" max="1.0" class="cyber-input">
                                          </div>
@@ -798,6 +807,6 @@
     </div>
 
     <!-- Script file -->
-    <script src="app.js?v=4.8"></script>
+    <script src="app.js?v=4.9"></script>
 </body>
 </html>

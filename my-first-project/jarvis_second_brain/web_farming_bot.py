@@ -5,8 +5,8 @@ import os
 import argparse
 from playwright.sync_api import sync_playwright
 
-# List of random positive comments (Thai and English)
-COMMENTS = [
+# List of text-only comments
+TEXT_COMMENTS = [
     "สุดยอดเลยครับบอส",
     "ดีงามมากครับชอบ ๆ",
     "เท่สุด ๆ ไปเลย",
@@ -14,8 +14,30 @@ COMMENTS = [
     "สุดจัดเลยครับ",
     "Wow! Beautiful",
     "Great content!",
-    "Amazing video 👍",
+    "Amazing video",
     "ชอบมากครับทำต่อเรื่อยๆ นะครับ"
+]
+
+# List of emoji-only comments
+EMOJI_COMMENTS = [
+    "👍", "❤️", "🔥", "🥰", "👏", "💯", "🙌", "🤩", "✨", "🎉",
+    "👍👍", "🔥🔥🔥", "🥰❤️", "💯💯", "👏👏👏", "🤩✨", "💖💖", "😂🤣", "😎👍",
+    "🙌🔥", "👍🥰", "💯🔥👍", "✨🤩✨", "🎉🥳", "❤️🔥🙌", "🥺😍", "😎🍿"
+]
+
+# List of mixed comments (text + emojis)
+MIXED_COMMENTS = [
+    "สุดยอดเลยครับบอส 👍🔥",
+    "ดีงามมากครับชอบ ๆ 🥰",
+    "เท่สุด ๆ ไปเลย 😎👍",
+    "คอนเทนต์เจ๋งมากครับ 💯✨",
+    "สุดจัดเลยครับ 🔥👏",
+    "Wow! Beautiful 💖",
+    "Great content! 🙌",
+    "Amazing video 👍🤩",
+    "ชอบมากครับทำต่อเรื่อยๆ นะครับ 🎉",
+    "ชอบคอนเทนต์นี้จัง 🥰❤️",
+    "ติดตามเลยครับบอส 💯🙌"
 ]
 
 def scroll_to_next_video(page):
@@ -72,6 +94,7 @@ def main():
     parser.add_argument("--loops", type=int, default=10, help="Number of scrolls/videos to watch")
     parser.add_argument("--like-prob", type=float, default=0.15, help="Probability of liking (0.0 - 1.0)")
     parser.add_argument("--comment-prob", type=float, default=0.05, help="Probability of commenting (0.0 - 1.0)")
+    parser.add_argument("--comment-style", type=str, default="mixed", choices=["text", "emoji", "mixed"], help="Style of comments to post")
     parser.add_argument("--follow-prob", type=float, default=0.0, help="Probability of following creators in feed (0.0 - 1.0)")
     parser.add_argument("--target-user", type=str, default="", help="TikTok username to search/follow at startup")
     parser.add_argument("--upload-video", type=str, default="", help="Path to local video file to upload")
@@ -421,8 +444,13 @@ def main():
                 
                 # Comment probability
                 if random.random() < args.comment_prob:
-                    comment_text = random.choice(COMMENTS)
-                    print(f"💬 Randomly commenting: \"{comment_text}\"")
+                    if args.comment_style == "text":
+                        comment_text = random.choice(TEXT_COMMENTS)
+                    elif args.comment_style == "emoji":
+                        comment_text = random.choice(EMOJI_COMMENTS)
+                    else:
+                        comment_text = random.choice(MIXED_COMMENTS)
+                    print(f"💬 Randomly commenting ({args.comment_style}): \"{comment_text}\"")
                     try:
                         comment_input_selectors = [
                             "div[data-e2e='comment-input']",

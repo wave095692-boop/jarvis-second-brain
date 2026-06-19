@@ -1065,6 +1065,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     loops = req.get('loops', 10)
                     like_prob = req.get('like_prob', 0.15)
                     comment_prob = req.get('comment_prob', 0.05)
+                    comment_style = req.get('comment_style', 'mixed')
                     follow_prob = req.get('follow_prob', 0.0)
                     target_user = req.get('target_user', '')
                     upload_video = req.get('upload_video', '')
@@ -1086,6 +1087,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     cmd += ['--loops', str(loops)]
                     cmd += ['--like-prob', str(like_prob)]
                     cmd += ['--comment-prob', str(comment_prob)]
+                    cmd += ['--comment-style', comment_style]
                     cmd += ['--follow-prob', str(follow_prob)]
                     cmd += ['--headed', 'true' if headed else 'false']
                     if login_mode:
