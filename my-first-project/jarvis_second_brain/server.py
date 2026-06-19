@@ -1056,12 +1056,12 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                         log_message = f"Failed to stop farming bot: {ex}"
                         
                 elif action == 'start_web_farming':
+                    profile = req.get('profile', 'profile_1')
                     try:
                         subprocess.run(['pkill', '-f', 'web_farming_bot.py'])
+                        subprocess.run(['pkill', '-9', '-f', f'profiles/{profile}'])
                     except Exception:
                         pass
-                    
-                    profile = req.get('profile', 'profile_1')
                     loops = req.get('loops', 10)
                     like_prob = req.get('like_prob', 0.15)
                     comment_prob = req.get('comment_prob', 0.05)
@@ -1071,6 +1071,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     upload_caption = req.get('upload_caption', '')
                     query = req.get('query', '')
                     headed = req.get('headed', True)
+                    login_mode = req.get('login_mode', False)
                     
                     log_file = os.path.join(DIRECTORY, "web_farming_bot.log")
                     with open(log_file, 'w', encoding='utf-8') as lf:
@@ -1087,6 +1088,8 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     cmd += ['--comment-prob', str(comment_prob)]
                     cmd += ['--follow-prob', str(follow_prob)]
                     cmd += ['--headed', 'true' if headed else 'false']
+                    if login_mode:
+                        cmd += ['--login-mode']
                     if target_user:
                         cmd += ['--target-user', target_user]
                     if upload_video:
@@ -1111,6 +1114,53 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                         log_message = "Web farming bot stopped successfully."
                     except Exception as ex:
                         log_message = f"Failed to stop web farming bot: {ex}"
+                
+                elif action == 'open_login_chrome':
+                    profile = req.get('profile', 'profile_1')
+                    profile_dir = os.path.join(DIRECTORY, "profiles", profile)
+                    if not os.path.exists(profile_dir):
+                        os.makedirs(profile_dir)
+                    
+                    try:
+                        subprocess.run(['pkill', '-9', '-f', f'profiles/{profile}'])
+                    except Exception:
+                        pass
+                    
+                    cmd = [
+                        "open", "-n", "-a", "Google Chrome", "--args",
+                        f"--user-data-dir={profile_dir}",
+                        "--password-store=basic",
+                        "--use-mock-keychain",
+                        "--disable-blink-features=AutomationControlled",
+                        "https://www.tiktok.com/login"
+                    ]
+                    try:
+                        subprocess.Popen(cmd)
+                        log_message = f"Opened Google Chrome manually for profile {profile}."
+                    except Exception as e:
+                        log_message = f"Failed to open Google Chrome: {e}"
+                elif action == 'create_profile':
+                    name = req.get('name', '').strip()
+                    import re
+                    name = re.sub(r'[^a-zA-Z0-9_-]', '', name)
+                    if not name:
+                        self.send_response(400)
+                        self.end_headers()
+                        self.wfile.write(json.dumps({'error': 'Invalid profile name'}).encode('utf-8'))
+                        return
+                    
+                    profile_dir = os.path.join(DIRECTORY, "profiles", name)
+                    try:
+                        if os.path.exists(profile_dir):
+                            log_message = f"Profile '{name}' already exists."
+                        else:
+                            os.makedirs(profile_dir)
+                            log_message = f"Profile '{name}' created successfully."
+                    except Exception as e:
+                        self.send_response(500)
+                        self.end_headers()
+                        self.wfile.write(json.dumps({'error': f"Failed to create profile: {e}"}).encode('utf-8'))
+                        return
                 
                 else:
                     self.send_response(400)

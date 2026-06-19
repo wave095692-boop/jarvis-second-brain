@@ -68,7 +68,7 @@ def main():
                 viewport={"width": 1280, "height": 800},
                 args=[
                     "--disable-blink-features=AutomationControlled",
-                    "--mute-audio"
+                    "--use-fake-ui-for-media-stream"
                 ]
             )
             print("Successfully launched with Google Chrome channel.")
@@ -82,7 +82,7 @@ def main():
                     viewport={"width": 1280, "height": 800},
                     args=[
                         "--disable-blink-features=AutomationControlled",
-                        "--mute-audio"
+                        "--use-fake-ui-for-media-stream"
                     ]
                 )
             except Exception as e2:
@@ -94,6 +94,7 @@ def main():
         # Grant microphone permissions for TikTok to allow real voice typing
         try:
             context.grant_permissions(["microphone"], origin="https://www.tiktok.com")
+            context.grant_permissions(["microphone"], origin="https://tiktok.com")
             print("✅ Granted microphone permissions for TikTok.")
         except Exception as pe:
             print(f"⚠️ Warning: Failed to grant microphone permissions: {pe}")
