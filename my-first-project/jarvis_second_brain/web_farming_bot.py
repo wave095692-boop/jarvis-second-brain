@@ -18,6 +18,54 @@ COMMENTS = [
     "ชอบมากครับทำต่อเรื่อยๆ นะครับ"
 ]
 
+def scroll_to_next_video(page):
+    print("👇 Attempting to scroll to the next video...")
+    try:
+        # Blur any active elements to release keyboard focus (e.g. comment input boxes)
+        page.evaluate("document.activeElement && document.activeElement.blur()")
+        time.sleep(0.5)
+        
+        # Check if theater mode or video page (URL contains '/video/')
+        if "/video/" in page.url:
+            print("🎬 Theater/Player mode detected.")
+            # Try to click the next video button
+            next_button_selectors = [
+                'button[data-e2e="arrow-right"]',
+                '[data-e2e="arrow-right"]',
+                'button[aria-label="Next video"]',
+                'button[aria-label="วิดีโอถัดไป"]',
+                '.arrow-right',
+                'button:has(svg[class*="ArrowRight"])'
+            ]
+            clicked = False
+            for selector in next_button_selectors:
+                try:
+                    btn = page.locator(selector).first
+                    if btn.is_visible() and btn.is_enabled():
+                        btn.click()
+                        print(f"✅ Clicked next video button: {selector}")
+                        clicked = True
+                        break
+                except Exception:
+                    pass
+            
+            if not clicked:
+                # Fallback to pressing ArrowDown keyboard key
+                page.keyboard.press("ArrowDown")
+                print("✅ Pressed ArrowDown key in theater mode.")
+        else:
+            print("🏠 Feed mode detected.")
+            # Scroll down using mouse wheel
+            page.mouse.move(640, 400) # Move mouse to the center of the viewport
+            page.mouse.wheel(0, 750) # Scroll down by 750 pixels
+            print("✅ Scrolled page down via mouse wheel.")
+            
+            # Also press ArrowDown as a backup
+            time.sleep(0.5)
+            page.keyboard.press("ArrowDown")
+    except Exception as e:
+        print(f"⚠️ Error during scrolling: {e}")
+
 def main():
     parser = argparse.ArgumentParser(description="TikTok Web Farming Bot by Jarvis")
     parser.add_argument("--profile", type=str, default="profile_1", help="Name of the browser profile")
@@ -452,8 +500,7 @@ def main():
                         print(f"⚠️ Follow failed: {fe}")
                 
                 # Scroll to next video
-                print("👇 Pressing ArrowDown to scroll to the next video...")
-                page.keyboard.press("ArrowDown")
+                scroll_to_next_video(page)
                 
                 # Random load delay
                 time.sleep(random.uniform(1.5, 4.0))
