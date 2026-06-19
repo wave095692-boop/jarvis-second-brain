@@ -46,6 +46,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const navYtBtn = document.getElementById('nav-btn-youtube');
     if (openYtBtn) openYtBtn.addEventListener('click', handleYtClick);
     if (navYtBtn) navYtBtn.addEventListener('click', handleYtClick);
+    
+    // Initialize comment style live preview
+    initCommentStylePreview();
 });
 
 
@@ -2134,6 +2137,54 @@ function clearWebFarmLogs() {
         el.textContent = "Console ready.\n";
     }
     playSynthSound('delete');
+}
+
+const COMMENT_PREVIEWS = {
+    text: [
+        "สุดยอดเลยครับบอส",
+        "ดีงามมากครับชอบ ๆ",
+        "เท่สุด ๆ ไปเลย",
+        "คอนเทนต์เจ๋งมากครับ",
+        "สุดจัดเลยครับ",
+        "Wow! Beautiful",
+        "Great content!",
+        "Amazing video",
+        "ชอบมากครับทำต่อเรื่อยๆ นะครับ"
+    ],
+    emoji: [
+        "👍", "❤️", "🔥", "🥰", "👏", "💯", "🙌", "🤩", "✨", "🎉",
+        "👍👍", "🔥🔥🔥", "🥰❤️", "💯💯", "👏👏👏", "🤩✨", "💖💖", "😂🤣", "😎👍",
+        "🙌🔥", "👍🥰", "💯🔥👍", "✨🤩✨", "🎉🥳", "❤️🔥🙌", "🥺😍", "😎🍿"
+    ],
+    mixed: [
+        "สุดยอดเลยครับบอส 👍🔥",
+        "ดีงามมากครับชอบ ๆ 🥰",
+        "เท่สุด ๆ ไปเลย 😎👍",
+        "คอนเทนต์เจ๋งมากครับ 💯✨",
+        "สุดจัดเลยครับ 🔥👏",
+        "Wow! Beautiful 💖",
+        "Great content! 🙌",
+        "Amazing video 👍🤩",
+        "ชอบมากครับทำต่อเรื่อยๆ นะครับ 🎉",
+        "ชอบคอนเทนต์นี้จัง 🥰❤️",
+        "ติดตามเลยครับบอส 💯🙌"
+    ]
+};
+
+function initCommentStylePreview() {
+    const styleSelect = document.getElementById("web-farm-comment-style");
+    const previewDiv = document.getElementById("comment-style-preview");
+    if (!styleSelect || !previewDiv) return;
+    
+    function updatePreview() {
+        const val = styleSelect.value;
+        const list = COMMENT_PREVIEWS[val] || [];
+        const previewText = list.slice(0, 5).join(" | ");
+        previewDiv.innerHTML = `<strong>ตัวอย่างข้อความ (${list.length} แบบ):</strong><br><span style="color:var(--yellow);">${previewText}</span> และอื่น ๆ...`;
+    }
+    
+    styleSelect.addEventListener("change", updatePreview);
+    updatePreview();
 }
 
 
