@@ -1,0 +1,7 @@
+2026/05/27-21:41:40.234 20de Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_ai.google.dev_0.indexeddb.leveldb/MANIFEST-000001
+2026/05/27-21:41:40.234 20de Recovering log #3
+2026/05/27-21:41:40.234 20de Reusing old log /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_ai.google.dev_0.indexeddb.leveldb/000003.log 
+2026/05/27-21:42:21.981 20c0 Level-0 table #5: started
+2026/05/27-21:42:21.984 20c0 Level-0 table #5: 2419 bytes OK
+2026/05/27-21:42:21.986 20c0 Delete type=0 #3
+2026/05/27-21:42:21.986 20c0 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

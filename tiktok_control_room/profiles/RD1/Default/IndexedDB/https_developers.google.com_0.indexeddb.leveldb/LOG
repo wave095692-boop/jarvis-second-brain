@@ -1,0 +1,6 @@
+2026/05/18-23:41:00.565 20c2 Creating DB /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_developers.google.com_0.indexeddb.leveldb since it was missing.
+2026/05/18-23:41:00.570 20c2 Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_developers.google.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/05/19-01:11:11.252 20c0 Level-0 table #5: started
+2026/05/19-01:11:11.254 20c0 Level-0 table #5: 1874 bytes OK
+2026/05/19-01:11:11.262 20c0 Delete type=0 #3
+2026/05/19-01:11:11.262 20c0 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

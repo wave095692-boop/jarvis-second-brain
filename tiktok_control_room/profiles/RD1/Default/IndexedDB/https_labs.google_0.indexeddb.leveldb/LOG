@@ -1,0 +1,26 @@
+2026/06/18-12:07:17.434 1a79 Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_labs.google_0.indexeddb.leveldb/MANIFEST-000001
+2026/06/18-12:07:17.435 1a79 Recovering log #1134
+2026/06/18-12:07:17.435 1a79 Reusing old log /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_labs.google_0.indexeddb.leveldb/001134.log 
+2026/06/18-12:07:17.436 1a79 Delete type=2 #1133
+2026/06/18-12:07:17.491 1a79 Manual compaction at level-0 from ' O\x02\x00\x00\x00' @ 72057594037927935 : 1 .. ' P\x02\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/06/18-12:07:21.556 1abf Level-0 table #1139: started
+2026/06/18-12:07:21.564 1abf Level-0 table #1139: 13235 bytes OK
+2026/06/18-12:07:21.567 1abf Delete type=0 #1134
+2026/06/18-12:07:21.567 1a7c Manual compaction at level-0 from ' P\x02\x00\x00\x00' @ 72057594037927935 : 1 .. ' Q\x02\x00\x00\x00' @ 0 : 0; will stop at ' P\x02\x00\x00\x05' @ 28348 : 1
+2026/06/18-12:07:21.567 1a7c Compacting 1@0 + 1@1 files
+2026/06/18-12:07:21.569 1a7c Generated table #1140@0: 531 keys, 6966 bytes
+2026/06/18-12:07:21.569 1a7c Compacted 1@0 + 1@1 files => 6966 bytes
+2026/06/18-12:07:21.570 1a7c compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/06/18-12:07:21.570 1a7c Delete type=2 #1139
+2026/06/18-12:07:21.571 1a7c Manual compaction at level-0 from ' P\x02\x00\x00\x05' @ 28348 : 1 .. ' Q\x02\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/06/19-10:27:54.191 1abf Level-0 table #1142: started
+2026/06/19-10:27:54.196 1abf Level-0 table #1142: 1167 bytes OK
+2026/06/19-10:27:54.203 1abf Delete type=2 #1136
+2026/06/19-10:27:54.203 1abf Delete type=0 #1138
+2026/06/19-10:27:54.204 1a79 Manual compaction at level-0 from ' Q\x02\x00\x00\x00' @ 72057594037927935 : 1 .. ' R\x02\x00\x00\x00' @ 0 : 0; will stop at ' Q\x02\x00\x00\x05' @ 28379 : 1
+2026/06/19-10:27:54.205 1a79 Compacting 1@0 + 1@1 files
+2026/06/19-10:27:54.207 1a79 Generated table #1143@0: 532 keys, 6974 bytes
+2026/06/19-10:27:54.207 1a79 Compacted 1@0 + 1@1 files => 6974 bytes
+2026/06/19-10:27:54.209 1a79 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/06/19-10:27:54.211 1a79 Delete type=2 #1142
+2026/06/19-10:27:54.212 1a79 Manual compaction at level-0 from ' Q\x02\x00\x00\x05' @ 28379 : 1 .. ' R\x02\x00\x00\x00' @ 0 : 0; will stop at (end)

@@ -11,6 +11,24 @@ function getApiUrl(path) {
     return path;
 }
 
+// Monkey-patch window.fetch to automatically fallback to relative paths when local backend is unreachable or blocked (CORS/Mixed Content)
+const originalFetch = window.fetch;
+window.fetch = function(url, options) {
+    if (typeof url === 'string' && url.startsWith('http://localhost:8500/api/')) {
+        const relativePath = url.replace('http://localhost:8500', '');
+        const optionsCopy = { ...options };
+        if (options && options.headers) {
+            optionsCopy.headers = { ...options.headers };
+        }
+        return originalFetch(url, options)
+            .catch(err => {
+                console.warn(`Local backend unreachable (${err.message}). Falling back to relative path: ${relativePath}`);
+                return originalFetch(relativePath, optionsCopy);
+            });
+    }
+    return originalFetch(url, options);
+};
+
 // System State
 let notesList = [];
 let audioCtx = null;
@@ -148,6 +166,8 @@ function initGameLoader() {
                     fetchNotes();
                     fetchUploadedFiles();
                     fetchProjectFiles();
+                    scanWebFarmProfiles();
+                    scanUploaderProfiles();
                 }, 1200);
             }
         }, 120);
@@ -731,7 +751,9 @@ function renderUploadedFiles(roomsData, roomLabels) {
         { key: "Friend1", label: roomLabels.Friend1 || "เพื่อน 1 (Friend 1)" },
         { key: "Friend2", label: roomLabels.Friend2 || "เพื่อน 2 (Friend 2)" },
         { key: "Friend3", label: roomLabels.Friend3 || "เพื่อน 3 (Friend 3)" },
-        { key: "Friend4", label: roomLabels.Friend4 || "เพื่อน 4 (Friend 4)" }
+        { key: "Friend4", label: roomLabels.Friend4 || "เพื่อน 4 (Friend 4)" },
+        { key: "TikTokBot", label: roomLabels.TikTokBot || "TikTok Bot" },
+        { key: "TikTokUpload", label: roomLabels.TikTokUpload || "TikTok Upload" }
     ];
     
     // Update dropdown select option elements in index.html dynamically
@@ -805,6 +827,19 @@ function toggleRoomCollapse(roomKey) {
         logToTerminal('[ACCESS ERROR] Folder "Boss" is restricted. Redirecting to authorization vault...');
         switchTab('boss');
         return;
+    }
+    if (roomKey === 'TikTokBot' && sessionStorage.getItem('room_unlocked_TikTokBot') !== 'true') {
+        playSynthSound('click');
+        const pin = prompt("กรุณากรอกรหัสผ่านเพื่อเข้าใช้ห้อง TikTok Bot:");
+        if (pin === "1113") {
+            playSynthSound('success');
+            sessionStorage.setItem('room_unlocked_TikTokBot', 'true');
+            logToTerminal('[ROOM] Unlocked room TikTok Bot successfully.');
+        } else {
+            playSynthSound('delete');
+            if (pin !== null) alert("รหัสผ่านห้องไม่ถูกต้อง!");
+            return;
+        }
     }
     collapsedRooms[roomKey] = !collapsedRooms[roomKey];
     fetchUploadedFiles();
@@ -1494,6 +1529,12 @@ function switchTab(tabId) {
     
     logToTerminal(`[NAV] Switched view to tab: ${tabId.toUpperCase()}`);
     lucide.createIcons();
+
+    if (tabId === 'tiktok') {
+        scanWebFarmProfiles();
+    } else if (tabId === 'tiktok-uploader') {
+        scanUploaderProfiles();
+    }
 }
 
 // PIN Vault Code Management
@@ -1643,6 +1684,21 @@ function handleRoomSelectChange() {
     playSynthSound('click');
     const select = document.getElementById('user-room-select');
     if (select) {
+        const roomKey = select.value;
+        if (roomKey === 'TikTokBot' && sessionStorage.getItem('room_unlocked_TikTokBot') !== 'true') {
+            const pin = prompt("กรุณากรอกรหัสผ่านเพื่อเข้าใช้ห้อง TikTok Bot:");
+            if (pin === "1113") {
+                playSynthSound('success');
+                sessionStorage.setItem('room_unlocked_TikTokBot', 'true');
+                logToTerminal('[ROOM] Unlocked room TikTok Bot successfully.');
+                fetchUploadedFiles();
+            } else {
+                playSynthSound('delete');
+                if (pin !== null) alert("รหัสผ่านห้องไม่ถูกต้อง!");
+                select.value = 'Friend1';
+                return;
+            }
+        }
         logToTerminal(`[ROOM] Selected upload room: ${select.value}`);
     }
 }
@@ -1689,6 +1745,7 @@ function updateRoomDropdownLabels(roomLabels) {
     const optF2 = document.getElementById('room-opt-friend2');
     const optF3 = document.getElementById('room-opt-friend3');
     const optF4 = document.getElementById('room-opt-friend4');
+    const optTikTokBot = document.getElementById('room-opt-tiktokbot');
     
     if (optBoss) {
         optBoss.disabled = !isUnlocked;
@@ -1701,6 +1758,16 @@ function updateRoomDropdownLabels(roomLabels) {
     if (optF2) optF2.innerText = roomLabels.Friend2 || "เพื่อน 2 (Friend 2)";
     if (optF3) optF3.innerText = roomLabels.Friend3 || "เพื่อน 3 (Friend 3)";
     if (optF4) optF4.innerText = roomLabels.Friend4 || "เพื่อน 4 (Friend 4)";
+    if (optTikTokBot) {
+        const isTikTokUnlocked = sessionStorage.getItem('room_unlocked_TikTokBot') === 'true';
+        optTikTokBot.innerText = isTikTokUnlocked 
+            ? (roomLabels.TikTokBot || "TikTok Bot") 
+            : `${roomLabels.TikTokBot || "TikTok Bot"} 🔒`;
+    }
+    const optTikTokUpload = document.getElementById('room-opt-tiktokupload');
+    if (optTikTokUpload) {
+        optTikTokUpload.innerText = roomLabels.TikTokUpload || "TikTok Upload";
+    }
 }
 
 // Bind keyboard support for PIN
@@ -1877,7 +1944,7 @@ function scanWebFarmUploads() {
     .then(res => res.json())
     .then(data => {
         select.innerHTML = '<option value="">-- NO VIDEO UPLOAD --</option>';
-        const bossFiles = data.files ? data.files.Boss || [] : [];
+        const bossFiles = data.files ? data.files.TikTokUpload || [] : [];
         const videoExtensions = ['.mp4', '.mov', '.webm', '.avi', '.mkv', '.m4v'];
         
         bossFiles.forEach(file => {
@@ -1899,12 +1966,15 @@ function scanWebFarmUploads() {
 function scanWebFarmProfiles() {
     logToTerminal("[WEB FARM] Scanning configured browser profiles...");
     const select = document.getElementById("web-farm-profile-select");
-    if (select) select.innerHTML = '<option value="">Scanning profiles...</option>';
+    const currentSelectedVal = select ? select.value : "";
+    if (select && select.innerHTML.trim() === '') select.innerHTML = '<option value="">Scanning profiles...</option>';
     
     // Scan uploads to populate video dropdown
     scanWebFarmUploads();
+    scanUploaderUploads();
     
-    fetch(getApiUrl('/api/web_farming_status'))
+    const profile = currentSelectedVal || "profile_1";
+    fetch(getApiUrl(`/api/web_farming_status?profile=${profile}`))
     .then(res => res.json())
     .then(data => {
         if (select) {
@@ -1913,7 +1983,14 @@ function scanWebFarmProfiles() {
                 data.profiles.forEach(p => {
                     const opt = document.createElement("option");
                     opt.value = p;
-                    opt.innerText = `Profile: ${p}`;
+                    const isRunning = data.running_profiles && data.running_profiles.includes(p);
+                    let label = `Profile: ${p}`;
+                    if (p === 'personal') {
+                        label = 'เบราว์เซอร์ปกติประจำวัน (Personal Chrome)';
+                    } else if (p === 'Profile_24') {
+                        label = 'โปรไฟล์หลัก: BOT (Chrome Profile 24)';
+                    }
+                    opt.innerText = isRunning ? `${label} 🟢 (RUNNING)` : label;
                     select.appendChild(opt);
                 });
             } else {
@@ -1921,6 +1998,11 @@ function scanWebFarmProfiles() {
                 opt.value = "profile_1";
                 opt.innerText = "profile_1 (default)";
                 select.appendChild(opt);
+            }
+            if (currentSelectedVal && data.profiles.includes(currentSelectedVal)) {
+                select.value = currentSelectedVal;
+            } else if (data.profiles.length > 0) {
+                select.value = data.profiles[0];
             }
         }
         updateWebFarmingUI(data);
@@ -1934,18 +2016,44 @@ function updateWebFarmingUI(data) {
     const logsEl = document.getElementById("web-farm-logs");
     const badgeEl = document.getElementById("web-farm-status-badge");
     const logTimeEl = document.getElementById("web-farm-log-time");
+    const select = document.getElementById("web-farm-profile-select");
     
     if (logsEl && data.logs) {
         logsEl.innerText = data.logs;
         logsEl.scrollTop = logsEl.scrollHeight;
     }
     
+    // Dynamically update option labels to show green dots for running profiles
+    if (select && data.profiles) {
+        Array.from(select.options).forEach(opt => {
+            const p = opt.value;
+            const isRunning = data.running_profiles && data.running_profiles.includes(p);
+            let label = `Profile: ${p}`;
+            if (p === 'personal') {
+                label = 'เบราว์เซอร์ปกติประจำวัน (Personal Chrome)';
+            } else if (p === 'Profile_24') {
+                label = 'โปรไฟล์หลัก: BOT (Chrome Profile 24)';
+            }
+            const expectedText = isRunning ? `${label} 🟢 (RUNNING)` : label;
+            if (opt.innerText !== expectedText) {
+                opt.innerText = expectedText;
+            }
+        });
+    }
+    
     if (badgeEl) {
+        const selectProfile = select ? select.value : "";
         if (data.running) {
             badgeEl.className = "badge";
             badgeEl.style.background = "var(--neon-cyan)";
             badgeEl.style.color = "var(--bg)";
-            badgeEl.innerText = "WEB FARMING ACTIVE";
+            badgeEl.innerText = `ACTIVE: ${selectProfile} 🟢`;
+            if (!webFarmingPollInterval) startWebFarmingLogPolling();
+        } else if (data.running_profiles && data.running_profiles.length > 0) {
+            badgeEl.className = "badge";
+            badgeEl.style.background = "var(--neon-yellow)";
+            badgeEl.style.color = "var(--bg)";
+            badgeEl.innerText = `RUNNING BOTS: ${data.running_profiles.join(", ")}`;
             if (!webFarmingPollInterval) startWebFarmingLogPolling();
         } else {
             badgeEl.className = "badge";
@@ -1958,6 +2066,220 @@ function updateWebFarmingUI(data) {
     
     if (logTimeEl) {
         logTimeEl.innerText = `UPDATE: ${new Date().toLocaleTimeString()}`;
+    }
+    renderWebFarmSlots(data);
+}
+
+function renderWebFarmSlots(data) {
+    const gridEl = document.getElementById("web-farm-slots-grid");
+    const summaryEl = document.getElementById("web-farm-slots-summary");
+    if (!gridEl) return;
+    
+    const profiles = data.profiles || [];
+    const runningProfiles = data.running_profiles || [];
+    const statuses = data.profile_statuses || {};
+    
+    if (summaryEl) {
+        summaryEl.innerText = `RUNNING: ${runningProfiles.length} / ${profiles.length} BOTS`;
+    }
+    
+    gridEl.innerHTML = '';
+    
+    if (profiles.length === 0) {
+        gridEl.innerHTML = `
+            <div style="grid-column: 1/-1; text-align: center; padding: 24px; color: var(--text-dim); border: 1px dashed rgba(255,255,255,0.1); border-radius: 8px;">
+                ไม่พบข้อมูลโปรไฟล์บัญชี กรุณากดปุ่มสร้างโปรไฟล์ใหม่ด้านบน
+            </div>
+        `;
+        return;
+    }
+    
+    profiles.forEach(p => {
+        const isRunning = runningProfiles.includes(p);
+        const card = document.createElement("div");
+        card.className = `web-farm-slot-card ${isRunning ? 'running' : 'idle'}`;
+        
+        const statusBadgeText = isRunning ? '🟢 RUNNING' : '🔴 IDLE';
+        const actionButtonText = isRunning ? 'STOP' : 'START';
+        const actionButtonIcon = isRunning ? 'square' : 'play';
+        const statusData = statuses[p] || {};
+        const lastLogLine = statusData.last_log_line || (isRunning ? "กำลังทำงาน..." : "รอการสั่งงาน...");
+        
+        card.innerHTML = `
+            <div class="slot-header">
+                <div class="slot-title">
+                    <i data-lucide="user" style="width: 14px; height: 14px;"></i> ${p}
+                </div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <div class="slot-status">${statusBadgeText}</div>
+                    <button class="slot-delete-btn" onclick="deleteWebFarmProfile('${p}')" title="ลบโปรไฟล์" style="background: none; border: none; padding: 2px; color: rgba(255,255,255,0.4); cursor: pointer; display: flex; align-items: center; justify-content: center; border-radius: 4px; transition: all 0.2s;" onmouseover="this.style.color='#ff4d4d'; this.style.background='rgba(255,77,77,0.1)'" onmouseout="this.style.color='rgba(255,255,255,0.4)'; this.style.background='none'">
+                        <i data-lucide="trash-2" style="width: 12px; height: 12px;"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="slot-preview-container" style="position: relative; width: 100%; height: 120px; background: #000; border-radius: 6px; overflow: hidden; margin: 4px 0; border: 1px solid rgba(255,255,255,0.05); display: ${isRunning ? 'block' : 'none'};">
+                <img src="/view/upload?file=web_farming_bot_${p}_preview.jpg&room=TikTokBot&t=${new Date().getTime()}" 
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" 
+                     onload="this.style.display='block'; this.nextElementSibling.style.display='none';"
+                     style="width: 100%; height: 100%; object-fit: cover; display: none;">
+                <div style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: var(--text-dim); font-size: 10px; font-family: monospace; flex-direction: column; gap: 6px;">
+                    <i data-lucide="image" style="width: 16px; height: 16px; opacity: 0.5;"></i>
+                    <span>NO PREVIEW AVAILABLE</span>
+                </div>
+            </div>
+
+            <div class="slot-body">
+                <div style="width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${lastLogLine}</div>
+            </div>
+            <div class="slot-actions">
+                <button class="slot-btn slot-btn-view" onclick="selectWebFarmProfile('${p}')">
+                    <i data-lucide="terminal" style="width: 10px; height: 10px;"></i> LOGS
+                </button>
+                <button class="slot-btn" style="background: rgba(0,242,254,0.1); border: 1px solid rgba(0,242,254,0.25); color: #00f2fe; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-family: monospace; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; transition: all 0.15s;" onmouseover="this.style.background='rgba(0,242,254,0.25)'" onmouseout="this.style.background='rgba(0,242,254,0.1)'" onclick="openLoginChromeForProfile('${p}')" ${isRunning ? 'disabled style="opacity: 0.5; cursor: not-allowed;"' : ''}>
+                    <i data-lucide="key-round" style="width: 10px; height: 10px;"></i> LOGIN
+                </button>
+                <button class="slot-btn slot-btn-action" onclick="toggleWebFarmSlot('${p}', ${isRunning})">
+                    <i data-lucide="${actionButtonIcon}" style="width: 10px; height: 10px;"></i> ${actionButtonText}
+                </button>
+            </div>
+        `;
+        gridEl.appendChild(card);
+    });
+    
+    if (typeof lucide !== 'undefined' && lucide.createIcons) {
+        lucide.createIcons();
+    }
+}
+
+function deleteWebFarmProfile(profileName) {
+    if (confirm(`คุณต้องการลบโปรไฟล์ "${profileName}" ใช่หรือไม่? การดำเนินการนี้จะหยุดการทำงานของบอทและลบประวัติทั้งหมดของโปรไฟล์นี้`)) {
+        logToTerminal(`[WEB FARM] กำลังลบโปรไฟล์: ${profileName}...`);
+        fetch(getApiUrl('/api/action'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'delete_profile',
+                profile: profileName
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                logToTerminal(`[WEB FARM] ลบโปรไฟล์ ${profileName} เรียบร้อยแล้ว`);
+                scanWebFarmProfiles();
+                if (typeof scanUploaderProfiles === 'function') {
+                    scanUploaderProfiles();
+                }
+            } else {
+                logToTerminal(`[WEB FARM ERROR] ลบโปรไฟล์ล้มเหลว: ${data.error}`);
+            }
+        })
+        .catch(err => {
+            logToTerminal(`[WEB FARM ERROR] ลบโปรไฟล์ล้มเหลว: ${err}`);
+        });
+    }
+}
+
+function selectWebFarmProfile(profileName) {
+    const select = document.getElementById("web-farm-profile-select");
+    if (select) {
+        select.value = profileName;
+        // Trigger comments load and polling update immediately
+        select.dispatchEvent(new Event('change'));
+        
+        // Scroll to telemetry logs smoothly
+        const logsContainer = document.querySelector(".cyber-console-container");
+        if (logsContainer) {
+            logsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        logToTerminal(`[WEB FARM] สลับการแสดงผลไปยังช่อง: ${profileName}`);
+    }
+}
+
+function toggleWebFarmSlot(profileName, isRunning) {
+    if (isRunning) {
+        logToTerminal(`[WEB FARM] Sending termination signal to web farming bot for profile ${profileName}...`);
+        playSynthSound('delete');
+        
+        fetch(getApiUrl('/api/action'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                action: 'stop_web_farming',
+                profile: profileName
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            logToTerminal(`[WEB FARM STOP] Web bot terminated for profile ${profileName}.`);
+            scanWebFarmProfiles();
+        })
+        .catch(err => {
+            logToTerminal(`[WEB FARM ERROR] Stop failed: ${err.message}`);
+        });
+    } else {
+        const loopsInput = document.getElementById("web-farm-loops");
+        const likeProbInput = document.getElementById("web-farm-like-prob");
+        const commentProbInput = document.getElementById("web-farm-comment-prob");
+        const followProbInput = document.getElementById("web-farm-follow-prob");
+        const targetUserInput = document.getElementById("web-farm-target-user");
+        const uploadVideoSelect = document.getElementById("web-farm-upload-video");
+        const uploadCaptionInput = document.getElementById("web-farm-upload-caption");
+        const queryInput = document.getElementById("web-farm-query");
+        const headedInput = document.getElementById("web-farm-headed");
+        const loginModeInput = document.getElementById("web-farm-login-mode");
+        const commentStyleSelect = document.getElementById("web-farm-comment-style");
+        const customCommentsTextarea = document.getElementById("web-farm-custom-comments");
+        
+        const loops = loopsInput ? parseInt(loopsInput.value) || 10 : 10;
+        const likeProb = likeProbInput ? parseFloat(likeProbInput.value) || 0.15 : 0.15;
+        const commentProb = commentProbInput ? parseFloat(commentProbInput.value) || 0.05 : 0.05;
+        const commentStyle = commentStyleSelect ? commentStyleSelect.value : "mixed";
+        const customComments = customCommentsTextarea ? customCommentsTextarea.value : "";
+        const followProb = followProbInput ? parseFloat(followProbInput.value) || 0.0 : 0.0;
+        const targetUser = targetUserInput ? targetUserInput.value.trim() : "";
+        const uploadVideo = uploadVideoSelect ? uploadVideoSelect.value : "";
+        const uploadCaption = uploadCaptionInput ? uploadCaptionInput.value.trim() : "";
+        const query = queryInput ? queryInput.value : "";
+        const headed = headedInput ? headedInput.checked : true;
+        const loginMode = loginModeInput ? loginModeInput.checked : false;
+        
+        logToTerminal(`[WEB FARM] Initiating Playwright bot for profile ${profileName} from slot card...`);
+        playSynthSound('success');
+        
+        fetch(getApiUrl('/api/action'), {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'start_web_farming',
+                profile: profileName,
+                loops: loops,
+                like_prob: likeProb,
+                comment_prob: commentProb,
+                comment_style: commentStyle,
+                custom_comments: customComments,
+                follow_prob: followProb,
+                target_user: targetUser,
+                upload_video: uploadVideo,
+                upload_caption: uploadCaption,
+                query: query,
+                headed: headed,
+                login_mode: loginMode
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                logToTerminal(`[WEB FARM SUCCESS] Playwright bot successfully spawned for ${profileName}.`);
+                scanWebFarmProfiles();
+            } else {
+                alert(`ล้มเหลวในการเริ่มทำงานเว็บบอตสำหรับ ${profileName}: ${data.error}`);
+            }
+        })
+        .catch(err => {
+            alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
+        });
     }
 }
 
@@ -2031,18 +2353,23 @@ function startWebFarming() {
 }
 
 function stopWebFarming() {
-    logToTerminal("[WEB FARM] Sending termination signal to web farming bot...");
+    const profileSelect = document.getElementById("web-farm-profile-select");
+    const profile = profileSelect ? profileSelect.value : "profile_1";
+    
+    logToTerminal(`[WEB FARM] Sending termination signal to web farming bot for profile ${profile}...`);
     playSynthSound('delete');
     
     fetch(getApiUrl('/api/action'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'stop_web_farming' })
+        body: JSON.stringify({ 
+            action: 'stop_web_farming',
+            profile: profile
+        })
     })
     .then(res => res.json())
     .then(data => {
-        logToTerminal(`[WEB FARM STOP] Web bot terminated.`);
-        stopWebFarmingLogPolling();
+        logToTerminal(`[WEB FARM STOP] Web bot terminated for profile ${profile}.`);
         scanWebFarmProfiles();
     })
     .catch(err => {
@@ -2050,11 +2377,33 @@ function stopWebFarming() {
     });
 }
 
+function stopAllWebFarming() {
+    logToTerminal("[WEB FARM] Sending termination signal to ALL running web farming bots...");
+    playSynthSound('delete');
+    
+    fetch(getApiUrl('/api/action'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'stop_all_web_farming' })
+    })
+    .then(res => res.json())
+    .then(data => {
+        logToTerminal("[WEB FARM STOP] All web bots terminated.");
+        scanWebFarmProfiles();
+    })
+    .catch(err => {
+        logToTerminal(`[WEB FARM ERROR] Stop all failed: ${err.message}`);
+    });
+}
+
 function openLoginChrome() {
     const profileSelect = document.getElementById("web-farm-profile-select");
     const profile = profileSelect ? profileSelect.value : "profile_1";
-    
-    logToTerminal(`[WEB FARM] Launching standard Google Chrome window for manual login (Profile: ${profile}). Please log in completely on Chrome, then close the browser window.`);
+    openLoginChromeForProfile(profile);
+}
+
+function openLoginChromeForProfile(profile) {
+    logToTerminal(`[WEB FARM] เปิดเบราว์เซอร์โคลนเพื่อเข้าระบบ TikTok สำหรับโปรไฟล์: ${profile}...`);
     playSynthSound('success');
     
     fetch(getApiUrl('/api/action'), {
@@ -2068,9 +2417,9 @@ function openLoginChrome() {
     .then(res => res.json())
     .then(data => {
         if (data.status === 'success') {
-            logToTerminal(`[WEB FARM SUCCESS] Clean Google Chrome window opened successfully.`);
+            logToTerminal(`[WEB FARM SUCCESS] เปิดเบราว์เซอร์สำหรับล็อกอินสำเร็จ ✅ กรุณาล็อกอินบัญชี TikTok ในหน้าต่างที่เปิดขึ้นมา`);
         } else {
-            alert(`ล้มเหลวในการเปิดเบราว์เซอร์จริง: ${data.error}`);
+            alert(`ล้มเหลวในการเปิดเบราว์เซอร์: ${data.error}`);
         }
     })
     .catch(err => {
@@ -2104,6 +2453,9 @@ function createWebFarmProfile() {
             logToTerminal(`[WEB FARM SUCCESS] ${data.log}`);
             if (input) input.value = "";
             scanWebFarmProfiles(); // Refresh the list
+            if (typeof scanUploaderProfiles === 'function') {
+                scanUploaderProfiles();
+            }
         } else {
             alert(`ล้มเหลวในการสร้างโปรไฟล์ใหม่: ${data.error}`);
         }
@@ -2116,7 +2468,9 @@ function createWebFarmProfile() {
 function startWebFarmingLogPolling() {
     if (webFarmingPollInterval) clearInterval(webFarmingPollInterval);
     webFarmingPollInterval = setInterval(() => {
-        fetch(getApiUrl('/api/web_farming_status'))
+        const profileSelect = document.getElementById("web-farm-profile-select");
+        const profile = profileSelect ? profileSelect.value : "profile_1";
+        fetch(getApiUrl(`/api/web_farming_status?profile=${profile}`))
         .then(res => res.json())
         .then(data => {
             updateWebFarmingUI(data);
@@ -2255,6 +2609,323 @@ function initCommentStylePreview() {
         });
     }
 }
+
+let pendingRoomKey = '';
+let pendingRoomAction = null; // 'select' or 'toggle'
+
+function showRoomPinModal(roomKey, action) {
+    pendingRoomKey = roomKey;
+    pendingRoomAction = action;
+    
+    const modal = document.getElementById("room-pin-modal");
+    const roomNameSpan = document.getElementById("pin-modal-room-name");
+    const pinInput = document.getElementById("room-pin-input");
+    const errorSpan = document.getElementById("room-pin-error");
+    
+    if (modal && roomNameSpan && pinInput && errorSpan) {
+        roomNameSpan.innerText = roomKey === "TikTokBot" ? "TikTok Bot" : roomKey;
+        pinInput.value = "";
+        errorSpan.style.display = "none";
+        modal.style.display = "flex";
+        setTimeout(() => pinInput.focus(), 50);
+    }
+}
+
+function closeRoomPinModal() {
+    const modal = document.getElementById("room-pin-modal");
+    if (modal) {
+        modal.style.display = "none";
+    }
+    
+    if (pendingRoomAction === 'select') {
+        const select = document.getElementById('user-room-select');
+        if (select) {
+            select.value = 'Friend1'; // revert fallback
+        }
+    }
+    
+    pendingRoomKey = '';
+    pendingRoomAction = null;
+}
+
+function submitRoomPin() {
+    const pinInput = document.getElementById("room-pin-input");
+    const errorSpan = document.getElementById("room-pin-error");
+    const pin = pinInput ? pinInput.value : "";
+    
+    if (pendingRoomKey === 'TikTokBot') {
+        if (pin === '1113') {
+            playSynthSound('success');
+            sessionStorage.setItem('room_unlocked_TikTokBot', 'true');
+            logToTerminal('[ROOM] Unlocked room TikTok Bot successfully.');
+            
+            const modal = document.getElementById("room-pin-modal");
+            if (modal) modal.style.display = "none";
+            
+            if (pendingRoomAction === 'select') {
+                logToTerminal(`[ROOM] Selected upload room: TikTokBot`);
+                fetchUploadedFiles();
+            } else if (pendingRoomAction === 'toggle') {
+                collapsedRooms[pendingRoomKey] = !collapsedRooms[pendingRoomKey];
+                fetchUploadedFiles();
+            }
+            
+            pendingRoomKey = '';
+            pendingRoomAction = null;
+        } else {
+            playSynthSound('delete');
+            if (errorSpan) errorSpan.style.display = "block";
+            if (pinInput) {
+                pinInput.value = "";
+                pinInput.focus();
+            }
+        }
+    }
+}
+
+// Bind Enter key inside room-pin-input
+document.addEventListener('keypress', (e) => {
+    const pinInput = document.getElementById("room-pin-input");
+    if (pinInput && document.activeElement === pinInput && e.key === 'Enter') {
+        submitRoomPin();
+    }
+});
+
+// TikTok Uploader Integration
+let uploaderPollInterval = null;
+
+function scanUploaderUploads() {
+    const select = document.getElementById("uploader-upload-video");
+    if (!select) return;
+    
+    fetch(getApiUrl('/api/uploads'))
+    .then(res => res.json())
+    .then(data => {
+        select.innerHTML = '<option value="">-- NO VIDEO UPLOAD --</option>';
+        const uploadFiles = data.files ? data.files.TikTokUpload || [] : [];
+        const videoExtensions = ['.mp4', '.mov', '.webm', '.avi', '.mkv', '.m4v'];
+        
+        uploadFiles.forEach(file => {
+            const lowerFile = file.toLowerCase();
+            const isVideo = videoExtensions.some(ext => lowerFile.endsWith(ext));
+            if (isVideo) {
+                const opt = document.createElement("option");
+                opt.value = file;
+                opt.innerText = file;
+                select.appendChild(opt);
+            }
+        });
+    })
+    .catch(err => {
+        console.error("Failed to load uploader video files: ", err);
+    });
+}
+
+function scanUploaderProfiles() {
+    logToTerminal("[UPLOADER] Scanning configured browser profiles...");
+    const select = document.getElementById("uploader-profile-select");
+    const currentSelectedVal = select ? select.value : "";
+    if (select && select.innerHTML.trim() === '') select.innerHTML = '<option value="">Scanning profiles...</option>';
+    
+    // Also scan uploads
+    scanUploaderUploads();
+    
+    const profile = currentSelectedVal || "profile_1";
+    fetch(getApiUrl(`/api/web_farming_status?profile=${profile}`))
+    .then(res => res.json())
+    .then(data => {
+        if (select) {
+            select.innerHTML = '';
+            if (data.profiles && data.profiles.length > 0) {
+                data.profiles.forEach(p => {
+                    const opt = document.createElement("option");
+                    opt.value = p;
+                    const isRunning = data.running_profiles && data.running_profiles.includes(p);
+                    opt.innerText = isRunning ? `Profile: ${p} 🟢 (RUNNING)` : `Profile: ${p}`;
+                    select.appendChild(opt);
+                });
+            } else {
+                const opt = document.createElement("option");
+                opt.value = "profile_1";
+                opt.innerText = "profile_1 (default)";
+                select.appendChild(opt);
+            }
+            if (currentSelectedVal && data.profiles.includes(currentSelectedVal)) {
+                select.value = currentSelectedVal;
+            } else if (data.profiles.length > 0) {
+                select.value = data.profiles[0];
+            }
+        }
+        updateUploaderUI(data);
+    })
+    .catch(err => {
+        logToTerminal(`[UPLOADER ERROR] Scan failed: ${err.message}`);
+    });
+}
+
+function updateUploaderUI(data) {
+    const logsEl = document.getElementById("uploader-logs");
+    const badgeEl = document.getElementById("uploader-status-badge");
+    const logTimeEl = document.getElementById("uploader-log-time");
+    const select = document.getElementById("uploader-profile-select");
+    
+    if (logsEl && data.logs) {
+        logsEl.innerText = data.logs;
+        logsEl.scrollTop = logsEl.scrollHeight;
+    }
+    
+    if (select && data.profiles) {
+        Array.from(select.options).forEach(opt => {
+            const p = opt.value;
+            const isRunning = data.running_profiles && data.running_profiles.includes(p);
+            const expectedText = isRunning ? `Profile: ${p} 🟢 (RUNNING)` : `Profile: ${p}`;
+            if (opt.innerText !== expectedText) {
+                opt.innerText = expectedText;
+            }
+        });
+    }
+    
+    if (badgeEl) {
+        const selectProfile = select ? select.value : "";
+        if (data.running_profiles && data.running_profiles.includes(selectProfile)) {
+            badgeEl.className = "badge";
+            badgeEl.style.background = "var(--neon-yellow)";
+            badgeEl.style.color = "var(--bg)";
+            badgeEl.innerText = `ACTIVE UPLOADER: ${selectProfile} 🟢`;
+            if (!uploaderPollInterval) startUploaderLogPolling();
+        } else {
+            badgeEl.className = "badge";
+            badgeEl.style.background = "transparent";
+            badgeEl.style.color = "var(--text-dim)";
+            badgeEl.innerText = "UPLOADER IDLE";
+            if (uploaderPollInterval) stopUploaderLogPolling();
+        }
+    }
+    
+    if (logTimeEl) {
+        logTimeEl.innerText = `UPDATE: ${new Date().toLocaleTimeString()}`;
+    }
+}
+
+function startVideoUploader() {
+    const profileSelect = document.getElementById("uploader-profile-select");
+    const uploadVideoSelect = document.getElementById("uploader-upload-video");
+    const uploadCaptionInput = document.getElementById("uploader-upload-caption");
+    const headedInput = document.getElementById("uploader-headed");
+    
+    const profile = profileSelect ? profileSelect.value : "profile_1";
+    const uploadVideo = uploadVideoSelect ? uploadVideoSelect.value : "";
+    const uploadCaption = uploadCaptionInput ? uploadCaptionInput.value.trim() : "";
+    const headed = headedInput ? headedInput.checked : true;
+    
+    if (!uploadVideo) {
+        alert("กรุณาเลือกวิดีโอที่ต้องการอัปโหลด!");
+        return;
+    }
+    
+    logToTerminal(`[UPLOADER] Starting TikTok Uploader for profile ${profile} (Video: ${uploadVideo}, Caption: ${uploadCaption}, Headed: ${headed})...`);
+    playSynthSound('success');
+    
+    fetch(getApiUrl('/api/action'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'start_web_farming',
+            profile: profile,
+            loops: 0, // 0 loops means it just uploads and terminates
+            like_prob: 0,
+            comment_prob: 0,
+            comment_style: 'mixed',
+            custom_comments: '',
+            follow_prob: 0,
+            target_user: '',
+            upload_video: uploadVideo,
+            upload_caption: uploadCaption,
+            query: '',
+            headed: headed,
+            login_mode: false
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            logToTerminal(`[UPLOADER SUCCESS] TikTok Uploader successfully spawned.`);
+            scanUploaderProfiles();
+            startUploaderLogPolling();
+        } else {
+            alert(`ล้มเหลวในการเริ่มทำงานเครื่องมืออัปโหลด: ${data.error}`);
+        }
+    })
+    .catch(err => {
+        alert(`การเชื่อมต่อขัดข้อง: ${err.message}`);
+    });
+}
+
+function stopVideoUploader() {
+    const profileSelect = document.getElementById("uploader-profile-select");
+    const profile = profileSelect ? profileSelect.value : "profile_1";
+    
+    logToTerminal(`[UPLOADER] Sending termination signal to uploader for profile ${profile}...`);
+    playSynthSound('delete');
+    
+    fetch(getApiUrl('/api/action'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            action: 'stop_web_farming',
+            profile: profile
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        logToTerminal(`[UPLOADER STOP] Uploader terminated for profile ${profile}.`);
+        scanUploaderProfiles();
+    })
+    .catch(err => {
+        logToTerminal(`[UPLOADER ERROR] Stop failed: ${err.message}`);
+    });
+}
+
+function clearUploaderLogs() {
+    const el = document.getElementById("uploader-logs");
+    if (el) {
+        el.textContent = "Console ready.\n";
+    }
+    playSynthSound('delete');
+}
+
+function startUploaderLogPolling() {
+    if (uploaderPollInterval) clearInterval(uploaderPollInterval);
+    uploaderPollInterval = setInterval(() => {
+        const select = document.getElementById("uploader-profile-select");
+        const profile = select ? select.value : "profile_1";
+        fetch(getApiUrl(`/api/web_farming_status?profile=${profile}`))
+        .then(res => res.json())
+        .then(data => {
+            updateUploaderUI(data);
+        })
+        .catch(err => {
+            console.error("Uploader status poll failed:", err);
+        });
+    }, 2500);
+}
+
+function stopUploaderLogPolling() {
+    if (uploaderPollInterval) {
+        clearInterval(uploaderPollInterval);
+        uploaderPollInterval = null;
+    }
+}
+
+// Bind change listener for uploader profile selector
+document.addEventListener("DOMContentLoaded", () => {
+    const uploaderProfileSelect = document.getElementById("uploader-profile-select");
+    if (uploaderProfileSelect) {
+        uploaderProfileSelect.addEventListener("change", () => {
+            scanUploaderProfiles();
+        });
+    }
+});
 
 
 

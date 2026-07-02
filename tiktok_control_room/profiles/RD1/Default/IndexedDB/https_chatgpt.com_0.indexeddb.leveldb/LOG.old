@@ -1,0 +1,6 @@
+2026/03/19-10:15:13.683 24cc Creating DB /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_chatgpt.com_0.indexeddb.leveldb since it was missing.
+2026/03/19-10:15:13.685 24cc Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_chatgpt.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/03/19-10:15:18.653 24cc Level-0 table #5: started
+2026/03/19-10:15:18.654 24cc Level-0 table #5: 1668 bytes OK
+2026/03/19-10:15:18.656 24cc Delete type=0 #3
+2026/03/19-10:15:18.657 24cc Manual compaction at level-0 from (begin) .. (end); will stop at (end)

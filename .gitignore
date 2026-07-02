@@ -1,0 +1,16 @@
+.DS_Store
+*.apk
+*.zip
+*.log
+*.xml
+*.png
+*.jpg
+*.jpeg
+*.pdf
+__pycache__/
+chrome_profile/
+my-first-project/
+jarvis_second_brain/__pycache__/
+youtube_premium_clone/__pycache__/
+node_modules/
+.env

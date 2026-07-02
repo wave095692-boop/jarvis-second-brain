@@ -24,13 +24,17 @@ NOTES_FILE = os.path.join(DIRECTORY, "notes.json")
 PROJECT_FILES_FILE = os.path.join(DIRECTORY, "project_files.json")
 ROOM_LABELS_FILE = os.path.join(DIRECTORY, "room_labels.json")
 
+VALID_ROOMS = ["Boss", "Friend1", "Friend2", "Friend3", "Friend4", "TikTokBot", "TikTokUpload"]
+
 def load_room_labels():
     default_labels = {
         "Boss": "บอส (Boss)",
         "Friend1": "เพื่อน 1 (Friend 1)",
         "Friend2": "เพื่อน 2 (Friend 2)",
         "Friend3": "เพื่อน 3 (Friend 3)",
-        "Friend4": "เพื่อน 4 (Friend 4)"
+        "Friend4": "เพื่อน 4 (Friend 4)",
+        "TikTokBot": "TikTok Bot",
+        "TikTokUpload": "TikTok Upload"
     }
     if os.path.exists(ROOM_LABELS_FILE):
         try:
@@ -256,7 +260,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
 
         elif path == '/api/uploads':
             upload_dir = os.path.join(DIRECTORY, "uploads")
-            rooms = ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]
+            rooms = VALID_ROOMS
             files_data = {}
             for r in rooms:
                 r_dir = os.path.join(upload_dir, r)
@@ -281,7 +285,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
             file_name = query_params.get("file", [""])[0]
             file_name = os.path.basename(file_name)
             room = query_params.get("room", ["Boss"])[0]
-            if room not in ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]:
+            if room not in VALID_ROOMS:
                 room = "Boss"
                 
             upload_dir = os.path.join(DIRECTORY, "uploads", room)
@@ -504,15 +508,24 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
             self.end_headers()
             self.wfile.write(json.dumps(response_data, ensure_ascii=False).encode('utf-8'))
         elif path == '/api/web_farming_status':
+            profile = query_params.get('profile', ['profile_1'])[0]
+            import re
+            profile = re.sub(r'[^a-zA-Z0-9_-]', '', profile)
+            
+            running_profiles = []
             is_running = False
             try:
-                res = subprocess.run(['pgrep', '-f', 'web_farming_bot.py'], capture_output=True, text=True)
-                if res.stdout.strip():
-                    is_running = True
+                res = subprocess.run(['ps', 'aux'], capture_output=True, text=True)
+                for line in res.stdout.splitlines():
+                    if 'web_farming_bot.py' in line and '--profile' in line:
+                        match = re.search(r'--profile\s+([a-zA-Z0-9_-]+)', line)
+                        if match:
+                            running_profiles.append(match.group(1))
+                is_running = profile in running_profiles
             except Exception:
                 pass
                 
-            log_file = os.path.join(DIRECTORY, "web_farming_bot.log")
+            log_file = os.path.join(DIRECTORY, f"web_farming_bot_{profile}.log")
             logs = ""
             if os.path.exists(log_file):
                 try:
@@ -522,23 +535,63 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 except Exception as ex:
                     logs = f"Error reading logs: {ex}"
             else:
-                logs = "Web farming bot idle. No log file created yet."
+                logs = f"Web farming bot idle for profile '{profile}'. No logs yet."
                 
             profiles_dir = os.path.join(DIRECTORY, "profiles")
+            if not os.path.exists(profiles_dir):
+                os.makedirs(profiles_dir)
+            
+            # Seed default profiles only if directory is empty
+            try:
+                existing = [d for d in os.listdir(profiles_dir) if os.path.isdir(os.path.join(profiles_dir, d)) and not d.startswith('.')]
+                if not existing:
+                    for default_p in ["Profile_24", "personal", "profile_1", "profile_2", "profile_3"]:
+                        os.makedirs(os.path.join(profiles_dir, default_p), exist_ok=True)
+            except Exception:
+                pass
+
             profiles = []
-            if os.path.exists(profiles_dir):
-                try:
-                    profiles = [d for d in os.listdir(profiles_dir) if os.path.isdir(os.path.join(profiles_dir, d)) and not d.startswith('.')]
-                except Exception:
-                    pass
-            if not profiles:
-                profiles = ["profile_1", "profile_2", "profile_3"]
+            try:
+                profiles = [d for d in os.listdir(profiles_dir) if os.path.isdir(os.path.join(profiles_dir, d)) and not d.startswith('.')]
+            except Exception:
+                pass
             profiles.sort()
+            
+            # Read last log line for each profile to show in the slots
+            profile_statuses = {}
+            for p in profiles:
+                p_log_file = os.path.join(DIRECTORY, f"web_farming_bot_{p}.log")
+                last_line = ""
+                if os.path.exists(p_log_file):
+                    try:
+                        with open(p_log_file, 'rb') as f:
+                            try:
+                                f.seek(-1024, os.SEEK_END)
+                            except OSError:
+                                pass
+                            lines = f.read().decode('utf-8', errors='replace').splitlines()
+                            lines = [l.strip() for l in lines if l.strip()]
+                            if lines:
+                                last_line = lines[-1]
+                    except Exception:
+                        pass
+                
+                if last_line.startswith("--- STARTING"):
+                    last_line = "กำลังเริ่มระบบบอต..."
+                elif "STOPPED BY USER ACTIONS" in last_line or "ALL BOTS TERMINATED" in last_line:
+                    last_line = "หยุดทำงานโดยผู้ใช้"
+                
+                profile_statuses[p] = {
+                    'running': p in running_profiles,
+                    'last_log_line': last_line or ("บอตหยุดทำงาน" if p not in running_profiles else "กำลังเริ่มต้นบอต...")
+                }
             
             response_data = {
                 'running': is_running,
+                'running_profiles': running_profiles,
                 'logs': logs,
-                'profiles': profiles
+                'profiles': profiles,
+                'profile_statuses': profile_statuses
             }
             self.send_response(200)
             self.send_header('Content-Type', 'application/json; charset=utf-8')
@@ -594,11 +647,36 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
             return
 
+        elif path == '/api/verify-room-pin':
+            try:
+                post_data = self.rfile.read(content_length).decode('utf-8')
+                data = json.loads(post_data) if post_data else {}
+                room = data.get("room", "")
+                pin = data.get("pin", "")
+                
+                correct_pin = "1113" if room == "TikTokBot" else ""
+                
+                if not correct_pin or pin == correct_pin:
+                    self.send_response(200)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'success': True}).encode('utf-8'))
+                else:
+                    self.send_response(401)
+                    self.send_header('Content-Type', 'application/json')
+                    self.end_headers()
+                    self.wfile.write(json.dumps({'success': False, 'error': 'รหัสผ่านห้องไม่ถูกต้อง'}).encode('utf-8'))
+            except Exception as e:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': str(e)}).encode('utf-8'))
+            return
+
         elif path == '/api/rename-room':
             room = query_params.get("room", [""])[0]
             label = query_params.get("label", [""])[0]
             
-            if room not in ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]:
+            if room not in VALID_ROOMS:
                 self.send_response(400)
                 self.end_headers()
                 self.wfile.write(json.dumps({'error': 'Invalid room key'}).encode('utf-8'))
@@ -643,7 +721,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
             filename = query_params.get("filename", ["document.dat"])[0]
             filename = os.path.basename(filename)
             room = query_params.get("room", ["Boss"])[0]
-            if room not in ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]:
+            if room not in VALID_ROOMS:
                 room = "Boss"
                 
             upload_dir = os.path.join(DIRECTORY, "uploads", room)
@@ -701,7 +779,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
             filename = query_params.get("filename", [""])[0]
             filename = os.path.basename(filename)
             room = query_params.get("room", ["Boss"])[0]
-            if room not in ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]:
+            if room not in VALID_ROOMS:
                 room = "Boss"
                 
             upload_dir = os.path.join(DIRECTORY, "uploads", room)
@@ -754,7 +832,7 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
             new_filename = query_params.get("new_filename", [""])[0]
             new_filename = os.path.basename(new_filename)
             room = query_params.get("room", ["Boss"])[0]
-            if room not in ["Boss", "Friend1", "Friend2", "Friend3", "Friend4"]:
+            if room not in VALID_ROOMS:
                 room = "Boss"
                 
             upload_dir = os.path.join(DIRECTORY, "uploads", room)
@@ -1077,7 +1155,8 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                 elif action == 'start_web_farming':
                     profile = req.get('profile', 'profile_1')
                     try:
-                        subprocess.run(['pkill', '-f', 'web_farming_bot.py'])
+                        # Only kill the running instance for this specific profile
+                        subprocess.run(['pkill', '-f', f'web_farming_bot.py --profile {profile}'])
                         subprocess.run(['pkill', '-9', '-f', f'profiles/{profile}'])
                     except Exception:
                         pass
@@ -1112,11 +1191,11 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                             except Exception:
                                 pass
                     
-                    log_file = os.path.join(DIRECTORY, "web_farming_bot.log")
+                    log_file = os.path.join(DIRECTORY, f"web_farming_bot_{profile}.log")
                     with open(log_file, 'w', encoding='utf-8') as lf:
                         lf.write(f"--- STARTING TIKTOK WEB FARMING BOT FOR {profile} ---\n")
                     
-                    venv_python = os.path.join(os.path.dirname(DIRECTORY), '.venv', 'bin', 'python')
+                    venv_python = os.path.join(DIRECTORY, '.venv', 'bin', 'python')
                     if not os.path.exists(venv_python):
                         venv_python = 'python3'
                         
@@ -1135,8 +1214,8 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     if target_user:
                         cmd += ['--target-user', target_user]
                     if upload_video:
-                        # Map uploaded file from the 'Boss' uploads directory
-                        video_path = os.path.join(DIRECTORY, 'uploads', 'Boss', upload_video)
+                        # Map uploaded file from the 'TikTokUpload' uploads directory
+                        video_path = os.path.join(DIRECTORY, 'uploads', 'TikTokUpload', upload_video)
                         cmd += ['--upload-video', video_path]
                     if upload_caption:
                         cmd += ['--upload-caption', upload_caption]
@@ -1148,15 +1227,38 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                     log_message = f"Web farming bot started successfully for profile {profile}."
                     
                 elif action == 'stop_web_farming':
+                    profile = req.get('profile', 'profile_1')
                     try:
-                        subprocess.run(['pkill', '-f', 'web_farming_bot.py'])
-                        log_file = os.path.join(DIRECTORY, "web_farming_bot.log")
+                        subprocess.run(['pkill', '-f', f'web_farming_bot.py --profile {profile}'])
+                        subprocess.run(['pkill', '-9', '-f', f'profiles/{profile}'])
+                        log_file = os.path.join(DIRECTORY, f"web_farming_bot_{profile}.log")
                         with open(log_file, 'a', encoding='utf-8') as lf:
                             lf.write("\n🛑 STOPPED BY USER ACTIONS FROM DASHBOARD.\n")
-                        log_message = "Web farming bot stopped successfully."
+                        log_message = f"Web farming bot stopped successfully for profile {profile}."
                     except Exception as ex:
                         log_message = f"Failed to stop web farming bot: {ex}"
+                        
+                elif action == 'stop_all_web_farming':
+                    try:
+                        # Kill all running bots
+                        subprocess.run(['pkill', '-f', 'web_farming_bot.py'])
+                        # Kill all Chrome profile contexts
+                        subprocess.run(['pkill', '-9', '-f', 'profiles/'])
+                        
+                        # Add stopped message to all profile logs
+                        profiles_dir = os.path.join(DIRECTORY, "profiles")
+                        if os.path.exists(profiles_dir):
+                            for d in os.listdir(profiles_dir):
+                                if os.path.isdir(os.path.join(profiles_dir, d)) and not d.startswith('.'):
+                                    lf_path = os.path.join(DIRECTORY, f"web_farming_bot_{d}.log")
+                                    with open(lf_path, 'a', encoding='utf-8') as lf:
+                                        lf.write("\n🛑 ALL BOTS TERMINATED BY GLOBAL STOP COMMAND.\n")
+                        
+                        log_message = "All web farming bots stopped successfully."
+                    except Exception as ex:
+                        log_message = f"Failed to stop all web farming bots: {ex}"
                 
+
                 elif action == 'open_login_chrome':
                     profile = req.get('profile', 'profile_1')
                     profile_dir = os.path.join(DIRECTORY, "profiles", profile)
@@ -1164,23 +1266,32 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                         os.makedirs(profile_dir)
                     
                     try:
+                        # Kill any existing instance for this profile first
+                        subprocess.run(['pkill', '-f', f'web_farming_bot.py --profile {profile}'])
                         subprocess.run(['pkill', '-9', '-f', f'profiles/{profile}'])
                     except Exception:
                         pass
+                        
+                    log_file = os.path.join(DIRECTORY, f"web_farming_bot_{profile}.log")
+                    with open(log_file, 'w', encoding='utf-8') as lf:
+                        lf.write(f"--- OPENED CLEAN CHROME WINDOW FOR {profile} LOGIN ---\n")
                     
+                    chrome_path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
                     cmd = [
-                        "open", "-n", "-a", "Google Chrome", "--args",
+                        chrome_path,
                         f"--user-data-dir={profile_dir}",
-                        "--password-store=basic",
-                        "--use-mock-keychain",
-                        "--disable-blink-features=AutomationControlled",
-                        "https://www.tiktok.com/login"
+                        "--no-first-run",
+                        "https://www.tiktok.com"
                     ]
+                    
                     try:
                         subprocess.Popen(cmd)
-                        log_message = f"Opened Google Chrome manually for profile {profile}."
+                        log_message = f"Opened isolated Chrome browser for manual login (profile: {profile}). Please log in directly in the opened window."
+                        import time
+                        time.sleep(1.5)
+                        subprocess.run(['osascript', '-e', 'tell application "Google Chrome" to activate'], timeout=2)
                     except Exception as e:
-                        log_message = f"Failed to open Google Chrome: {e}"
+                        log_message = f"Failed to open Chrome: {e}"
                 elif action == 'create_profile':
                     name = req.get('name', '').strip()
                     import re
@@ -1202,6 +1313,34 @@ class SecondBrainHandler(http.server.SimpleHTTPRequestHandler):
                         self.send_response(500)
                         self.end_headers()
                         self.wfile.write(json.dumps({'error': f"Failed to create profile: {e}"}).encode('utf-8'))
+                        return
+                
+                elif action == 'delete_profile':
+                    profile = req.get('profile', '').strip()
+                    import re
+                    profile = re.sub(r'[^a-zA-Z0-9_-]', '', profile)
+                    if not profile:
+                        self.send_response(400)
+                        self.end_headers()
+                        self.wfile.write(json.dumps({'error': 'Invalid profile name'}).encode('utf-8'))
+                        return
+                    
+                    profile_dir = os.path.join(DIRECTORY, "profiles", profile)
+                    log_file = os.path.join(DIRECTORY, f"web_farming_bot_{profile}.log")
+                    try:
+                        # Stop any running processes for this profile
+                        subprocess.run(['pkill', '-f', f'web_farming_bot.py --profile {profile}'])
+                        subprocess.run(['pkill', '-9', '-f', f'profiles/{profile}'])
+                        
+                        if os.path.exists(profile_dir):
+                            shutil.rmtree(profile_dir)
+                        if os.path.exists(log_file):
+                            os.remove(log_file)
+                        log_message = f"Profile '{profile}' deleted successfully."
+                    except Exception as e:
+                        self.send_response(500)
+                        self.end_headers()
+                        self.wfile.write(json.dumps({'error': f"Failed to delete profile: {e}"}).encode('utf-8'))
                         return
                 
                 elif action == 'save_comments':

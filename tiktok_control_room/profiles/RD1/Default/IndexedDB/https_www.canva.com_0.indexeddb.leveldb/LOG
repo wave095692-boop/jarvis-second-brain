@@ -1,0 +1,18 @@
+2026/05/04-12:20:11.646 2158 Creating DB /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_www.canva.com_0.indexeddb.leveldb since it was missing.
+2026/05/04-12:20:11.650 2158 Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_www.canva.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/05/04-12:20:11.908 2158 Level-0 table #5: started
+2026/05/04-12:20:11.909 2158 Level-0 table #5: 10321 bytes OK
+2026/05/04-12:20:11.912 2158 Delete type=0 #3
+2026/05/04-12:20:11.913 2158 Manual compaction at level-0 from '\x00\x04\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x05\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/05/04-12:20:17.741 2158 Level-0 table #7: started
+2026/05/04-12:20:17.744 2158 Level-0 table #7: 20644 bytes OK
+2026/05/04-12:20:17.746 2158 Delete type=0 #4
+2026/05/04-12:20:17.746 2158 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2026/05/04-12:20:17.746 2158 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x03\x01\x02\x01\x0e\x00a\x00n\x00a\x00l\x00y\x00t\x00i\x00c\x00s\x00-\x00n\x00u\x00l\x00l' @ 507 : 1
+2026/05/04-12:20:17.746 2158 Compacting 1@1 + 1@2 files
+2026/05/04-12:20:17.748 2158 Generated table #8@1: 79 keys, 5595 bytes
+2026/05/04-12:20:17.748 2158 Compacted 1@1 + 1@2 files => 5595 bytes
+2026/05/04-12:20:17.749 2158 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/05/04-12:20:17.750 2158 Delete type=2 #7
+2026/05/04-12:20:17.750 2158 Delete type=2 #5
+2026/05/04-12:20:17.750 2158 Manual compaction at level-1 from '\x00\x03\x01\x02\x01\x0e\x00a\x00n\x00a\x00l\x00y\x00t\x00i\x00c\x00s\x00-\x00n\x00u\x00l\x00l' @ 507 : 1 .. (end); will stop at (end)

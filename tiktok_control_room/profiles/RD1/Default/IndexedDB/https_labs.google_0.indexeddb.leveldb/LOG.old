@@ -1,0 +1,36 @@
+2026/06/16-15:17:11.763 1a7c Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_labs.google_0.indexeddb.leveldb/MANIFEST-000001
+2026/06/16-15:17:11.764 1a7c Recovering log #1124
+2026/06/16-15:17:11.764 1a7c Reusing old log /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_labs.google_0.indexeddb.leveldb/001124.log 
+2026/06/16-15:17:11.764 1a7c Delete type=2 #1123
+2026/06/16-15:17:11.810 1abf Level-0 table #1129: started
+2026/06/16-15:17:11.812 1abf Level-0 table #1129: 6602 bytes OK
+2026/06/16-15:17:11.818 1abf Delete type=0 #1124
+2026/06/16-15:17:11.820 1a79 Manual compaction at level-0 from ' L\x02\x00\x00\x00' @ 72057594037927935 : 1 .. ' M\x02\x00\x00\x00' @ 0 : 0; will stop at ' L\x02\x00\x00\x05' @ 27828 : 1
+2026/06/16-15:17:11.820 1a79 Compacting 1@0 + 1@1 files
+2026/06/16-15:17:11.822 1a79 Generated table #1130@0: 441 keys, 6320 bytes
+2026/06/16-15:17:11.822 1a79 Compacted 1@0 + 1@1 files => 6320 bytes
+2026/06/16-15:17:11.824 1a79 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/06/16-15:17:11.824 1a79 Delete type=2 #1129
+2026/06/16-15:17:11.825 1a79 Manual compaction at level-0 from ' L\x02\x00\x00\x05' @ 27828 : 1 .. ' M\x02\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/06/16-15:17:14.097 1abf Level-0 table #1132: started
+2026/06/16-15:17:14.102 1abf Level-0 table #1132: 8369 bytes OK
+2026/06/16-15:17:14.104 1abf Delete type=2 #1126
+2026/06/16-15:17:14.104 1abf Delete type=0 #1128
+2026/06/16-15:17:14.104 1a7c Manual compaction at level-0 from ' M\x02\x00\x00\x00' @ 72057594037927935 : 1 .. ' N\x02\x00\x00\x00' @ 0 : 0; will stop at ' M\x02\x00\x00\x05' @ 28003 : 1
+2026/06/16-15:17:14.104 1a7c Compacting 1@0 + 1@1 files
+2026/06/16-15:17:14.106 1a7c Generated table #1133@0: 486 keys, 6664 bytes
+2026/06/16-15:17:14.107 1a7c Compacted 1@0 + 1@1 files => 6664 bytes
+2026/06/16-15:17:14.108 1a7c compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/06/16-15:17:14.108 1a7c Delete type=2 #1132
+2026/06/16-15:17:14.108 1a7c Manual compaction at level-0 from ' M\x02\x00\x00\x05' @ 28003 : 1 .. ' N\x02\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/06/17-10:24:44.680 1abf Level-0 table #1135: started
+2026/06/17-10:24:44.685 1abf Level-0 table #1135: 1164 bytes OK
+2026/06/17-10:24:44.688 1abf Delete type=0 #1131
+2026/06/17-10:24:44.688 1abf Delete type=2 #1130
+2026/06/17-10:24:44.689 1a79 Manual compaction at level-0 from ' N\x02\x00\x00\x00' @ 72057594037927935 : 1 .. ' O\x02\x00\x00\x00' @ 0 : 0; will stop at ' N\x02\x00\x00\x05' @ 28034 : 1
+2026/06/17-10:24:44.689 1a79 Compacting 1@0 + 1@1 files
+2026/06/17-10:24:44.690 1a79 Generated table #1136@0: 491 keys, 6718 bytes
+2026/06/17-10:24:44.690 1a79 Compacted 1@0 + 1@1 files => 6718 bytes
+2026/06/17-10:24:44.691 1a79 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/06/17-10:24:44.691 1a79 Delete type=2 #1135
+2026/06/17-10:24:44.691 1a79 Manual compaction at level-0 from ' N\x02\x00\x00\x05' @ 28034 : 1 .. ' O\x02\x00\x00\x00' @ 0 : 0; will stop at (end)

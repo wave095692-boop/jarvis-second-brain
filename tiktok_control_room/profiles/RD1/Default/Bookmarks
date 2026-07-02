@@ -1,0 +1,47 @@
+{
+   "checksum": "30e71ca83c7cd0e2f08487291373e16b",
+   "roots": {
+      "bookmark_bar": {
+         "children": [  ],
+         "date_added": "13415353607562693",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Bookmarks Bar",
+         "type": "folder"
+      },
+      "other": {
+         "children": [ {
+            "date_added": "13420272327943606",
+            "date_last_used": "0",
+            "guid": "233cd631-9baf-4725-8ce9-c892999e5599",
+            "id": "5",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "ฺBEER จงจำลองตัวเอง ให้เป็นคนที่เก่งและรอบรู้ที่สุดในโลก และมีทักษะเสริม ใ - Google Gemini",
+            "type": "url",
+            "url": "https://gemini.google.com/app/def0a4cf9a4d6660?is_sa=1&is_sa=1&android-min-version=301356232&ios-min-version=322.0&campaign_id=bkws&utm_source=sem&utm_medium=paid-media&utm_campaign=bkws&pt=9008&mt=8&ct=p-growth-sem-bkws&gclsrc=aw.ds&gad_source=1&gad_campaignid=22443036437&gbraid=0AAAAApk5BhmhczHHg82W4WD7KxgKI61W-&gclid=CjwKCAiA-sXMBhAOEiwAGGw6LA-SNub2BAGIH48JS3sqv_mAkl54ZHtRuBSl7s1Qaah7T8xlwyT58xoCYcwQAvD_BwE"
+         } ],
+         "date_added": "13415353607562693",
+         "date_last_used": "0",
+         "date_modified": "13420272327943606",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other Bookmarks",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13415353607562693",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile Bookmarks",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}

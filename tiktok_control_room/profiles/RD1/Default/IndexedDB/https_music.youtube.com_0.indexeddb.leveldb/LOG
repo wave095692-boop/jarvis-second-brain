@@ -1,0 +1,6 @@
+2026/06/16-16:23:12.842 1abf Creating DB /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_music.youtube.com_0.indexeddb.leveldb since it was missing.
+2026/06/16-16:23:12.847 1abf Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_music.youtube.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/06/16-16:32:41.185 1a79 Level-0 table #5: started
+2026/06/16-16:32:41.188 1a79 Level-0 table #5: 170070 bytes OK
+2026/06/16-16:32:41.194 1a79 Delete type=0 #3
+2026/06/16-16:32:41.198 1a79 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

@@ -1,0 +1,6 @@
+2026/02/16-16:15:55.097 9406da Creating DB /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_www.capcut.com_0.indexeddb.leveldb since it was missing.
+2026/02/16-16:15:55.100 9406da Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_www.capcut.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/02/16-16:16:23.499 9406da Level-0 table #5: started
+2026/02/16-16:16:23.506 9406da Level-0 table #5: 976084 bytes OK
+2026/02/16-16:16:23.508 9406da Delete type=0 #3
+2026/02/16-16:16:23.508 9406da Manual compaction at level-0 from (begin) .. (end); will stop at (end)

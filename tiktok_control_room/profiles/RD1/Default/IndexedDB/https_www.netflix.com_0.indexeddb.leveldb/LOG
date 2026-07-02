@@ -1,0 +1,63 @@
+2026/03/22-10:41:12.164 1ccf Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_www.netflix.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/03/22-10:41:12.164 1ccf Recovering log #3
+2026/03/22-10:41:12.167 1ccf Reusing old log /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_www.netflix.com_0.indexeddb.leveldb/000003.log 
+2026/03/22-11:10:45.563 1cd9 Level-0 table #5: started
+2026/03/22-11:10:45.585 1cd9 Level-0 table #5: 2640207 bytes OK
+2026/03/22-11:10:45.591 1cd9 Delete type=0 #3
+2026/03/22-12:01:06.817 1cd9 Level-0 table #7: started
+2026/03/22-12:01:06.828 1cd9 Level-0 table #7: 2240676 bytes OK
+2026/03/22-12:01:06.830 1cd9 Delete type=0 #4
+2026/03/22-12:03:18.822 1cd9 Compacting 1@1 + 1@2 files
+2026/03/22-12:03:18.830 1cd9 Generated table #8@1: 51 keys, 13709 bytes
+2026/03/22-12:03:18.830 1cd9 Compacted 1@1 + 1@2 files => 13709 bytes
+2026/03/22-12:03:18.834 1cd9 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/03/22-12:03:18.834 1cd9 Delete type=2 #7
+2026/03/22-12:03:18.834 1cd9 Delete type=2 #5
+2026/03/22-12:50:16.907 1cd9 Level-0 table #10: started
+2026/03/22-12:50:16.927 1cd9 Level-0 table #10: 2330059 bytes OK
+2026/03/22-12:50:16.929 1cd9 Delete type=0 #6
+2026/03/22-12:57:36.910 1ccf Compacting 1@1 + 1@2 files
+2026/03/22-12:57:36.914 1ccf Generated table #11@1: 51 keys, 12655 bytes
+2026/03/22-12:57:36.914 1ccf Compacted 1@1 + 1@2 files => 12655 bytes
+2026/03/22-12:57:36.916 1ccf compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/03/22-12:57:36.916 1ccf Delete type=2 #10
+2026/03/22-12:57:36.916 1ccf Delete type=2 #8
+2026/03/22-13:38:39.221 1cd9 Level-0 table #13: started
+2026/03/22-13:38:39.235 1cd9 Level-0 table #13: 2240453 bytes OK
+2026/03/22-13:38:39.237 1cd9 Delete type=0 #9
+2026/03/22-13:45:07.219 1ccf Compacting 1@1 + 1@2 files
+2026/03/22-13:45:07.229 1ccf Generated table #14@1: 48 keys, 11064 bytes
+2026/03/22-13:45:07.229 1ccf Compacted 1@1 + 1@2 files => 11064 bytes
+2026/03/22-13:45:07.230 1ccf compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/03/22-13:45:07.230 1ccf Delete type=2 #13
+2026/03/22-13:45:07.230 1ccf Delete type=2 #11
+2026/03/22-14:28:23.172 1cd9 Level-0 table #16: started
+2026/03/22-14:28:23.184 1cd9 Level-0 table #16: 2398846 bytes OK
+2026/03/22-14:28:23.185 1cd9 Delete type=0 #12
+2026/03/22-14:35:51.169 1ccf Compacting 1@1 + 1@2 files
+2026/03/22-14:35:51.175 1ccf Generated table #17@1: 52 keys, 13981 bytes
+2026/03/22-14:35:51.176 1ccf Compacted 1@1 + 1@2 files => 13981 bytes
+2026/03/22-14:35:51.177 1ccf compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/03/22-14:35:51.178 1ccf Delete type=2 #14
+2026/03/22-14:35:51.178 1ccf Delete type=2 #16
+2026/03/22-22:18:53.649 1cd9 Level-0 table #19: started
+2026/03/22-22:18:53.673 1cd9 Level-0 table #19: 2360264 bytes OK
+2026/03/22-22:18:53.677 1cd9 Delete type=0 #15
+2026/03/23-00:30:57.879 1ccf Compacting 1@1 + 1@2 files
+2026/03/23-00:30:57.892 1ccf Generated table #20@1: 51 keys, 13468 bytes
+2026/03/23-00:30:57.892 1ccf Compacted 1@1 + 1@2 files => 13468 bytes
+2026/03/23-00:30:57.899 1ccf compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/03/23-00:30:57.899 1ccf Delete type=2 #17
+2026/03/23-00:30:57.899 1ccf Delete type=2 #19
+2026/03/23-09:54:47.193 1cd9 Level-0 table #22: started
+2026/03/23-09:54:47.201 1cd9 Level-0 table #22: 1192141 bytes OK
+2026/03/23-09:54:47.205 1cd9 Delete type=0 #18
+2026/03/23-09:54:47.208 1cd9 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2026/03/23-09:54:47.208 1cd9 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x02\x01\x02\x01\x0e\x00u\x00n\x00s\x00e\x00n\x00t\x00p\x00l\x00a\x00y\x00d\x00a\x00t\x00a' @ 56729 : 1
+2026/03/23-09:54:47.208 1cd9 Compacting 1@1 + 1@2 files
+2026/03/23-09:54:47.211 1cd9 Generated table #23@1: 50 keys, 11450 bytes
+2026/03/23-09:54:47.211 1cd9 Compacted 1@1 + 1@2 files => 11450 bytes
+2026/03/23-09:54:47.212 1cd9 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/03/23-09:54:47.212 1cd9 Delete type=2 #20
+2026/03/23-09:54:47.212 1cd9 Delete type=2 #22
+2026/03/23-09:54:47.214 1cd9 Manual compaction at level-1 from '\x00\x02\x01\x02\x01\x0e\x00u\x00n\x00s\x00e\x00n\x00t\x00p\x00l\x00a\x00y\x00d\x00a\x00t\x00a' @ 56729 : 1 .. (end); will stop at (end)

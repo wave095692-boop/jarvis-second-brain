@@ -1,0 +1,15 @@
+2026/03/31-11:22:07.400 1cd9 Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_th.savemp3.net_0.indexeddb.leveldb/MANIFEST-000001
+2026/03/31-11:22:07.402 1cd9 Recovering log #11
+2026/03/31-11:22:07.404 1cd9 Reusing old log /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_th.savemp3.net_0.indexeddb.leveldb/000011.log 
+2026/03/31-11:22:43.728 1cd9 Level-0 table #16: started
+2026/03/31-11:22:43.732 1cd9 Level-0 table #16: 45838 bytes OK
+2026/03/31-11:22:43.736 1cd9 Delete type=0 #11
+2026/03/31-11:22:43.738 1cd9 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2026/03/31-11:22:43.738 1cd9 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x01\x01 \x03\x00 u\x0a"\xd4yB\x00\x01'\x00c\x00r\x00o\x00s\x00s\x00-\x00o\x00r\x00i\x00g\x00i\x00n\x00|\x00h\x00t\x00t\x00p\x00s\x00:\x00/\x00/\x00c\x00.\x00c\x00l\x00a\x00r\x00i\x00t\x00y\x00.\x00m\x00s\x00/\x00c\x00.\x00g\x00i\x00f' @ 3400 : 1
+2026/03/31-11:22:43.738 1cd9 Compacting 1@1 + 1@2 files
+2026/03/31-11:22:43.742 1cd9 Generated table #17@1: 150 keys, 12934 bytes
+2026/03/31-11:22:43.742 1cd9 Compacted 1@1 + 1@2 files => 12934 bytes
+2026/03/31-11:22:43.744 1cd9 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/03/31-11:22:43.745 1cd9 Delete type=2 #16
+2026/03/31-11:22:43.745 1cd9 Delete type=2 #13
+2026/03/31-11:22:43.747 1cd9 Manual compaction at level-1 from '\x00\x01\x01 \x03\x00 u\x0a"\xd4yB\x00\x01'\x00c\x00r\x00o\x00s\x00s\x00-\x00o\x00r\x00i\x00g\x00i\x00n\x00|\x00h\x00t\x00t\x00p\x00s\x00:\x00/\x00/\x00c\x00.\x00c\x00l\x00a\x00r\x00i\x00t\x00y\x00.\x00m\x00s\x00/\x00c\x00.\x00g\x00i\x00f' @ 3400 : 1 .. (end); will stop at (end)

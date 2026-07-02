@@ -1,0 +1,16 @@
+2026/06/10-16:45:10.812 31b4 Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/WebStorage/4/IndexedDB/indexeddb.leveldb/MANIFEST-000001
+2026/06/10-16:45:10.812 31b4 Recovering log #31
+2026/06/10-16:45:10.817 31b4 Reusing old log /Users/apple/Library/Application Support/Google/Chrome/Profile 11/WebStorage/4/IndexedDB/indexeddb.leveldb/000031.log 
+2026/06/10-16:45:11.293 31c9 Manual compaction at level-0 from '\x00\x05\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x06\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/06/10-17:28:09.383 31b6 Level-0 table #36: started
+2026/06/10-17:28:09.391 31b6 Level-0 table #36: 908827 bytes OK
+2026/06/10-17:28:09.395 31b6 Delete type=0 #31
+2026/06/10-17:28:09.401 31b6 Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2026/06/10-17:28:09.401 31b6 Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x05\x01\x1f\x04\x03\x01\x06\x00Q\x00U\x00E\x00U\x00E\x00D\x03\x00\x00\x00\x00\x00\x00L@\x03\x00`\xfd\x8a\xbe\xe3yB\x00\x03\x00\x00\x00\x00\x00\x80N@' @ 11299 : 1
+2026/06/10-17:28:09.401 31b6 Compacting 1@1 + 1@2 files
+2026/06/10-17:28:09.406 31b6 Generated table #37@1: 86 keys, 20639 bytes
+2026/06/10-17:28:09.406 31b6 Compacted 1@1 + 1@2 files => 20639 bytes
+2026/06/10-17:28:09.407 31b6 compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/06/10-17:28:09.407 31b6 Delete type=2 #36
+2026/06/10-17:28:09.407 31b6 Delete type=2 #33
+2026/06/10-17:28:09.414 31b6 Manual compaction at level-1 from '\x00\x05\x01\x1f\x04\x03\x01\x06\x00Q\x00U\x00E\x00U\x00E\x00D\x03\x00\x00\x00\x00\x00\x00L@\x03\x00`\xfd\x8a\xbe\xe3yB\x00\x03\x00\x00\x00\x00\x00\x80N@' @ 11299 : 1 .. (end); will stop at (end)

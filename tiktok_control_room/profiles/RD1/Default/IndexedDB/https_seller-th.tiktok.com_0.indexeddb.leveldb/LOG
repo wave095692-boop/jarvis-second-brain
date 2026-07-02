@@ -1,0 +1,25 @@
+2026/05/30-17:40:49.617 20c2 Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_seller-th.tiktok.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/05/30-17:40:49.618 20c2 Recovering log #10
+2026/05/30-17:40:49.618 20c2 Reusing old log /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_seller-th.tiktok.com_0.indexeddb.leveldb/000010.log 
+2026/05/30-17:40:49.618 20c2 Delete type=2 #8
+2026/05/30-17:40:49.695 20de Level-0 table #15: started
+2026/05/30-17:40:49.696 20de Level-0 table #15: 5147 bytes OK
+2026/05/30-17:40:49.698 20de Delete type=0 #10
+2026/05/30-17:40:49.699 20c0 Manual compaction at level-0 from '\x00\x07\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x08\x00\x00\x00' @ 0 : 0; will stop at '\x00\x07\x00\x00\x05' @ 256 : 1
+2026/05/30-17:40:49.699 20c0 Compacting 1@0 + 1@1 files
+2026/05/30-17:40:49.700 20c0 Generated table #16@0: 83 keys, 2919 bytes
+2026/05/30-17:40:49.700 20c0 Compacted 1@0 + 1@1 files => 2919 bytes
+2026/05/30-17:40:49.701 20c0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/05/30-17:40:49.701 20c0 Delete type=2 #15
+2026/05/30-17:40:49.701 20c0 Manual compaction at level-0 from '\x00\x07\x00\x00\x05' @ 256 : 1 .. '\x00\x08\x00\x00\x00' @ 0 : 0; will stop at (end)
+2026/05/30-17:40:50.832 20c2 Level-0 table #18: started
+2026/05/30-17:40:50.833 20c2 Level-0 table #18: 1234 bytes OK
+2026/05/30-17:40:50.834 20c2 Delete type=0 #14
+2026/05/30-17:40:50.834 20c2 Delete type=2 #12
+2026/05/30-17:40:50.835 20c0 Manual compaction at level-0 from '\x00\x08\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\x09\x00\x00\x00' @ 0 : 0; will stop at '\x00\x08\x00\x00\x05' @ 299 : 1
+2026/05/30-17:40:50.835 20c0 Compacting 1@0 + 1@1 files
+2026/05/30-17:40:50.835 20c0 Generated table #19@0: 87 keys, 2959 bytes
+2026/05/30-17:40:50.835 20c0 Compacted 1@0 + 1@1 files => 2959 bytes
+2026/05/30-17:40:50.836 20c0 compacted to: files[ 0 1 1 0 0 0 0 ]
+2026/05/30-17:40:50.836 20c0 Delete type=2 #18
+2026/05/30-17:40:50.836 20c0 Manual compaction at level-0 from '\x00\x08\x00\x00\x05' @ 299 : 1 .. '\x00\x09\x00\x00\x00' @ 0 : 0; will stop at (end)

@@ -1,0 +1,15 @@
+2026/06/19-10:33:36.615 1a7c Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_claude.ai_0.indexeddb.leveldb/MANIFEST-000001
+2026/06/19-10:33:36.615 1a7c Recovering log #4
+2026/06/19-10:33:36.615 1a7c Reusing old log /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_claude.ai_0.indexeddb.leveldb/000004.log 
+2026/06/19-12:49:25.342 1a7c Level-0 table #8: started
+2026/06/19-12:49:25.344 1a7c Level-0 table #8: 6541 bytes OK
+2026/06/19-12:49:25.345 1a7c Delete type=0 #4
+2026/06/19-12:49:25.346 1a7c Manual compaction at level-0 from (begin) .. (end); will stop at (end)
+2026/06/19-12:49:25.346 1a7c Manual compaction at level-1 from (begin) .. (end); will stop at '\x00\x02\x01\x02\x01"\x00x\x00-\x00a\x00r\x00k\x00-\x00a\x00r\x00i\x00d\x00-\x00h\x00t\x00t\x00p\x00s\x00:\x00/\x00/\x00a\x00-\x00c\x00d\x00n\x00.\x00c\x00l\x00a\x00u\x00d\x00e\x00.\x00a\x00i' @ 166 : 1
+2026/06/19-12:49:25.346 1a7c Compacting 1@1 + 1@2 files
+2026/06/19-12:49:25.348 1a7c Generated table #9@1: 39 keys, 1151 bytes
+2026/06/19-12:49:25.348 1a7c Compacted 1@1 + 1@2 files => 1151 bytes
+2026/06/19-12:49:25.349 1a7c compacted to: files[ 0 0 1 0 0 0 0 ]
+2026/06/19-12:49:25.349 1a7c Delete type=2 #5
+2026/06/19-12:49:25.349 1a7c Delete type=2 #8
+2026/06/19-12:49:25.350 1a7c Manual compaction at level-1 from '\x00\x02\x01\x02\x01"\x00x\x00-\x00a\x00r\x00k\x00-\x00a\x00r\x00i\x00d\x00-\x00h\x00t\x00t\x00p\x00s\x00:\x00/\x00/\x00a\x00-\x00c\x00d\x00n\x00.\x00c\x00l\x00a\x00u\x00d\x00e\x00.\x00a\x00i' @ 166 : 1 .. (end); will stop at (end)

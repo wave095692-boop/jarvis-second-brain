@@ -296,26 +296,26 @@ html_content = """<!DOCTYPE html>
                 <div class="card-header">
                     <div>
                         <span class="ep-label">DAY D-9 — EP.2</span>
-                        <h2>คำสารภาพ CEO — ทำไมต้องลด</h2>
+                        <h2>ชาเลนจ์ท้าชนบัญชี — ทำไมต้องลด</h2>
                     </div>
                     <span class="badge reach">REACH</span>
                 </div>
                 
                 <div style="margin-top: 12px; border-left: 3px solid var(--secondary); padding-left: 12px; margin-bottom: 10px;">
-                    <div style="font-weight: 700; font-size: 0.85rem; color: var(--secondary);">1. คอนเทนต์หลัก (CEO Confession Video):</div>
-                    <div style="font-size: 0.82rem; color: var(--text-dim); line-height: 1.45; margin-top: 3px;">บอสเคนทอล์กสารภาพตรงๆ เรื่องสั่งผ้าล้นคลังจนสต๊อกเกิน (Pratfall Effect) ลดแหลกเพราะหน้างานขายตรงไม่เสียค่า GP 30% ให้แอปออนไลน์ ชวนคอมเมนต์เสื้อรู้ดด็อกตัวแรก</div>
+                    <div style="font-weight: 700; font-size: 0.85rem; color: var(--secondary);">1. คอนเทนต์หลัก (Vlog Challenge & Zero-GP Math):</div>
+                    <div style="font-size: 0.82rem; color: var(--text-dim); line-height: 1.45; margin-top: 3px;">บอสเคนทอล์กท้าเดิมพันกับแผนกบัญชีที่ว่าล้างสต๊อกแสนชิ้นไม่หมดใน 9 วัน หั่นราคาต่ำกว่าทุนด้วยการตัดค่า GP ออนไลน์ 30% คืนให้ลูกค้า ดึงคนมาร่วมลุยภารกิจดันโบนัสคลังสินค้า</div>
                 </div>
                 <div style="margin-top: 10px; border-left: 3px solid var(--primary); padding-left: 12px; margin-bottom: 10px;">
                     <div style="font-weight: 700; font-size: 0.85rem; color: var(--primary);">2. คอนเทนต์ย่อย (Behind the Scenes):</div>
-                    <div style="font-size: 0.82rem; color: var(--text-dim); line-height: 1.45; margin-top: 3px;">คลิปสั้นสัมภาษณ์คนงานบ่นเหนื่อยเพราะเสื้อล้นโกดัง ตัดสลับภาพบอสเคนทำหน้าตึงและสั่งหั่นราคาระบายของด่วน</div>
+                    <div style="font-size: 0.82rem; color: var(--text-dim); line-height: 1.45; margin-top: 3px;">คลิปสัมภาษณ์พนักงานคลังและพี่หมีแอบลุ้นโบนัสและเตรียมลุยชาเลนจ์ 9 วัน สลับภาพบอสเคนกอดอกเชียร์ทีมงานแบบเป็นกันเอง</div>
                 </div>
                 <div style="margin-top: 10px; border-left: 3px solid var(--success); padding-left: 12px; margin-bottom: 10px;">
-                    <div style="font-weight: 700; font-size: 0.85rem; color: var(--success);">3. คอนเทนต์มีม/รูปภาพ (Reason-Why Info):</div>
-                    <div style="font-size: 0.82rem; color: var(--text-dim); line-height: 1.45; margin-top: 3px;">กราฟิกอินโฟชี้แจงคณิตศาสตร์ความคุ้มค่า เปรียบเทียบส่วนลด GP ระบบออนไลน์ที่ทีมงานเอามาเปลี่ยนเป็นส่วนลดหน้างานให้ผู้ซื้อ</div>
+                    <div style="font-weight: 700; font-size: 0.85rem; color: var(--success);">3. คอนเทนต์มีม/รูปภาพ (Reason-Why Challenge Info):</div>
+                    <div style="font-size: 0.82rem; color: var(--text-dim); line-height: 1.45; margin-top: 3px;">อินโฟกราฟิกท้าชนแผนกบัญชี ตีแผ่ตัวเลขเปรียบเทียบค่าธรรมเนียม GP ที่โดนหัก 30% นำมาเปลี่ยนเป็นส่วนลดให้ผู้ซื้อที่หน้างานจริง</div>
                 </div>
                 <div class="section-title">ฝ่ายยุทธวิธีและงบประมาณ</div>
                 <div class="script-box" style="font-size:0.78rem;">
-                    <b>งบโฆษณา:</b> ENG obj ฿1,500/วัน ใส่โพสต์สคริปต์ยาว / คลิปหลักสารภาพ CEO | <b>จิตวิทยา:</b> P2 Pratfall, P3 Reason-Why
+                    <b>งบโฆษณา:</b> ENG obj ฿1,500/วัน ใส่โพสต์สคริปต์ยาว / คลิปชาเลนจ์ท้าชนบัญชี | <b>จิตวิทยา:</b> P7 Unity, P3 Reason-Why
                 </div>
             </div>
 
@@ -579,8 +579,6 @@ command = [
     chrome_path,
     "--headless",
     "--disable-gpu",
-    "--no-sandbox",
-    "--user-data-dir=/Users/apple/.gemini/antigravity-ide/scratch/chrome_profile",
     f"--print-to-pdf={pdf_path}",
     html_path
 ]

@@ -1,0 +1,48 @@
+{
+   "checksum": "30e71ca83c7cd0e2f08487291373e16b",
+   "roots": {
+      "bookmark_bar": {
+         "children": [  ],
+         "date_added": "13415353607562693",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Bookmarks Bar",
+         "type": "folder"
+      },
+      "other": {
+         "children": [ {
+            "date_added": "13420272327943606",
+            "date_last_used": "0",
+            "guid": "233cd631-9baf-4725-8ce9-c892999e5599",
+            "id": "5",
+            "meta_info": {
+               "power_bookmark_meta": ""
+            },
+            "name": "ฺBEER จงจำลองตัวเอง ให้เป็นคนที่เก่งและรอบรู้ที่สุดในโลก และมีทักษะเสริม ใ - Google Gemini",
+            "type": "url",
+            "url": "https://gemini.google.com/app/def0a4cf9a4d6660?is_sa=1&is_sa=1&android-min-version=301356232&ios-min-version=322.0&campaign_id=bkws&utm_source=sem&utm_medium=paid-media&utm_campaign=bkws&pt=9008&mt=8&ct=p-growth-sem-bkws&gclsrc=aw.ds&gad_source=1&gad_campaignid=22443036437&gbraid=0AAAAApk5BhmhczHHg82W4WD7KxgKI61W-&gclid=CjwKCAiA-sXMBhAOEiwAGGw6LA-SNub2BAGIH48JS3sqv_mAkl54ZHtRuBSl7s1Qaah7T8xlwyT58xoCYcwQAvD_BwE"
+         } ],
+         "date_added": "13415353607562693",
+         "date_last_used": "0",
+         "date_modified": "13420272327943606",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Other Bookmarks",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13415353607562693",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile Bookmarks",
+         "type": "folder"
+      }
+   },
+   "sync_metadata": "CpUCCvQBCIiBAhLtASAAkgHZAQrWAQoOY2hyb21lX3N5bmNfYm0SBTUxIWJtGhIJFQK9l3FUBgARFQK9l3FUBgAiNAke236XcVQGABADGbYRhcdl3KQyIAEqHDUxIWJtL2ZkOjkxNjM3MjM1NTk0Njg4OTMxNjEiNAke236XcVQGABADGbYRhcdl3KQyIAEqHDUxIWJtL2ZkOjkxNjM3MjM1NTk0Njg4OTMxNjEiNAke236XcVQGABADGbYRhcdl3KQyIAEqHDUxIWJtL2ZkOjkxNjM3MjM1NTk0Njg4OTMxNjEpYJC+l3FUBgDqAQsIypHK0QYQ2MOfEBIAKhh2dlVaLzl4ZElBVHJsckhySitUVE1RPT1IAxLDAQgDEr4BChxuamdEdTg4ZUNydlhwODZwRDdmSEdjcUZwODg9EmZaOkFEcXRBWno5OHgvTS9ZOGV6Tk9zeEl1SG53NE0vbEtDRDlIWFhubTNwMHBBTHJhUFhqRjY1M1d4VFJmVUxOZEpvZkFUQjlNMXZtOGx4aCtJTU5DbGZ5MFRlMW53WENJTXl3PT0YACAAKAAwqrK7wN7SkgM4AEAAShx5ek5CMDFjbjU0QTdjUlUwdVQrL1BnbVR0VW89WgBlAAAAABLDAQgCEr4BChxZY1NUb252RVNQd3FDczRMMmNyVmh2NjhMOTg9EmZaOkFEcXRBWnkxaFhXTFNncHNzZmhTSS9KRFZXTHRhc29ZZDhwWjZRNXJTRFU1UjlUcm01QzZqb1RYbU96cUVwd0RGTVMwZkRGT1l1R05OY1FPQjc1ckJuNERyYTBXRFY4MkFBPT0YACAAKAAwqrK7wN7SkgM4AEAAShxvUFZraHdCUmJWNjVLQ1dSMitJT05IV29PdTg9WgBlAAAAABKrAQgBEqYBChx5eEovNmZ2a2VjcjdrcDVFUXpCNHRXTHBkYkU9Ek5aOkFEcXRBWngrem5QMy84Z1BPcXlVWFFXdGhlMWhpL2U3dGQ0TlA4S1lsNDhrTXN3ODZGM1lpejVVT2dDRWMxdnE3SHh4M0RCUHBqTGoYACAAKAAwqrK7wN7SkgM4AEAAShxhUkNXTGdoRjliNUlucUtJRHZ1Si9qdlFrRmM9WgBlAAAAABLrAQgFEuYBChx1clNpN2REYTNzdlF6SURMR25PanIycXhkT0U9EmZaOkFEcXRBWnlpSGZIVXh5RTArY3pVeTNhaWtCcGVnWEJaRHQrRTA4aUFIR0tYRUhqcGZQWmNvMllDWnFaMXdwTmxwa2M3TCt6Y0xLd1NyWUplQTRJRmxWQ1g3WUttMnp2aXZ3PT0YACAAKAAwltOH5MXikwM4iurortczQIrq6K7XM0occ3VHNldldW45dWdHZXFhTzJmWll0NnVkaStjPVoeIhxpQlZZU2dBdTVEZXR5eUNiRnk5L0NzbHRnSWs9ZYVwsQQwATgA",
+   "version": 1
+}

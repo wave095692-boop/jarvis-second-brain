@@ -1,0 +1,6 @@
+2026/05/30-17:12:53.136 20c2 Creating DB /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_www.bestbuy.com_0.indexeddb.leveldb since it was missing.
+2026/05/30-17:12:53.140 20c2 Reusing MANIFEST /Users/apple/Library/Application Support/Google/Chrome/Profile 11/IndexedDB/https_www.bestbuy.com_0.indexeddb.leveldb/MANIFEST-000001
+2026/05/30-17:12:56.767 20c0 Level-0 table #5: started
+2026/05/30-17:12:56.769 20c0 Level-0 table #5: 8231 bytes OK
+2026/05/30-17:12:56.775 20c0 Delete type=0 #3
+2026/05/30-17:12:56.775 20c0 Manual compaction at level-0 from (begin) .. (end); will stop at (end)

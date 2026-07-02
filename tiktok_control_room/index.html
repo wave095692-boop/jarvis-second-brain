@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS SECOND BRAIN — Control Room</title>
+    <!-- Cyan Glowing Neon Game Controller Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300ffcc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><rect x='2' y='6' width='20' height='12' rx='3' /><path d='M6 12h4M8 10v4M15 11h.01M18 13h.01' /></svg>">
+    <!-- Lucide Icons & Fonts -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700;800&family=Anuphan:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css?v=4.12">
+    <style>
+        /* Embed docx styles directly to avoid browser CSS caching */
+        .docx-viewer {
+            background: #ffffff !important;
+            color: #2b2b2b !important;
+            padding: 40px 50px !important;
+            border-radius: 8px !important;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+            max-height: 550px !important;
+            overflow-y: auto !important;
+            font-family: 'Times New Roman', Georgia, serif, 'Kanit' !important;
+            font-size: 16px !important;
+            line-height: 1.6 !important;
+            text-align: left !important;
+            border: 1px solid #ddd !important;
+            margin: 10px auto !important;
+            max-width: 800px !important;
+        }
+        .docx-viewer h1, .docx-viewer h2, .docx-viewer h3, .docx-viewer h4 {
+            font-family: 'Kanit', sans-serif !important;
+            color: #111111 !important;
+            margin-top: 1.2em !important;
+            margin-bottom: 0.6em !important;
+            font-weight: 700 !important;
+        }
+        .docx-viewer h1 { font-size: 22px !important; border-bottom: 1px solid #ddd !important; padding-bottom: 5px !important; }
+        .docx-viewer h2 { font-size: 18px !important; }
+        .docx-viewer h3 { font-size: 16px !important; }
+        .docx-viewer p {
+            margin-bottom: 1em !important;
+            color: #222222 !important;
+        }
+        .docx-viewer ul, .docx-viewer ol {
+            margin-bottom: 1em !important;
+            padding-left: 20px !important;
+            color: #222222 !important;
+        }
+        .docx-viewer li {
+            margin-bottom: 0.4em !important;
+        }
+        .docx-viewer table {
+            width: 100% !important;
+            border-collapse: collapse !important;
+            margin: 15px 0 !important;
+            font-size: 14px !important;
+        }
+        .docx-viewer th, .docx-viewer td {
+            border: 1px solid #cccccc !important;
+            padding: 8px 12px !important;
+            text-align: left !important;
+            color: #222222 !important;
+        }
+        .docx-viewer th {
+            background-color: #f5f5f5 !important;
+            font-weight: bold !important;
+        }
+
+        /* Beautiful Brutalist DOCX custom dashboard presentation styles */
+        .docx-beautiful-container {
+            background: #FAF9F6 !important;
+            color: #121212 !important;
+            padding: 35px 30px !important;
+            border-radius: 8px !important;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5) !important;
+            max-height: 580px !important;
+            overflow-y: auto !important;
+            font-family: 'Anuphan', 'Kanit', sans-serif !important;
+            font-size: 14.5px !important;
+            line-height: 1.6 !important;
+            text-align: left !important;
+            border: 2px solid #121212 !important;
+            margin: 0 auto !important;
+        }
+
+        .docx-intro-header {
+            border-bottom: 4px solid #121212 !important;
+            padding-bottom: 20px !important;
+            margin-bottom: 25px !important;
+        }
+
+        .docx-intro-header h1 {
+            font-family: 'Kanit', sans-serif !important;
+            font-size: 26px !important;
+            font-weight: 800 !important;
+            margin: 0 0 10px 0 !important;
+            color: #121212 !important;
+            text-transform: uppercase !important;
+        }
+
+        .docx-intro-subtitle {
+            font-size: 14px !important;
+            color: #444444 !important;
+            margin-bottom: 15px !important;
+            font-weight: 600 !important;
+        }
+
+        .docx-meta-grid {
+            display: grid !important;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)) !important;
+            gap: 12px !important;
+            margin-top: 15px !important;
+            margin-bottom: 15px !important;
+        }
+
+        .docx-meta-item {
+            border: 2px solid #121212 !important;
+            padding: 10px 12px !important;
+            background: #ffffff !important;
+            box-shadow: 3px 3px 0 #121212 !important;
+        }
+
+        .docx-meta-item b {
+            display: block !important;
+            font-family: 'IBM Plex Mono', monospace !important;
+            font-size: 15px !important;
+            color: #FF4D00 !important;
+        }
+
+        .docx-meta-item span {
+            font-size: 11px !important;
+            color: #555555 !important;
+            font-weight: 600 !important;
+        }
+
+        .docx-phase-box {
+            background: #ffffff !important;
+            border: 2px solid #121212 !important;
+            padding: 12px 15px !important;
+            margin-bottom: 12px !important;
+            box-shadow: 3px 3px 0 #121212 !important;
+        }
+
+        .docx-phase-box h4, .docx-rules-box h4 {
+            font-family: 'Kanit', sans-serif !important;
+            margin: 0 0 8px 0 !important;
+            font-size: 13px !important;
+            font-weight: 700 !important;
+            color: #121212 !important;
+        }
+
+        .docx-rules-box {
+            background: #fff9e6 !important;
+            border: 2px dashed #ffb300 !important;
+            padding: 12px 15px !important;
+            margin-bottom: 15px !important;
+            border-radius: 4px !important;
+        }
+
+        .docx-rules-box ul, .docx-phase-box ul {
+            padding-left: 20px !important;
+            margin: 0 !important;
+        }
+
+        .docx-rules-box li {
+            margin-bottom: 6px !important;
+            font-size: 12.5px !important;
+            color: #664d03 !important;
+        }
+
+        .docx-card {
+            background: #ffffff !important;
+            border: 2px solid #121212 !important;
+            border-left: 10px solid #121212 !important;
+            padding: 20px !important;
+            margin-bottom: 25px !important;
+            box-shadow: 4px 4px 0 #121212 !important;
+            border-radius: 4px !important;
+        }
+
+        .docx-card.reach { border-left-color: #FF4D00 !important; }
+        .docx-card.believe { border-left-color: #0E6BA8 !important; }
+        .docx-card.move { border-left-color: #1F7A3D !important; }
+
+        .docx-card-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: flex-start !important;
+            border-bottom: 2px solid #121212 !important;
+            padding-bottom: 8px !important;
+            margin-bottom: 12px !important;
+        }
+
+        .docx-card-header .ep-info {
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        .docx-card-header .ep-num {
+            font-family: 'IBM Plex Mono', monospace !important;
+            color: #FF4D00 !important;
+            font-weight: 700 !important;
+            font-size: 11.5px !important;
+        }
+
+        .docx-card-header .ep-title {
+            font-family: 'Kanit', sans-serif !important;
+            font-size: 16.5px !important;
+            font-weight: 700 !important;
+            margin: 4px 0 0 0 !important;
+            color: #121212 !important;
+        }
+
+        .docx-card-header .badge {
+            font-family: 'Kanit', sans-serif !important;
+            font-weight: 700 !important;
+            font-size: 10px !important;
+            color: #ffffff !important;
+            padding: 3px 8px !important;
+            border-radius: 2px !important;
+            text-transform: uppercase !important;
+        }
+
+        .docx-card-header .badge.reach { background: #FF4D00 !important; }
+        .docx-card-header .badge.believe { background: #0E6BA8 !important; }
+        .docx-card-header .badge.move { background: #1F7A3D !important; }
+
+        .docx-card-meta-line {
+            font-size: 12.5px !important;
+            margin-bottom: 6px !important;
+            color: #333333 !important;
+        }
+
+        .docx-card-meta-line strong {
+            color: #121212 !important;
+        }
+
+        .docx-card-tag {
+            display: inline-block !important;
+            background: #f0f0f0 !important;
+            border: 1px solid #d1cfca !important;
+            padding: 3px 8px !important;
+            font-size: 11px !important;
+            font-family: 'IBM Plex Mono', monospace !important;
+            margin-bottom: 12px !important;
+            border-radius: 4px !important;
+            color: #555555 !important;
+        }
+
+        .docx-idea-box {
+            background: #FAF9F6 !important;
+            border: 1px solid #d1cfca !important;
+            padding: 12px !important;
+            margin-bottom: 12px !important;
+            border-radius: 4px !important;
+        }
+
+        .docx-idea-box:last-child {
+            margin-bottom: 0 !important;
+        }
+
+        .docx-idea-title {
+            font-family: 'Kanit', sans-serif !important;
+            font-size: 13px !important;
+            font-weight: 600 !important;
+            color: #121212 !important;
+            margin-bottom: 6px !important;
+            border-bottom: 1px dashed #d1cfca !important;
+            padding-bottom: 4px !important;
+        }
+
+        .docx-idea-details {
+            margin: 0 !important;
+            padding-left: 15px !important;
+            font-size: 12px !important;
+            line-height: 1.5 !important;
+            color: #333333 !important;
+        }
+
+        .docx-idea-details li {
+            margin-bottom: 4px !important;
+        }
+
+        .docx-idea-details li:last-child {
+            margin-bottom: 0 !important;
+        }
+
+        /* Compact action icon buttons for files */
+        .btn-icon-action {
+            background: rgba(255, 255, 255, 0.02) !important;
+            border: 1px solid var(--border-color) !important;
+            color: var(--neon-cyan) !important;
+            width: 22px !important;
+            height: 22px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            padding: 0 !important;
+            outline: none !important;
+        }
+        .btn-icon-action:hover {
+            background: rgba(0, 242, 254, 0.1) !important;
+            border-color: var(--neon-cyan) !important;
+            box-shadow: 0 0 8px rgba(0, 242, 254, 0.2) !important;
+            color: #fff !important;
+        }
+        .btn-icon-action.text-pink {
+            color: var(--neon-pink) !important;
+            border-color: rgba(255, 0, 80, 0.3) !important;
+        }
+        .btn-icon-action.text-pink:hover {
+            background: rgba(255, 0, 80, 0.1) !important;
+            border-color: var(--neon-pink) !important;
+            box-shadow: 0 0 8px rgba(255, 0, 80, 0.2) !important;
+            color: #fff !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Game-like Loading Screen Overlay -->
+    <div id="loader-overlay" class="loader-overlay">
+        <div class="loader-container">
+            <div class="loader-cyber-grid"></div>
+            <div class="loader-glitch-text" data-text="JARVIS // SECOND BRAIN">JARVIS // SECOND BRAIN</div>
+            <div class="loader-subtitle">NEURAL LINK INTERFACE</div>
+            
+            <!-- Step 1: Click to Boot (Autoplay workaround & Game vibe) -->
+            <div id="loader-init-screen" class="loader-init-screen">
+                <button id="loader-start-btn" class="loader-start-btn">
+                    <span class="btn-scanlines"></span>
+                    <span class="btn-text">INITIATE NEURAL LINK</span>
+                </button>
+                <div class="loader-tip">System will synthesize tactical audio protocols</div>
+            </div>
+
+            <!-- Step 2: Progress Screen (Hidden initially) -->
+            <div id="loader-progress-screen" class="loader-progress-screen" style="display: none;">
+                <div class="loader-progress-wrapper">
+                    <div class="loader-progress-bar">
+                        <div id="loader-progress-fill" class="loader-progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="loader-progress-details">
+                        <span id="loader-status-text">WAITING FOR HANDSHAKE...</span>
+                        <span id="loader-percentage">0%</span>
+                    </div>
+                </div>
+
+                <div class="loader-terminal-box">
+                    <div id="loader-terminal-logs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="hud-container">
+        <!-- Header HUD -->
+        <header class="hud-header">
+            <div class="hud-title-wrapper">
+                <div class="cyber-blink red-blink"></div>
+                <h1>JARVIS // SECOND BRAIN</h1>
+                <span class="premium-badge">TACTICAL COMMAND</span>
+            </div>
+            <div class="hud-meta">
+                <div class="meta-block">
+                    <span class="lbl">LAN IP:</span>
+                    <span id="hud-lan-ip" class="val text-cyan">loading...</span>
+                </div>
+                <div class="meta-block">
+                    <span class="lbl">SYSTEM:</span>
+                    <span id="hud-cpu" class="val text-pink">loading...</span>
+                </div>
+                <div class="meta-block">
+                    <span class="lbl">DISK STATUS:</span>
+                    <span id="hud-disk" class="val text-yellow">loading...</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Sidebar Layout Wrapper -->
+        <div class="main-layout-wrapper">
+            <!-- Sidebar Navigation -->
+            <nav class="hud-sidebar">
+                <button class="nav-tab active" onclick="switchTab('dashboard')" id="tab-btn-dashboard">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Control Panel</span>
+                </button>
+                <button class="nav-tab" onclick="switchTab('boss')" id="tab-btn-boss">
+                    <i data-lucide="lock" id="boss-nav-icon" style="color: var(--neon-pink);"></i>
+                    <span id="boss-nav-text">Boss Workspace</span>
+                </button>
+                <button class="nav-tab" onclick="switchTab('tiktok')" id="tab-btn-tiktok">
+                    <i data-lucide="cpu" style="color: var(--neon-cyan);"></i>
+                    <span>TikTok Bot</span>
+                </button>
+                <button class="nav-tab" onclick="switchTab('tiktok-uploader')" id="tab-btn-tiktok-uploader">
+                    <i data-lucide="video" style="color: var(--neon-yellow);"></i>
+                    <span>TikTok Uploader</span>
+                </button>
+                <button class="nav-tab" onclick="switchTab('shared')" id="tab-btn-shared">
+                    <i data-lucide="users"></i>
+                    <span>Shared Rooms</span>
+                </button>
+                <a class="nav-tab" id="nav-btn-youtube" href="#" target="_blank" style="text-decoration: none; color: var(--text-primary);">
+                    <i data-lucide="youtube" style="color: var(--neon-pink);"></i>
+                    <span>YouTube App</span>
+                </a>
+            </nav>
+
+            <!-- Main Content Area -->
+            <div class="hud-content">
+                <!-- Section 1: Dashboard -->
+                <div id="tab-dashboard" class="tab-content active">
+                    <div class="tab-grid-dashboard">
+                        <!-- Diagnostics -->
+                        <section class="hud-card diagnostic-panel">
+                            <div class="card-glow"></div>
+                            <h2><i data-lucide="activity"></i> SYSTEM DIAGNOSTICS</h2>
+                            <div class="diagnostic-list">
+                                <div class="diag-item">
+                                    <span class="diag-label">YOUTUBE PREMIUM WEB CLIENT</span>
+                                    <div class="diag-status">
+                                        <span id="yt-status-text" class="status-text text-dim">checking...</span>
+                                        <div id="yt-status-led" class="status-led led-gray"></div>
+                                    </div>
+                                </div>
+                                <div class="diag-item">
+                                    <span class="diag-label">ONLINE TUNNEL (LOCALTUNNEL)</span>
+                                    <div class="diag-status">
+                                        <span id="tunnel-status-text" class="status-text text-dim">checking...</span>
+                                        <div id="tunnel-status-led" class="status-led led-gray"></div>
+                                    </div>
+                                </div>
+                                <div class="diag-item">
+                                    <span class="diag-label">RUDEDOG CONTENT IDEAS PDF</span>
+                                    <div class="diag-status">
+                                        <span id="pdf-status-text" class="status-text text-dim">checking...</span>
+                                        <div id="pdf-status-led" class="status-led led-gray"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="network-info-box">
+                                <h3><i data-lucide="globe"></i> CONNECTIVITY PROFILE</h3>
+                                <div class="net-grid">
+                                    <div class="net-item">
+                                        <span class="net-lbl">DASHBOARD URL:</span>
+                                        <a id="lan-link" href="#" target="_blank" class="net-val text-yellow">loading...</a>
+                                    </div>
+                                    <div class="net-item">
+                                        <span class="net-lbl">YOUTUBE CLONE:</span>
+                                        <a id="tunnel-link" href="#" target="_blank" class="net-val text-pink">loading...</a>
+                                    </div>
+                                    <div class="net-item">
+                                        <span class="net-lbl">PDF ON DESKTOP:</span>
+                                        <span id="pdf-mtime" class="net-val text-cyan">loading...</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Quick Command Console -->
+                        <section class="hud-card control-panel">
+                            <div class="card-glow"></div>
+                            <h2><i data-lucide="sliders"></i> QUICK COMMAND CONSOLE</h2>
+                            
+                            <div class="control-actions">
+                                <button class="btn-hud btn-cyan" onclick="runAction('restart_youtube')">
+                                    <i data-lucide="play-circle"></i>
+                                    <div class="btn-text">
+                                        <b>LAUNCH YOUTUBE ON BRAVE</b>
+                                        <span>Open official YouTube in Brave Browser locally</span>
+                                    </div>
+                                </button>
+                                <button class="btn-hud btn-pink" onclick="runAction('restart_tunnel')">
+                                    <i data-lucide="share-2"></i>
+                                    <div class="btn-text">
+                                        <b>ESTABLISH LOCALTUNNEL</b>
+                                        <span>Forward port 8000 to public subdomain</span>
+                                    </div>
+                                </button>
+                                <button class="btn-hud btn-orange" onclick="runAction('regenerate_pdf')">
+                                    <i data-lucide="file-text"></i>
+                                    <div class="btn-text">
+                                        <b>REGENERATE STRATEGY PDF</b>
+                                        <span>Compile create_pdf.py to Desktop</span>
+                                    </div>
+                                </button>
+                                <a id="btn-open-youtube" href="https://www.youtube.com/" target="_blank" class="btn-hud btn-green" style="text-decoration: none;">
+                                    <i data-lucide="external-link"></i>
+                                    <div class="btn-text">
+                                        <b>OPEN YOUTUBE</b>
+                                        <span id="btn-open-youtube-url">Go to youtube.com</span>
+                                    </div>
+                                </a>
+                            </div>
+
+                            <div class="terminal-container">
+                                <div class="term-header">
+                                    <span class="term-title"><i data-lucide="terminal"></i> JARVIS COMMAND LOGS</span>
+                                    <span class="term-status">READY</span>
+                                </div>
+                                <div id="terminal-body" class="term-body">
+                                    [13:18:04] SYSTEM INITIALIZED // WALKING THROUGH MEMORY STATUS...
+                                    [13:18:05] ACTIVE INSTANCE CONNECTED ON PORT 8500.
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Section 2: Boss Workspace -->
+                <div id="tab-boss" class="tab-content">
+                    <!-- Lock Overlay -->
+                    <div id="boss-lock-screen" class="boss-lock-screen">
+                        <div class="lock-card">
+                            <div class="lock-glow"></div>
+                            <div class="lock-icon-wrapper">
+                                <i data-lucide="lock" class="lock-icon"></i>
+                            </div>
+                            <h2>ENTER ACCESS PIN</h2>
+                            <p>Boss Workspace is restricted. Enter PIN to decrypt.</p>
+                            
+                            <div class="pin-display">
+                                <div class="pin-dot"></div>
+                                <div class="pin-dot"></div>
+                                <div class="pin-dot"></div>
+                                <div class="pin-dot"></div>
+                            </div>
+                            
+                            <div class="pin-keypad">
+                                <button class="btn-key" onclick="pressPin('1')">1</button>
+                                <button class="btn-key" onclick="pressPin('2')">2</button>
+                                <button class="btn-key" onclick="pressPin('3')">3</button>
+                                <button class="btn-key" onclick="pressPin('4')">4</button>
+                                <button class="btn-key" onclick="pressPin('5')">5</button>
+                                <button class="btn-key" onclick="pressPin('6')">6</button>
+                                <button class="btn-key" onclick="pressPin('7')">7</button>
+                                <button class="btn-key" onclick="pressPin('8')">8</button>
+                                <button class="btn-key" onclick="pressPin('9')">9</button>
+                                <button class="btn-key text-pink" onclick="clearPin()">CLEAR</button>
+                                <button class="btn-key" onclick="pressPin('0')">0</button>
+                                <button class="btn-key text-cyan" onclick="submitPin()">ENTER</button>
+                            </div>
+                            <div id="pin-error-msg" class="pin-error" style="display: none;">ACCESS DENIED: INVALID KEYCODE</div>
+                        </div>
+                    </div>
+
+                    <!-- Unlocked Content -->
+                    <div id="boss-workspace-content" style="display: none; flex-direction: column; gap: 24px;">
+                        <div style="display: flex; justify-content: flex-end; margin-bottom: -8px;">
+                            <button class="btn-hud btn-pink" onclick="lockBossWorkspace()" style="padding: 6px 12px; font-size: 11px; display: inline-flex; align-items: center; gap: 6px; height: 32px; border-radius: 4px; border: 1px solid var(--border-color); cursor: pointer;">
+                                <i data-lucide="lock" style="width: 12px; height: 12px;"></i> LOCK WORKSPACE
+                            </button>
+                        </div>
+                        <!-- Project File Explorer -->
+                        <section class="hud-card explorer-panel">
+                            <div class="card-glow"></div>
+                            <h2 style="color: var(--neon-cyan);"><i data-lucide="folder-open"></i> PROJECT FILE EXPLORER</h2>
+                            
+                            <div class="explorer-groups">
+                                <div class="exp-group">
+                                    <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-down" class="group-arrow"></i> RUDEDOG FAIR CAMPAIGN</div>
+                                    <div class="exp-files" id="project-campaign-files">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+
+                                <div class="exp-group">
+                                    <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-right" class="group-arrow"></i> YOUTUBE PREMIUM APP</div>
+                                    <div class="exp-files" id="project-youtube-files" style="display: none;">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+
+                                <div class="exp-group">
+                                    <div class="exp-group-title" onclick="toggleExpGroup(this)" style="cursor: pointer; user-select: none;"><i data-lucide="chevron-right" class="group-arrow"></i> COMPILER SCRIPTS</div>
+                                    <div class="exp-files" id="project-compiler-files" style="display: none;">
+                                        <!-- Loaded dynamically -->
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- TikTok Auto-Farming Control (Emulator-based bot removed) -->
+
+                    </div>
+                </div>
+
+                <!-- Section 3: Shared Rooms -->
+                <div id="tab-shared" class="tab-content">
+                    <div class="tab-grid-shared">
+                        <!-- Shared Hub Panel -->
+                        <section class="hud-card shared-panel">
+                            <div class="card-glow"></div>
+                            <h2 style="color: var(--neon-pink); display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 6px;">
+                                <span><i data-lucide="users"></i> SHARED HUB</span>
+                                <div style="display: flex; align-items: center; gap: 4px; margin-left: auto;">
+                                    <select id="user-room-select" class="btn-exp-action" onchange="handleRoomSelectChange()" style="background: var(--dark); border: 1px solid var(--neon-pink); color: #fff; font-family: 'IBM Plex Mono'; font-size: 11px; padding: 2px 4px; border-radius: 2px; height: 22px; cursor: pointer;">
+                                        <!-- Option Boss is hidden/disabled by default until PIN is entered -->
+                                        <option value="Boss" id="room-opt-boss" disabled style="display: none;">บอส (Boss) - Locked</option>
+                                        <option value="Friend1" id="room-opt-friend1">เพื่อน 1 (Friend 1)</option>
+                                        <option value="Friend2" id="room-opt-friend2">เพื่อน 2 (Friend 2)</option>
+                                        <option value="Friend3" id="room-opt-friend3">เพื่อน 3 (Friend 3)</option>
+                                        <option value="Friend4" id="room-opt-friend4">เพื่อน 4 (Friend 4)</option>
+                                        <option value="TikTokBot" id="room-opt-tiktokbot">TikTok Bot 🔒</option>
+                                        <option value="TikTokUpload" id="room-opt-tiktokupload">TikTok Upload</option>
+                                    </select>
+                                    <button class="btn-exp-action text-pink" onclick="triggerFileUpload()" style="display: inline-flex; align-items: center; gap: 4px; font-size: 11px; padding: 2px 8px; cursor: pointer; border: 1px solid var(--neon-pink); height: 22px; border-radius: 4px;">
+                                        <i data-lucide="upload-cloud" style="width: 12px; height: 12px;"></i> UPLOAD
+                                    </button>
+                                </div>
+                                <input type="file" id="pdf-upload-file" style="display: none;" onchange="handleFileUpload(event)">
+                            </h2>
+                            <div class="exp-files" id="uploaded-files-list" style="margin-top: 16px;">
+                                <!-- Loaded dynamically via JS -->
+                            </div>
+                        </section>
+
+                        <!-- Column 3: Notes (Second Brain Memory) -->
+                        <section class="hud-card memory-panel">
+                            <div class="card-glow"></div>
+                            <h2><i data-lucide="brain"></i> SECOND BRAIN MEMORY</h2>
+                            
+                            <!-- Quick input to add note -->
+                            <div class="note-input-wrapper">
+                                <input type="text" id="note-input" placeholder="ป้อนความจำใหม่ บันทึกไอเดีย/ภารกิจค้าง..." onkeypress="handleNoteKeyPress(event)">
+                                <button class="btn-add" onclick="addNote()"><i data-lucide="plus"></i></button>
+                            </div>
+
+                            <div id="notes-list" class="notes-list">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </section>
+                    </div>
+                </div>
+
+                <!-- Section: TikTok Bot -->
+                <div id="tab-tiktok" class="tab-content">
+                    <!-- TikTok Web-Farming Control -->
+                    <section class="hud-card web-farming-panel" style="margin-top: 12px; border-left: 4px solid var(--neon-cyan);">
+                        <div class="card-glow" style="background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(0, 242, 254, 0.15), transparent 40%);"></div>
+                        <h2 style="color: var(--neon-cyan);"><i data-lucide="globe"></i> ระบบควบคุมบอตติ๊กต็อก (TIKTOK WEB-FARMING CONTROL)</h2>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 12px;">
+                            <!-- Configuration options -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+                                 
+                                 <!-- Column 1: Accounts & Session -->
+                                 <div class="cyber-group-card cyber-group-cyan">
+                                     <div class="cyber-group-header">
+                                         <h3><i data-lucide="users"></i> เซสชัน & โปรไฟล์บัญชี</h3>
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="web-farm-profile-select"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> โปรไฟล์บัญชีเป้าหมาย (TARGET PROFILE)</label>
+                                         <select id="web-farm-profile-select" class="cyber-select">
+                                             <option value="profile_1">profile_1</option>
+                                             <option value="profile_2">profile_2</option>
+                                             <option value="profile_3">profile_3</option>
+                                         </select>
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="web-farm-new-profile"><i data-lucide="user-plus" style="width: 12px; height: 12px;"></i> สร้างโปรไฟล์ใหม่ (CREATE PROFILE)</label>
+                                         <div class="cyber-input-merged">
+                                             <input type="text" id="web-farm-new-profile" placeholder="เช่น profile_4" class="cyber-input">
+                                             <button onclick="createWebFarmProfile()"><i data-lucide="plus" style="width: 12px; height: 12px; margin-right: 4px;"></i> สร้าง</button>
+                                         </div>
+                                     </div>
+                                     
+                                     <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 6px;">
+                                         <label class="cyber-switch-container">
+                                             <span class="cyber-switch-label-text">
+                                                 <strong>โหมดรอเข้าสู่ระบบ</strong><br>
+                                                 <span style="font-size: 9px; color: var(--text-dim); font-family: 'IBM Plex Mono';">WAIT FOR MANUAL LOGIN</span>
+                                             </span>
+                                             <input type="checkbox" id="web-farm-login-mode" class="cyber-switch-checkbox">
+                                             <span class="cyber-switch-rail"></span>
+                                         </label>
+                                         
+                                         <label class="cyber-switch-container">
+                                             <span class="cyber-switch-label-text">
+                                                 <strong>เปิดหน้าจอเบราว์เซอร์</strong><br>
+                                                 <span style="font-size: 9px; color: var(--text-dim); font-family: 'IBM Plex Mono';">SHOW BROWSER (HEADED)</span>
+                                             </span>
+                                             <input type="checkbox" id="web-farm-headed" checked class="cyber-switch-checkbox">
+                                             <span class="cyber-switch-rail"></span>
+                                         </label>
+                                     </div>
+                                 </div>
+                                 
+                                 <!-- Column 2: Bot Behavior -->
+                                 <div class="cyber-group-card cyber-group-pink">
+                                     <div class="cyber-group-header">
+                                         <h3><i data-lucide="sliders"></i> พฤติกรรมการเล่นของบอต</h3>
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="web-farm-loops"><i data-lucide="repeat" style="width: 12px; height: 12px;"></i> จำนวนรอบดูคลิป (LOOPS/ROUND)</label>
+                                         <input type="number" id="web-farm-loops" value="10" min="0" max="1000" class="cyber-input">
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="web-farm-like-prob"><i data-lucide="heart" style="width: 12px; height: 12px;"></i> โอกาสกดใจ (LIKE PROBABILITY - 0.0 ถึง 1.0)</label>
+                                         <input type="number" id="web-farm-like-prob" value="0.15" step="0.05" min="0.0" max="1.0" class="cyber-input">
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="web-farm-comment-prob"><i data-lucide="message-square" style="width: 12px; height: 12px;"></i> โอกาสคอมเมนต์ (COMMENT PROBABILITY - 0.0 ถึง 1.0)</label>
+                                         <input type="number" id="web-farm-comment-prob" value="0.05" step="0.05" min="0.0" max="1.0" class="cyber-input">
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="web-farm-comment-style"><i data-lucide="smile" style="width: 12px; height: 12px;"></i> รูปแบบคอมเมนต์ (COMMENT STYLE)</label>
+                                         <select id="web-farm-comment-style" class="cyber-input">
+                                             <option value="mixed" selected>Mixed (ข้อความและอีโมจิ)</option>
+                                             <option value="text">Text Only (ข้อความอย่างเดียว)</option>
+                                             <option value="emoji">Emoji Only (อีโมจิอย่างเดียว)</option>
+                                         </select>
+                                     </div>
+                                     <div id="comment-style-preview" style="font-size: 0.78rem; color: var(--text-dim); margin-top: -6px; margin-bottom: 10px; padding: 6px 10px; background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.1); border-radius: 4px; line-height: 1.45;">
+                                         <!-- Will be updated dynamically by app.js -->
+                                     </div>
+                                     
+                                     <div class="cyber-input-group" style="margin-top: 8px;">
+                                         <label class="cyber-input-label" for="web-farm-custom-comments">
+                                             <i data-lucide="edit-3" style="width: 12px; height: 12px;"></i> ข้อความคอมเมนต์กำหนดเอง (กำหนดได้บรรทัดละ 1 ข้อความ)
+                                         </label>
+                                         <textarea id="web-farm-custom-comments" class="cyber-input" style="height: 70px; resize: vertical; font-family: monospace; font-size: 0.8rem;" placeholder="เช่น:&#10;สุดยอดเลยครับบอส 👍&#10;🔥🔥🔥&#10;เสื้อสวยมากก (เว้นว่างไว้หากต้องการใช้ชุดข้อความมาตรฐานด้านบน)"></textarea>
+                                     </div>
+                                     <div style="margin-top: -4px; margin-bottom: 12px; display: flex; justify-content: flex-end;">
+                                         <button type="button" id="web-farm-save-comments-btn" class="cyber-btn cyber-btn-yellow" style="font-size: 0.72rem; padding: 4px 10px; min-width: auto; height: auto; border-radius: 3px;">
+                                             <i data-lucide="save" style="width: 10px; height: 10px; margin-right: 4px;"></i> บันทึกข้อความคอมเมนต์
+                                         </button>
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="web-farm-follow-prob"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> โอกาสกดติดตาม (FOLLOW PROBABILITY - 0.0 ถึง 1.0)</label>
+                                         <input type="number" id="web-farm-follow-prob" value="0.0" step="0.05" min="0.0" max="1.0" class="cyber-input">
+                                     </div>
+                                 </div>
+                                 
+                                 <!-- Column 3: Actions & Content -->
+                                 <div class="cyber-group-card cyber-group-yellow">
+                                     <div class="cyber-group-header">
+                                         <h3><i data-lucide="play-circle"></i> เป้าหมายการรันบอต (BOT TARGETS)</h3>
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="web-farm-query"><i data-lucide="search" style="width: 12px; height: 12px;"></i> คำค้นหาค้นคลิป (AUTO-SEARCH QUERY - ไม่บังคับ)</label>
+                                         <input type="text" id="web-farm-query" placeholder="เช่น #กางเกงยีนส์, @rudedog (ปล่อยว่างหากต้องการฟีดแนะนำ)" class="cyber-input">
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="web-farm-target-user"><i data-lucide="user" style="width: 12px; height: 12px;"></i> ติดตามบัญชีเจาะจง (TARGET USER - ไม่บังคับ)</label>
+                                         <input type="text" id="web-farm-target-user" placeholder="เช่น @rudedog, @my_channel" class="cyber-input">
+                                     </div>
+                                     
+                                 </div>
+                             </div>
+                            
+                            <!-- Action controls -->
+                            <div class="cyber-action-row">
+                                <button class="btn-cyber-action" onclick="scanWebFarmProfiles()">
+                                    <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> SCAN PROFILES
+                                </button>
+                                <button class="btn-cyber-action cyan" id="btn-start-web-farm" onclick="startWebFarming()">
+                                    <i data-lucide="play" style="width: 14px; height: 14px;"></i> START WEB BOT
+                                </button>
+                                <button class="btn-cyber-action pink" id="btn-stop-web-farm" onclick="stopWebFarming()">
+                                    <i data-lucide="square" style="width: 14px; height: 14px;"></i> STOP WEB BOT
+                                </button>
+                                <button class="btn-cyber-action pink" id="btn-stop-all-web-farm" onclick="stopAllWebFarming()" style="background: rgba(255, 0, 127, 0.15);">
+                                    <i data-lucide="x-octagon" style="width: 14px; height: 14px;"></i> STOP ALL BOTS
+                                </button>
+                                <button class="btn-cyber-action cyan" onclick="openLoginChrome()" style="background: rgba(0, 242, 254, 0.1);">
+                                    <i data-lucide="external-link" style="width: 14px; height: 14px;"></i> OPEN CHROME TO LOGIN
+                                </button>
+                                <div id="web-farm-status-badge" class="badge badge-offline" style="margin-left: auto; font-family: 'IBM Plex Mono'; font-size: 10px; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); display: flex; align-items: center; gap: 6px;">
+                                    <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--neon-pink); display: inline-block; box-shadow: 0 0 8px var(--neon-pink);"></span>
+                                    WEB BOT IDLE
+                                </div>
+                            </div>
+
+                            <!-- Running Bots Slots -->
+                            <div id="web-farm-slots-section" style="margin-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 16px;">
+                                <div class="cyber-group-header" style="margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;">
+                                    <h3 style="color: var(--neon-cyan); margin: 0; font-size: 13px; display: flex; align-items: center; gap: 6px; letter-spacing: 0.5px;">
+                                        <i data-lucide="cpu" style="width: 14px; height: 14px;"></i> บัญชีและสถานะการทำงาน (ACCOUNT SLOTS & STATUS)
+                                    </h3>
+                                    <span id="web-farm-slots-summary" style="font-family: 'IBM Plex Mono'; font-size: 9px; font-weight: bold; color: var(--neon-yellow); background: rgba(255, 210, 63, 0.1); padding: 3px 8px; border-radius: 4px; border: 1px solid rgba(255, 210, 63, 0.2);">RUNNING: 0 / 0 BOTS</span>
+                                </div>
+                                <div id="web-farm-slots-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+                                    <!-- Dynamic slots will be injected here -->
+                                </div>
+                            </div>
+                            
+                            <!-- Logs container -->
+                            <div class="cyber-console-container">
+                                <div class="cyber-console-header">
+                                    <label style="font-size: 11px; color: var(--text-dim); font-family: 'IBM Plex Mono'; font-weight: bold; display: flex; align-items: center; gap: 6px;"><i data-lucide="terminal" style="width: 12px; height: 12px; color: var(--neon-cyan);"></i> LIVE WEB BOT TELEMETRY & LOGS</label>
+                                    <div style="display: flex; align-items: center; gap: 12px;">
+                                        <span id="web-farm-log-time" style="font-size: 9px; color: var(--text-dim); font-family: 'IBM Plex Mono';">UPDATE: NEVER</span>
+                                        <button class="btn-exp-action text-pink" onclick="clearWebFarmLogs()" style="padding: 2px 6px; font-size: 9px; height: 18px; border-radius: 3px; display: inline-flex; align-items: center; gap: 3px; cursor: pointer;"><i data-lucide="trash-2" style="width: 10px; height: 10px;"></i> CLEAR LOGS</button>
+                                    </div>
+                                </div>
+                                <div id="web-farm-logs" class="cyber-console-body">System online. Please click 'SCAN PROFILES' to discover active user profile sessions.</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Section: TikTok Uploader -->
+                <div id="tab-tiktok-uploader" class="tab-content">
+                    <!-- TikTok Uploader Control -->
+                    <section class="hud-card web-farming-panel" style="margin-top: 12px; border-left: 4px solid var(--neon-yellow);">
+                        <div class="card-glow" style="background: radial-gradient(800px circle at var(--x, 0px) var(--y, 0px), rgba(255, 210, 63, 0.15), transparent 40%);"></div>
+                        <h2 style="color: var(--neon-yellow);"><i data-lucide="video"></i> ระบบอัปโหลดวิดีโอติ๊กต็อก (TIKTOK VIDEO UPLOADER)</h2>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 20px; margin-top: 12px;">
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+                                 
+                                 <!-- Column 1: Configuration -->
+                                 <div class="cyber-group-card cyber-group-yellow">
+                                     <div class="cyber-group-header">
+                                         <h3><i data-lucide="sliders"></i> ตั้งค่าการอัปโหลด (UPLOAD SETTINGS)</h3>
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="uploader-profile-select"><i data-lucide="user-check" style="width: 12px; height: 12px;"></i> โปรไฟล์บัญชีเป้าหมาย (TARGET PROFILE)</label>
+                                         <select id="uploader-profile-select" class="cyber-select">
+                                             <option value="profile_1">profile_1</option>
+                                             <option value="profile_2">profile_2</option>
+                                             <option value="profile_3">profile_3</option>
+                                         </select>
+                                     </div>
+
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="uploader-upload-video"><i data-lucide="video" style="width: 12px; height: 12px;"></i> วิดีโอที่ต้องการอัปโหลด (VIDEO TO UPLOAD)</label>
+                                         <select id="uploader-upload-video" class="cyber-select">
+                                             <option value="">-- NO VIDEO UPLOAD --</option>
+                                         </select>
+                                     </div>
+                                     
+                                     <div class="cyber-input-group">
+                                         <label class="cyber-input-label" for="uploader-upload-caption"><i data-lucide="type" style="width: 12px; height: 12px;"></i> คำอธิบายและแฮชแท็กโพสต์ (VIDEO CAPTION)</label>
+                                         <textarea id="uploader-upload-caption" placeholder="เช่น #ฟอลมาฟอลกลับ #fyp #rudedog" class="cyber-input" style="height: 100px; resize: vertical;"></textarea>
+                                     </div>
+
+                                     <div style="display: flex; flex-direction: column; gap: 12px; margin-top: 6px;">
+                                         <label class="cyber-switch-container">
+                                             <span class="cyber-switch-label-text">
+                                                 <strong>เปิดหน้าจอเบราว์เซอร์</strong><br>
+                                                 <span style="font-size: 9px; color: var(--text-dim); font-family: 'IBM Plex Mono';">SHOW BROWSER (HEADED)</span>
+                                             </span>
+                                             <input type="checkbox" id="uploader-headed" checked class="cyber-switch-checkbox">
+                                             <span class="cyber-switch-rail"></span>
+                                         </label>
+                                     </div>
+                                 </div>
+
+                                 <!-- Column 2: Run status and preview/logs -->
+                                 <div class="cyber-group-card cyber-group-cyan">
+                                     <div class="cyber-group-header">
+                                         <h3><i data-lucide="terminal"></i> คอนโซลสถานะ (CONSOLE & STATUS)</h3>
+                                     </div>
+
+                                     <div class="cyber-action-row" style="margin-bottom: 16px;">
+                                         <button class="btn-cyber-action" onclick="scanUploaderProfiles()">
+                                             <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i> SCAN PROFILES
+                                         </button>
+                                         <button class="btn-cyber-action yellow" id="btn-start-uploader" onclick="startVideoUploader()">
+                                             <i data-lucide="play" style="width: 14px; height: 14px;"></i> START UPLOAD
+                                         </button>
+                                         <button class="btn-cyber-action pink" id="btn-stop-uploader" onclick="stopVideoUploader()">
+                                             <i data-lucide="square" style="width: 14px; height: 14px;"></i> STOP UPLOAD
+                                         </button>
+                                         <button class="btn-cyber-action cyan" onclick="openUploaderLoginChrome()" style="background: rgba(0, 242, 254, 0.15); border-color: rgba(0, 242, 254, 0.45); color: #00f2fe;">
+                                             <i data-lucide="key-round" style="width: 14px; height: 14px;"></i> LOGIN TO ACCOUNT
+                                         </button>
+                                     </div>
+
+                                     <div id="uploader-status-badge" class="badge badge-offline" style="font-family: 'IBM Plex Mono'; font-size: 10px; padding: 6px 12px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); display: flex; align-items: center; gap: 6px; margin-bottom: 16px;">
+                                         <span style="width: 6px; height: 6px; border-radius: 50%; background: var(--neon-pink); display: inline-block; box-shadow: 0 0 8px var(--neon-pink);"></span>
+                                         UPLOADER IDLE
+                                     </div>
+
+                                     <!-- Logs container -->
+                                     <div class="cyber-console-container" style="height: 250px;">
+                                         <div class="cyber-console-header">
+                                             <label style="font-size: 11px; color: var(--text-dim); font-family: 'IBM Plex Mono'; font-weight: bold; display: flex; align-items: center; gap: 6px;"><i data-lucide="terminal" style="width: 12px; height: 12px; color: var(--neon-yellow);"></i> LIVE UPLOADER TELEMETRY & LOGS</label>
+                                             <div style="display: flex; align-items: center; gap: 12px;">
+                                                 <span id="uploader-log-time" style="font-size: 9px; color: var(--text-dim); font-family: 'IBM Plex Mono';">UPDATE: NEVER</span>
+                                                 <button class="btn-exp-action text-pink" onclick="clearUploaderLogs()" style="padding: 2px 6px; font-size: 9px; height: 18px; border-radius: 3px; display: inline-flex; align-items: center; gap: 3px; cursor: pointer;"><i data-lucide="trash-2" style="width: 10px; height: 10px;"></i> CLEAR LOGS</button>
+                                             </div>
+                                         </div>
+                                         <div id="uploader-logs" class="cyber-console-body" style="height: 200px;">Uploader online. Select a video and profile, then click 'START UPLOAD'.</div>
+                                     </div>
+                                 </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <!-- HUD Code Viewer Modal Overlay -->
+        <div id="code-viewer-modal" class="hud-modal" style="display: none;">
+            <div class="modal-content">
+                <header class="modal-header">
+                    <span id="modal-file-title" class="modal-title"><i data-lucide="file-code"></i> FILE VIEWER // LOADING...</span>
+                    <button class="btn-close" onclick="closeFileViewer()"><i data-lucide="x"></i></button>
+                </header>
+                <div class="modal-body" id="modal-body-container">
+                    <pre id="modal-pre-block"><code id="modal-code-block" class="code-block">loading file contents...</code></pre>
+                    <div id="modal-custom-preview" style="display: none; width: 100%; height: 100%;"></div>
+                </div>
+                <footer class="modal-footer-box">
+                    <span id="modal-file-path">PATH: /unknown/file</span>
+                    <button class="btn-modal-action" onclick="closeFileViewer()">CLOSE VIEW</button>
+                </footer>
+            </div>
+        </div>
+
+        <!-- HUD PIN Input Modal Overlay -->
+        <div id="room-pin-modal" class="hud-modal" style="display: none; align-items: center; justify-content: center; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 10000;">
+            <div class="modal-content" style="max-width: 320px; border: 1px solid var(--neon-pink); box-shadow: 0 0 20px rgba(255, 0, 80, 0.25); background: #06060c; border-radius: 8px; overflow: hidden; display: flex; flex-direction: column;">
+                <header class="modal-header" style="border-bottom: 1px solid rgba(255, 0, 80, 0.2); padding: 12px 16px; background: rgba(255, 0, 80, 0.03);">
+                    <span class="modal-title" style="color: var(--neon-pink); font-family: 'IBM Plex Mono'; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px;"><i data-lucide="lock" style="width: 12px; height: 12px;"></i> AUTHORIZATION VAULT</span>
+                </header>
+                <div class="modal-body" style="padding: 24px 20px; display: flex; flex-direction: column; gap: 16px; align-items: center; background: #080810;">
+                    <label style="font-size: 11px; color: var(--text-dim); text-align: center; line-height: 1.4; font-family: 'Anuphan', sans-serif;">กรอกรหัสผ่านเพื่อเข้าใช้งานห้อง <span id="pin-modal-room-name" style="color: var(--neon-cyan); font-weight: bold;">TikTok Bot</span></label>
+                    <input type="password" id="room-pin-input" placeholder="••••" class="cyber-input" style="text-align: center; font-size: 18px; letter-spacing: 6px; width: 100%; max-width: 180px; height: 38px; border: 1px solid rgba(255,255,255,0.1); border-radius: 4px; background: rgba(0,0,0,0.3); color: #fff;">
+                    <span id="room-pin-error" style="color: var(--neon-pink); font-size: 10px; display: none; font-family: 'Anuphan', sans-serif;">รหัสผ่านไม่ถูกต้อง!</span>
+                </div>
+                <footer class="modal-footer-box" style="border-top: 1px solid rgba(255, 255, 255, 0.05); display: flex; gap: 10px; justify-content: flex-end; padding: 12px 16px; background: rgba(0,0,0,0.2);">
+                    <button class="btn-modal-action" onclick="closeRoomPinModal()" style="background: rgba(255,255,255,0.04); color: var(--text-dim); border: 1px solid rgba(255,255,255,0.08); font-size: 11px; padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: all 0.2s;">CANCEL</button>
+                    <button class="btn-modal-action" onclick="submitRoomPin()" style="background: rgba(255, 0, 80, 0.15); color: var(--neon-pink); border: 1px solid var(--neon-pink); font-size: 11px; padding: 6px 12px; border-radius: 4px; cursor: pointer; transition: all 0.2s;">ACCESS</button>
+                </footer>
+            </div>
+        </div>
+        
+        <footer class="hud-footer">
+            <span>JARVIS SYSTEM v4.0 // ACTIVE COMMAND AND MEMORY DASHBOARD</span>
+            <span>TONY STARK PRIVATE WORKSPACE</span>
+        </footer>
+    </div>
+
+    <!-- Script file -->
+    <script src="app.js?v=4.13"></script>
+</body>
+</html>
